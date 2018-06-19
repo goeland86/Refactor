@@ -28,6 +28,7 @@ python-scipy \
 python-smbus \
 python-gi-cairo \
 python-numpy \
+python-networkmanager \
 libavahi-compat-libdnssd1 \
 libclutter-1.0-common \
 libclutter-imcontext-0.1-bin \
