@@ -8,6 +8,7 @@ exec 2> >(tee -ia /root/prep_ubuntu.log >&2)
 upgrade_base_operating_system() {
   echo "Upgrading packages"
   apt-get update
+  apt-get upgrade -y
   echo "Removing unwanted kernel packages"
 # apt-get -y remove linux-image-*
   apt-get -y remove linux-headers-*
@@ -31,6 +32,8 @@ upgrade_base_operating_system() {
   update-initramfs -k $KERNEL_VERSION -u
 
   echo "Updating wireless..."
+  apt-mark hold linux-firmware
+
   if [ ! -d "/usr/src/wl18xx_fw" ]; then
     git clone --no-single-branch --depth 1 git://git.ti.com/wilink8-wlan/wl18xx_fw.git /usr/src/wl18xx_fw
   fi

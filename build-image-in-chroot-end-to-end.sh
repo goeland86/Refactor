@@ -46,8 +46,8 @@ mount -o bind /dev ${MOUNTPOINT}/dev
 mount -o bind /sys ${MOUNTPOINT}/sys
 mount -o bind /proc ${MOUNTPOINT}/proc
 
-mkdir -p ${MOUNTPOINT}/run/resolvconf
-cp /etc/resolv.conf ${MOUNTPOINT}/run/resolvconf/resolv.conf
+rm ${MOUNTPOINT}/etc/resolv.conf
+cp /etc/resolv.conf ${MOUNTPOINT}/etc/resolv.conf
 
 # don't git clone here - if someone did a commit since this script started, Unexpected Things will happen
 # instead, do a deep copy so the image has a git repo as well
@@ -69,6 +69,7 @@ chroot ${MOUNTPOINT} /bin/su -c "cd ${UMIKAZE_HOME} && ./prep_ubuntu.sh && ./mak
 status=$?
 set -e
 
+rm ${MOUNTPOINT}/etc/resolv.conf
 umount ${MOUNTPOINT}/proc
 umount ${MOUNTPOINT}/sys
 umount ${MOUNTPOINT}/dev
