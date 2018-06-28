@@ -27,7 +27,6 @@ libcluttergesture-0.0.2-0 \
 python-scipy \
 python-smbus \
 python-gi-cairo \
-python-numpy \
 python-networkmanager \
 libavahi-compat-libdnssd1 \
 libclutter-1.0-common \
@@ -47,11 +46,14 @@ ffmpeg \
 parted \
 python-parted
 
+pip install --upgrade pip
+apt-get -y remove python-pip
+hash -d pip
+
 apt-get -y autoremove
 apt-get -y purge linux-image-4.9.* linux-image-4.4.*
 apt-mark hold linux-image-`cat /boot/uEnv.txt | awk -F '=' '/uname_r/ {print $2}'`
 
-easy_install --upgrade pip
 pip install numpy
 pip install evdev spidev Adafruit_BBIO Adafruit-GPIO sympy docutils sh
 
