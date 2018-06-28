@@ -16,11 +16,12 @@ fi
 cd $REDEEM_HOME
 git pull
 git checkout $REDEEM_BRANCH
-make install
+python2 setup.py develop
 
 # Make profiles uploadable via Octoprint
-cp -r configs /etc/redeem
-cp -r data /etc/redeem
+mkdir -p /etc/redeem
+cp configs/*.cfg /etc/redeem/
+cp data/*.cht /etc/redeem/
 touch /etc/redeem/local.cfg
 chown -R octo:octo /etc/redeem/
 chown -R octo:octo $REDEEM_HOME
