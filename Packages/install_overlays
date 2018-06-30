@@ -18,4 +18,6 @@ git pull
 git checkout ${OVERLAYS_BRANCH}
 ./dtc-overlay.sh # upgrade DTC version!
 ./install.sh
+# We are overriding the base distribution
+apt-mark hold bb-cape-overlays
 for kernel in `ls /lib/modules`; do update-initramfs -u -k $kernel; done
