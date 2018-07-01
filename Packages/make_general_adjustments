@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: GPL-2.0
 
 set -e
-set -x
 for f in `ls ${VERSIONING}/*`
   do
     source $f
@@ -10,6 +9,7 @@ for f in `ls ${VERSIONING}/*`
 cd Packages
 
 echo "** Performing general actions **"
+set -x
 sed -i "s/cape_universal=enable/consoleblank=0 fbcon=rotate:1 omap_wdt.nowayout=0/" /boot/uEnv.txt
 sed -i "s/arm/kamikaze/" /etc/hostname
 sed -i "s/arm/kamikaze/g" /etc/hosts

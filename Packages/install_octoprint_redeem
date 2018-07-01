@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: GPL-2.0
 
 set -e
-set -x
 for f in `ls ${VERSIONING}/*`
   do
     source $f
@@ -10,6 +9,7 @@ for f in `ls ${VERSIONING}/*`
 cd Packages
 
 echo "**install_octoprint_redeem**"
+set -x
 if [ ! -d "${OCTOPRINT_REDEEM_HOME}" ]; then
   git clone --no-single-branch --depth 1 ${OCTOPRINT_REDEEM_REPOSITORY} ${OCTOPRINT_REDEEM_HOME}
 fi

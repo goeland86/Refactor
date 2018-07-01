@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: GPL-2.0
 
 set -e
-set -x
 for f in `ls ${VERSIONING}/*`
   do
     source $f
@@ -10,6 +9,7 @@ for f in `ls ${VERSIONING}/*`
 cd Packages
 
 echo "**install_redeem**"
+set -x
 if [ ! -d $REDEEM_HOME ]; then
   git clone $REDEEM_REPOSITORY --single-branch --branch $REDEEM_BRANCH $REDEEM_HOME
 fi

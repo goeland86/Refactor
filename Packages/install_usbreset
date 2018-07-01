@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: GPL-2.0
 
 set -e
-set -x
 for f in `ls ${VERSIONING}/*`
   do
     source $f
@@ -10,6 +9,7 @@ for f in `ls ${VERSIONING}/*`
 cd Packages
 
 echo "** Installing usbreset **"
+set -x
 cd USB
 cc usbreset.c -o usbreset
 chmod +x usbreset

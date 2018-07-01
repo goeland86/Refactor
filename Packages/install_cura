@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: GPL-2.0
 
 set -e
-set -x
 for f in `ls ${VERSIONING}/*`
   do
     source $f
@@ -10,6 +9,7 @@ for f in `ls ${VERSIONING}/*`
 cd Packages
 
 echo "** install Cura **"
+set -x
 pushd /usr/src/
   if [ ! -d "${CURA_HOME}" ]; then
     wget ${CURA_REPOSITORY}/archive/${CURA_TAG}.zip

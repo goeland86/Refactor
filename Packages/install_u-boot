@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: GPL-2.0
 
 set -e
-set -x
 for f in `ls ${VERSIONING}/*`
   do
     source $f
@@ -10,6 +9,7 @@ for f in `ls ${VERSIONING}/*`
 cd Packages
 
 echo "** install U-boot**"
+set -x
 cd ${UBOOT_HOME}
 export DISK=/dev/mmcblk0
 dd if=MLO of=${DISK} count=1 seek=1 bs=128k

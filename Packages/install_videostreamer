@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: GPL-2.0
 
 set -e
-set -x
 for f in `ls ${VERSIONING}/*`
   do
     source $f
@@ -10,6 +9,7 @@ for f in `ls ${VERSIONING}/*`
 cd Packages
 
 echo "** Install video streamer **"
+set -x
 apt-get install -y --no-install-recommends cmake libjpeg62-dev
 
 if [ ! -d "${VIDEOSTREAMER_HOME}" ]; then
