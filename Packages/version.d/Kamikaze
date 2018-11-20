@@ -4,5 +4,5 @@ UMIKAZE_BRANCH="master"
 UMIKAZE_HOME="/usr/src/Umikaze"
 
 # This specifies the Kamikaze Variables
-VERSION="Umikaze 2.2.1-dev4"
+VERSION="Umikaze 2.2.1-RC1"
 ROOTPASS="kamikaze"
