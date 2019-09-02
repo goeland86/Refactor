@@ -34,9 +34,10 @@ apt install -y \
  libmx-2.0-0=1.99.4-1.1 \
  libmx-bin=1.99.4-1.1 \
  libmx-common=1.99.4-1.1 \
- python-networkmanager \
- python-gi-cairo \
- python-tornado \
+ python3-networkmanager \
+ python3-gi-cairo \
+ python3-tornado \
+ python3-pip
 
 apt-mark hold \
  gir1.2-clutter-1.0 \
@@ -58,15 +59,11 @@ apt-mark hold \
  libmx-bin \
  libmx-common \
 
-if [ ! -d ${TOGGLE_ENVIRONMENT} ]; then
-  python2 -m virtualenv ${TOGGLE_ENVIRONMENT}
-fi
+pip3 install virtualenv
 
-cat >${TOGGLE_ENVIRONMENT}/lib/python2.7/site-packages/dist-packages.pth <<EOF
-import sys; sys.__plen = len(sys.path)
-/usr/lib/python2.7/dist-packages
-/usr/local/lib/python2.7/dist-packages
-EOF
+if [ ! -d ${TOGGLE_ENVIRONMENT} ]; then
+  virtualenv -p ${TOGGLE_ENVIRONMENT} toggle
+fi
 
 if [ ! -d ${TOGGLE_ENVIRONMENT}/src/toggle ]; then
   mkdir -p ${TOGGLE_ENVIRONMENT}/src/toggle
@@ -130,9 +127,15 @@ echo "%octo ALL=NOPASSWD: /bin/systemctl restart toggle.service" >> /etc/sudoers
 
 # Do the actual installation
 source ${TOGGLE_ENVIRONMENT}/bin/activate
+cd ${TOGGLE_ENVIRONMENT}/src
+git clone --no-single-branch --depth=1 https://github.com/liamw9534/pyconnman
+cd pyconnman
+python setup.py clean install
+
 cd ${TOGGLE_ENVIRONMENT}/src/toggle
 git fetch
 git checkout $TOGGLE_BRANCH
+pip3 install -e . -r requirements.txt
 python setup.py clean install
 
 #This is a hack for Umikaze 2.2.1 compatibility
