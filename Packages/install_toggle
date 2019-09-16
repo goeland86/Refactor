@@ -37,7 +37,11 @@ apt install -y \
  python3-networkmanager \
  python3-gi-cairo \
  python3-tornado \
- python3-pip
+ python3-pip \
+ python3-venv \
+ python3-dbus \
+ libdbus-1-dev \
+ libglib2.0-dev
 
 apt-mark hold \
  gir1.2-clutter-1.0 \
@@ -59,10 +63,8 @@ apt-mark hold \
  libmx-bin \
  libmx-common \
 
-pip3 install virtualenv
-
 if [ ! -d ${TOGGLE_ENVIRONMENT} ]; then
-  virtualenv -p ${TOGGLE_ENVIRONMENT} toggle
+  python3 -m venv ${TOGGLE_ENVIRONMENT}
 fi
 
 if [ ! -d ${TOGGLE_ENVIRONMENT}/src/toggle ]; then
@@ -135,7 +137,7 @@ python setup.py clean install
 cd ${TOGGLE_ENVIRONMENT}/src/toggle
 git fetch
 git checkout $TOGGLE_BRANCH
-pip3 install -e . -r requirements.txt
+pip install -e . -r requirements.txt
 python setup.py clean install
 
 #This is a hack for Umikaze 2.2.1 compatibility

@@ -28,7 +28,7 @@ upgrade_base_operating_system() {
   # Update to the latest ti kernel with initrd!
   FORCEMACHINE=TI_AM335x_BeagleBoneBlack sh update_kernel.sh --lts-4_14 --ti-kernel
   KERNEL_VERSION=`awk -F '=' '/uname_r/ {print $2}' /boot/uEnv.txt`
-  apt-get install linux-headers-$KERNEL_VERSION
+  apt-get install -y linux-headers-$KERNEL_VERSION
 # apt-get -y install ti-sgx-es8-modules-$KERNEL_VERSION
   depmod $KERNEL_VERSION
   update-initramfs -k $KERNEL_VERSION -u
