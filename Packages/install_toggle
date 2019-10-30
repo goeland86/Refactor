@@ -134,6 +134,11 @@ source ${TOGGLE_ENVIRONMENT}/bin/activate
 cd ${TOGGLE_ENVIRONMENT}/src
 git clone --no-single-branch --depth=1 https://github.com/liamw9534/pyconnman
 cd pyconnman
+
+pip3 install wheel
+pip3 install pycairo
+pip3 install pygobject
+
 python setup.py clean install
 
 cd ${TOGGLE_ENVIRONMENT}/src/toggle
