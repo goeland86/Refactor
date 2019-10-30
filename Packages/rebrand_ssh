@@ -19,7 +19,7 @@ rcn-ee.net console Ubuntu Image ${BASEIMAGE_DATE}
 
 Check that nothing is printing before any CPU/disk intensive operations!
 EOL
-rm /etc/issue
+
 ln -s /etc/issue.net /etc/issue
 
 # Enable ZeroConf for ssh

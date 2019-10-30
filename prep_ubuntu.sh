@@ -6,10 +6,13 @@ exec >  >(tee -ia /root/prep_ubuntu.log)
 exec 2> >(tee -ia /root/prep_ubuntu.log >&2)
 
 upgrade_base_operating_system() {
+  export DEBIAN_FRONTEND=noninteractive 
   echo "Upgrading packages"
   apt-get update
   # nuke GRUB so it doesn't prompt about config changes
   apt-get remove -y grub-efi-arm
+  # removing issue and issue.net to avoid questioning prompt during upgrade.
+  rm /etc/issue /etc/issue.net
   apt-get upgrade -y
   echo "Removing unwanted kernel packages"
 # apt-get -y remove linux-image-*
@@ -29,7 +32,6 @@ upgrade_base_operating_system() {
   FORCEMACHINE=TI_AM335x_BeagleBoneBlack sh update_kernel.sh --lts-4_14 --ti-kernel
   KERNEL_VERSION=`awk -F '=' '/uname_r/ {print $2}' /boot/uEnv.txt`
   apt-get install -y linux-headers-$KERNEL_VERSION
-# apt-get -y install ti-sgx-es8-modules-$KERNEL_VERSION
   depmod $KERNEL_VERSION
   update-initramfs -k $KERNEL_VERSION -u
 
@@ -43,7 +45,7 @@ upgrade_base_operating_system() {
   echo "iptables-persistent     iptables-persistent/autosave_v6 boolean true" | debconf-set-selections
 
   # now install it
-  apt-get -y -q --no-install-recommends --force-yes install unzip iptables iptables-persistent
+  apt-get -y -q --no-install-recommends install unzip iptables iptables-persistent
   systemctl enable netfilter-persistent
 
   # allow root logon to SSH
@@ -64,6 +66,16 @@ EOL
   wget -q http://kamikaze.thing-printer.com/ubuntu/public.gpg -O- | apt-key add -
 # wget -q http://kamikaze.thing-printer.com/debian/public.gpg -O- | apt-key add -
   apt-get update
+}
+
+install_rtl_update() {
+  WD=`pwd`
+  cd /usr/src/
+  apt-get install -y --no-install-recommends linux-headers-generic build-essential dkms
+  git clone https://github.com/pvaret/rtl8192cu-fixes.git
+  dkms add ./rtl8192cu-fixes
+  dkms install 8192cu/1.11
+  cp ./rtl8192cu-fixes/blacklist-native-rtl8192.conf /etc/modprobe.d/
 }
 
 install_network_manager() {
@@ -122,6 +134,7 @@ cleanup() {
 prep() {
   upgrade_base_operating_system
   add_thing_printer_support_repository
+#  install_rtl_update
   install_network_manager
   remove_unneeded_packages
   cleanup
