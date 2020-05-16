@@ -1,0 +1,21 @@
+---
+- name: copy function files
+  copy:
+    src: '{{ item }}'
+    dest: /opt/scripts/tools/eMMC/
+  with_items:
+    - '{{ role_path }}/files/umikaze-files'
+    - '{{ role_path }}/files/partition.py'
+  when: platform == 'replicape'
+
+- name: uncomment flasher script in uEnv.txt
+  replace:
+    path: /boot/uEnv.txt
+    regex: '#(cmdline=init.*)'
+    replace: '\1'
+
+- name: uncomment the enabler
+  replace:
+    path: /boot/uEnv.txt
+    regex: '#(enable_.*)'
+    replace: '\1'

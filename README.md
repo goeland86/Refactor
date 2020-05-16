@@ -1,10 +1,40 @@
-# Umikaze
-Simplified Umikaze image generation, based on Ubuntu
+# ReFactor
+Simplified Thing-Printer board image generation toolset, based on Debian or Ubuntu images from RCN for beaglebone.
 
-The starting point for Umikaze is the Ubuntu console image, details are in the wiki here:
-https://github.com/intelligent-agent/Umikaze/wiki
+The starting point for ReFactor is the Ubuntu console image, details are in the wiki here:
+http://wiki.thing-printer.com/index.php?title=ReFactor
 
-## Previous versions
+ReFactor is a build-tool to install a printer's Firmware (at the moment Klipper), a printer control interface (OctoPrint or DWC), a touch-screen interface (Toggle w/ OctoPrint, DWC's tbd) and a few miscellaneous items (webcam streamer, network file share for gcode file uploads, etc.). 
+
+It sets a default password for access as root on new images (**root:kamikaze**), but leaves the root account alone otherwise.
+SSH is meant to be active and allow root login. The `debian` user is normally also setup and runs OctoPrint and Klipper. Its password is set to `temppwd`. Both root and debian passwords will need to be changed upon first login.
+
+## Usage
+
+The images generated are focused on being a boot-strapped firmware for Thing-Printer control boards, such as Replicape and Recore. However PRs to make ReFactor an image generation tool for a wider range of single-board controllers is completely welcome. To support multiple platforms, the build script usage has been modified:
+```
+cd <path to Refactor git clone>
+sudo ./build-image-in-chroot-end-to-end.sh <platform> [OPTIONAL: system setup script]
+```
+If not specified, the _ansible-playbook_ that is used is ___SYSTEM_klipper_octoprint-DEFAULT.yml___
+
+The platform (required parameter) is one of:
+ * replicape
+ * recore
+ * pi
+ * pi64
+
+The script then exports the `platform` ansible variable, and sources the `BaseLinux/$platform/Linux` file for a number of items:
+* a URL for which base linux image to build from (pine64 armbian for `pi64` and `recore`, RCN-built console debian 10.3 for `replicape`, raspbian for `pi`)
+* the `decompress()` function, to allow the script to properly decompress the downloaded file and export the image file to where it can be mounted
+* additional ansible parameters specific to the platform requirements. For the moment this is where the `platform` gets passed through, as well as the `firmware` variable.
+
+**IMPORTANT NOTE**: Only the `SYSTEM-[...].yml` playbook files can work with the `build-image-in-chroot-end-to-end.sh` script. The `INSTALL-[...].yml` playbooks are provided as means for end-users to customize their running images. It is inadvisable to run a `SYSTEM-[...].yml` playbook on an already running system. And especially not during a print. That would cause a division by zero and make the printer disappear into its own micro black hole. Or release the magic smoke. Either way, not a good thing. You have been warned.
+
+# Previous image versions
+
+Umikaze 2.1.1 was built on Ubuntu 18.04.1 (LTS) and incorporated OctoPrint, Redeem and Toggle.
+To learn more about Umikaze, go to https://github.com/intelligent-agent/Umikaze/wiki
 
 The starting point for Kamikaze 2.0.0 is the Debian IoT image found here: 
 https://debian.beagleboard.org/images/

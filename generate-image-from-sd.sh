@@ -28,16 +28,20 @@ echo
 
 DEVICE=$1
 PARTITION=${DEVICE}p1
+TARGET_PLATFORM=$2
 
 echo "Device: $DEVICE"
 echo "Partition: $PARTITION"
 
 # This makes it so the image will boot on other BB not just the one it was built on
-echo "Removing UUID references and uncommenting flasher option from /boot/uEnv.txt"
-MOUNTPOINT=$(mktemp -d /tmp/umikaze-sd.XXXXXX)
-mount $PARTITION ${MOUNTPOINT}
-sed -ie '/^uuid=/d' ${MOUNTPOINT}/boot/uEnv.txt
-sed -ie 's/#cmdline=init=\/opt\/scripts\/tools\/eMMC\/init-eMMC-flasher-v3.sh$/cmdline=init=\/opt\/scripts\/tools\/eMMC\/init-eMMC-flasher-v3.sh/' ${MOUNTPOINT}/boot/uEnv.txt
+    MOUNTPOINT=$(mktemp -d /tmp/Refactor-sd.XXXXXX)
+    mount $PARTITION ${MOUNTPOINT}
+if [ ${TARGET_PLATFORM} == 'replicape' ]; then
+    echo "Removing UUID references and uncommenting flasher option from /boot/uEnv.txt"
+    sed -ie '/^uuid=/d' ${MOUNTPOINT}/boot/uEnv.txt
+    #sed -ie 's/#cmdline=init=\/opt\/scripts\/tools\/eMMC\/init-eMMC-flasher-v3.sh$/cmdline=init=\/opt\/scripts\/tools\/eMMC\/init-eMMC-flasher-v3.sh/' ${MOUNTPOINT}/boot/uEnv.txt
+fi
+
 echo "Removing WPA wifi access file just in case"
 rm -rf ${MOUNTPOINT}/root/wpa.conf
 echo "Clearing bash history"
@@ -46,7 +50,7 @@ rm -rf ${MOUNTPOINT}/home/ubuntu/.bash_history
 echo
 
 # Likely not needed but for the sake of making the image smaller we defrag first
-echo "Defragmenting partition."
+echo "Defragmenting partition mounted at ${MOUNTPOINT}."
 e4defrag -c ${MOUNTPOINT} > /dev/null
 umount ${MOUNTPOINT}
 echo
@@ -113,7 +117,7 @@ echo
 # Run one last defrag and zero of the free space before backing it up
 echo "Final defrag and zeroing partition free space."
 mount $PARTITION ${MOUNTPOINT}
-UmikamiVersion=$(cat ${MOUNTPOINT}/etc/dogtag | awk '{printf $2}')
+ImageVersion=$(cat ${MOUNTPOINT}/etc/dogtag | awk -F' ' '{printf $2}')
 e4defrag -c ${MOUNTPOINT} > /dev/null
 # ignore the failure on this line - it runs until it's out of space
 dd if=/dev/zero of=${MOUNTPOINT}/zero_fill || true
@@ -132,9 +136,9 @@ echo "Generating image file now."
 blocksize=$(fdisk -l $DEVICE | grep Units: | awk '{printf $8}')
 count=$(fdisk -l -o Device,End $DEVICE | grep $PARTITION | awk '{printf $2}')
 ddcount=$((count*blocksize/1000000+1))
-dd if=$DEVICE bs=1MB count=${ddcount} | xz -T 0 > Umikaze-${UmikamiVersion}.img.xz
+dd if=$DEVICE bs=1MB count=${ddcount} | xz -T 0 > Refactor-${TARGET_PLATFORM}-${ImageVersion}.img.xz
 echo
 
 # Talkie talkie
-echo "Image file generated on USB drive as Umikaze-${UmikamiVersion}.img.xz"
+echo "Image file generated on USB drive as Refactor-${TARGET_PLATFORM}-${ImageVersion}.img.xz"
 echo "USB drive and MicroSD card can be removed safely now."

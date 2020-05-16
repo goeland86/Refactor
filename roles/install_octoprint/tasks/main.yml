@@ -1,0 +1,148 @@
+---
+- name: remove nginx / apache
+  apt:
+    name:
+      - nginx
+      - apache2
+    state: absent
+  when: platform == 'replicape'
+
+- name: verify python2-virtualenv is present
+  pip:
+    name: virtualenv
+    executable: pip
+
+- name: ensure the debian user exists
+  user:
+    name: debian
+    comment: Default user for OctoPrint
+    shell: /bin/bash
+    groups: tty,dialout
+    append: yes
+    expires: -1
+    home: /home/debian
+
+# iptables -t nat -A PREROUTING -i eth0 -p tcp --dport $srcPortNumber -j REDIRECT --to-port $dstPortNumber
+- name: create IPtables port forward
+  iptables:
+    table: nat
+    chain: PREROUTING
+    protocol: tcp
+    match: tcp
+    jump: REDIRECT
+    destination_port: 80
+    to_ports: 5000
+    comment: Redirect web traffic on port 80 to octoprint
+
+- name: create home octoprint folder
+  file:
+    path: /home/debian/.octoprint
+    state: directory
+    owner: debian
+    group: debian
+
+- name: give debian permissions to python folders for updates
+  file:
+    path: '{{ item }}'
+    group: debian
+    owner: debian
+    mode: 0755
+    recurse: yes
+    state: directory
+  with_items:
+    - '{{ octoprint_home }}/..'
+    - /usr/local/lib/python2.7
+    - /usr/local/bin
+
+- name: Make octoprint config folder
+  file:
+    path: "{{ octoprint_home}}/../.octoprint"
+    state: directory
+    owner: debian
+    group: debian
+
+- name: Insert octoprint config
+  copy:
+    src: "{{ role_path }}/files/config.yaml"
+    dest: "{{ octoprint_home }}/../.octoprint/config.yaml"
+    owner: debian
+    group: debian
+    force: no
+
+- name: Use pip to install OctoPrint
+  pip:
+    chdir: '{{ octoprint_home }}'
+    virtualenv: '{{ octoprint_home }}/venv'
+    virtualenv_python: python2.7
+    state: latest
+    name: git+https://github.com/foosel/OctoPrint.git
+  become_user: debian
+
+
+#- name: Use pip to install Octoprint-filemanager
+#  pip:
+#    chdir: '{{ octoprint_home }}'
+#    virtualenv: '{{ octoprint_home }}/venv'
+#    state: latest
+#    name: https://github.com/Salandora/OctoPrint-FileManager/archive/master.zip
+#  become_user: debian
+
+#- name: Use pip to install Octoprint-SystemCommandEditor
+#  pip:
+#    chdir: '{{ octoprint_home }}'
+#    virtualenv: '{{ octoprint_home }}/venv'
+#    state: latest
+#    name: https://github.com/Salandora/OctoPrint-SystemCommandEditor/archive/master.zip
+#  become_user: debian
+
+
+- name: Have the upload folder ready
+  file:
+    path: /usr/share/models
+    state: directory
+    owner: debian
+    group: debian
+    mode: 0777
+
+- name: annotate OctoPrint port in services
+  lineinfile:
+    path: /etc/services
+    line: octoprint 5000/tcp
+    state: present
+
+- name: make sure the sudoers.d/debian file exists
+  file:
+    path: /etc/sudoers.d/debian
+    owner: root
+    group: root
+    state: touch
+
+- name: grant debian user sudo privileges for some commands
+  blockinfile:
+    path: /etc/sudoers.d/debian
+    block: |
+      %debian ALL=NOPASSWD: /bin/systemctl restart octoprint.service
+      %debian ALL=NOPASSWD: /sbin/reboot
+      %debian ALL=NOPASSWD: /sbin/shutdown -h now
+      %debian ALL=NOPASSWD: /sbin/poweroff
+
+- name: install service file for OctoPrint
+  copy:
+    src: '{{ role_path }}/files/octoprint.service'
+    dest: /lib/systemd/system/octoprint.service
+    owner: root
+    group: root
+    mode: 0644
+
+- name: enable octoprint service
+  service:
+    name: octoprint
+    enabled: yes
+
+- name: allow debian user access to Umikaze repo folder
+  file:
+    path: /usr/src/Umikaze
+    owner: debian
+    group: debian
+    state: directory
+    recurse: yes
