@@ -6,6 +6,11 @@
   with_items:
     - /etc/issue.net
     - /etc/issue
+
+- name: Register ReFactor version
+  script: 
+    cmd: '{{ role_path }}/files/get_refactor_version.sh'
+  register: version
     
 - name: upgrade packages
   apt:
@@ -91,15 +96,24 @@
 
 - name: write dogtag
   lineinfile:
-    line: '{{ version }} {{ build_date.stdout }}'
+    line: '{{ version.stdout }} {{ build_date.stdout }}'
     state: present
     path: '/etc/{{ dogtag }}'
 
-- name: remove hosts entry
+- name: remove hostname
+  file:
+    path: /etc/hostname
+    state: absent
+
+- name: create hostname
+  file:
+    path: /etc/hostname
+    state: touch
+
+- name: set hostname
   lineinfile:
     path: /etc/hostname
-    line: arm
-    state: absent
+    line: '{{ platform }}'
 
 - name: set root password
   shell:
@@ -122,10 +136,10 @@
     path: '{{ item }}'
     state: present
     block: |
-      "{{ version }}
+      {{ version.stdout }}
 
       Check that nothing is printing before any intensive operation!
-      "
+      
   with_items:
     - /etc/issue.net
     - /etc/issue
@@ -135,8 +149,35 @@
     name: ssh
     enabled: yes
 
-- name: enable connman
-  service:
+- name: remove connman
+  apt:
     name: connman
-    enabled: yes
-  when: platform == 'replicape'
+    state: absent
+
+- name: create resolv.conf
+  file:
+    path: /etc/resolv.conf
+    state: touch
+    mode: 0644
+    owner: root
+    group: root
+
+- name: reset the resolv.conf file
+  lineinfile:
+    path: /etc/resolv.conf
+    line: nameserver 1.1.1.1
+    state: present
+
+- name: install NetworkManager
+  apt:
+    name: network-manager
+    state: latest
+
+- name: Recore - include device tree
+  copy:
+    src: '{{ role_path }}/files/{{ item }}'
+    dest: '/boot/dtb/allwinner/{{ item }}'
+  with_items:
+   - sun50i-a64-recore.dtb
+   - sun50i-a64-recore.dts
+  when: platform == 'recore'
