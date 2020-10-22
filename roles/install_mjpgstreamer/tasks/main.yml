@@ -19,6 +19,12 @@
     line: '#add_subdirectory(plugins/input_raspicam)'
   when: (platform != 'pi' and 'platform' != 'pi64')
 
+- name: compile mjpg-streamer
+  shell: make && make install
+  args:
+    chdir: /usr/src/mjpg-streamer/mjpg-streamer-experimental/
+    creates: /usr/bin/mjpg_streamer
+
 - name: add video udev rule file
   file:
     path: /etc/udev/rules.d/50-video.rules

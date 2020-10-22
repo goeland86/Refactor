@@ -3,10 +3,10 @@ accessControl:
 api:
   key: A16E678B4725409883770F6DD4DAA436
 appearance:
-  name: Kamiklipper
+  name: ReFactor
 feature: {}
 folder:
-  uploads: /usr/share/models
+  uploads: /home/debian/.octoprint/uploads
 gcodeViewer: {}
 plugins:
   announcements:
@@ -22,11 +22,6 @@ plugins:
         read_until: 1574985600
       _releases:
         read_until: 1575299700
-  cura:
-    _config_version: null
-    cura_engine: /usr/bin/CuraEngine
-    debug_logging: false
-    default_profile: null
   discovery:
     upnpUuid: 05489750-db4d-4c17-8aa6-e9783bc31ef3
   errortracking:
@@ -80,13 +75,15 @@ server:
     corewizard: 3
     tracking: null
 system:
-  actions:
-  - action: restart_toggle
-    command: sudo systemctl restart toggle.service
-    name: Restart Toggle
-  - action: restart mjpg
-    command: sudo systemctl restart mjpg.service
-    name: Restart Mjpg
+    actions:
+    -   action: restart klipper
+        command: sudo systemctl stop klipper && sudo systemctl restart klipper_pru
+            && sudo systemctl start klipper
+        confirm: Are you sure? This will interrupt any ongoing printing.
+        name: Restart Klipper
+    -   action: restart mjpg
+        command: sudo systemctl restart mjpg
+        name: Restart Mjpg
 temperature:
   profiles:
   - bed: 100
@@ -105,6 +102,6 @@ terminalFilters:
 - name: Suppress wait responses
   regex: 'Recv: (wait)|(ok)$'
 webcam:
-  ffmpeg: /usr/bin/avconv
+  ffmpeg: /usr/bin/ffmpeg
   snapshot: http://localhost:8080/?action=snapshot
   stream: http://kamikaze.local:8080/?action=stream
