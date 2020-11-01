@@ -1,5 +1,6 @@
 # This specifies the base Ubuntu system
 BASEIMAGE_URL=https://redirect.armbian.com/pine64/Buster_current
+
 BASEIMAGE=armbian_pine64_current_$(date --iso-8601).img.xz
 
 ANSIBLE_PLATFORM_VARS='{"platform":"recore", "packaging":"apt"}'
