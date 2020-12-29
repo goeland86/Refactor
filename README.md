@@ -39,6 +39,14 @@ If you are trying to fix a bug, please prefix the `PR` with `[bug]`, and mention
 
 In case you need help building an image to test your changes and do not have a build environment available, please submit your PR against `goeland86/ReFactor`, with a title prefixed with `[Dev]` to clearly identify that the features are still under active development.
 
+# Latest images
+
+To verify images and always test the latest code changes, a Jenkins unit is running to build images for any commit to the `master` branch.
+Any tag created will generate a pre-release on the repository, with automatically generated and uploaded images attached.
+If you want to test a specific commit's image, you'll need to browse the [Jenkins project](https://goeland86.hopto.org/job/IntelligentAgent-master-ReFactor/) to download the corresponding image (called artifact).
+
+This Jenkins server is running on a pi 4, which means its capacity is limited to only one image build at a time, and despite the USB3 drive for I/O, an image for Replicape or Recore alone takes nearly an hour. It's also a recurring donation to the project by @goeland86 to keep it online and up to date.
+
 # Previous image versions
 
 Umikaze 2.1.1 was built on Ubuntu 18.04.1 (LTS) and incorporated OctoPrint, Redeem and Toggle.
