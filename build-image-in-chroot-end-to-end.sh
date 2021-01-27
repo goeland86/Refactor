@@ -61,8 +61,9 @@ w
 
 EOF
 
-clean=$(e2fsck -f -p ${DEVICE}p1)
-if [ $clean != '0' ]; then
+e2fsck -f -p ${DEVICE}p1
+clean_status=$?
+if [ "$clean_status" -ne "0" ]; then
 	echo "had to clear out something on the FS..."
 fi
 resize2fs ${DEVICE}p1
@@ -71,6 +72,7 @@ mount ${DEVICE}p1 ${MOUNTPOINT}
 mount -o bind /dev ${MOUNTPOINT}/dev
 mount -o bind /sys ${MOUNTPOINT}/sys
 mount -o bind /proc ${MOUNTPOINT}/proc
+mount -o bind /dev/pts ${MOUNTPOINT}/dev/pts
 
 rm ${MOUNTPOINT}/etc/resolv.conf
 cp /etc/resolv.conf ${MOUNTPOINT}/etc/resolv.conf
@@ -91,25 +93,22 @@ if [ -f "customize.sh" ]; then
 fi
 
 set +e # allow this to fail - we'll check the return code
-cat << EOF | chroot ${MOUNTPOINT} su -c passwd
-1234
-kamikaze
-kamikaze
-EOF
-
-chroot ${MOUNTPOINT} su -c "cd ${REFACTOR_HOME} && ./prep_apt.sh && ansible-playbook ${SYSTEM_ANSIBLE} -T 180 --extra-vars '${ANSIBLE_PLATFORM_VARS}'"
+chroot ${MOUNTPOINT} su -c "\
+cd ${REFACTOR_HOME} && \
+apt update && \
+apt install -y ansible python && \
+ansible-playbook ${SYSTEM_ANSIBLE} -T 180 --extra-vars '${ANSIBLE_PLATFORM_VARS}' -i hosts"
 
 status=$?
 set -e
 
-if [ $TARGET_PLATFORM == "recore" ]; then
-	dd if=/dev/zero of=$DEVICE bs=1k count=1023 seek=1
-	dd if=$UBOOT_BIN of=$DEVICE bs=1024 seek=8 conv=notrunc
-fi
+lsof | grep pts
+
 
 rm ${MOUNTPOINT}/etc/resolv.conf
 umount ${MOUNTPOINT}/proc
 umount ${MOUNTPOINT}/sys
+umount -l ${MOUNTPOINT}/dev/pts
 umount ${MOUNTPOINT}/dev
 umount ${MOUNTPOINT}
 rmdir ${MOUNTPOINT}
@@ -117,15 +116,27 @@ rmdir ${MOUNTPOINT}
 if [ $status -eq 0 ]; then
     echo "Looks like the image was prepared successfully - packing it up"
     if [ ${TARGET_PLATFORM} == 'replicape' ]; then
-      ./update-u-boot.sh $DEVICE
+			if [ ! -f ${UBOOT_SPL} ] ; then
+				wget ${UBOOT_SPL_URL}
+			fi
+			if [ ! -f ${UBOOT_BIN} ] ; then
+				wget ${UBOOT_BIN_URL}
+			fi
+			dd if=${UBOOT_SPL} of=${DEVICE} seek=1 bs=128k
+			dd if=${UBOOT_BIN} of=${DEVICE} seek=1 bs=384k
     fi
+
+		if [ ${TARGET_PLATFORM} == "recore" ]; then
+			dd if=/dev/zero of=${DEVICE} bs=1k count=1023 seek=1
+			dd if=${UBOOT_BIN} of=${DEVICE} bs=1024 seek=8 conv=notrunc
+		fi
     ./generate-image-from-sd.sh $DEVICE $TARGET_PLATFORM
+
+		losetup -d $DEVICE
 else
-    echo "image generation seems to have failed - cleaning up"
-fi
+    echo "image generation seems to have failed - cleaning up, returning $status"
 
-losetup -d $DEVICE
+		losetup -d $DEVICE
 
-if [ $status -ne 0 ]; then
-  exit $status
+		exit ${status}
 fi
