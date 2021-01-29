@@ -19,7 +19,8 @@
 - name: Install packages
   apt:
     name:
-      - iptables
+      - nftables
+      - python3.7
       - python3-pip
       - python3-dev
       - git
@@ -41,10 +42,15 @@
     expires: -1
     home: /home/debian
 
-# iptables -t nat -A PREROUTING -p tcp --dport $srcPortNumber -j REDIRECT --to-port $dstPortNumber
-- name: create iptables port forward with iptables-legacy
-  shell:
-    cmd: iptables-legacy -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 5000
+- name: create nftables port forward from :80 to :5000
+  copy:
+    src: "{{ role_path }}/files/nftables.conf"
+    dest: "/etc/nftables.conf"
+
+- name: Enable nftables
+  service:
+    name: nftables
+    enabled: yes
 
 - name: create home octoprint folder
   file:
@@ -82,7 +88,6 @@
     group: debian
     force: no
 
-
 - name: Use pip to install OctoPrint
   pip:
     chdir: '{{ octoprint_home }}'
@@ -91,24 +96,6 @@
     state: latest
     name: git+https://github.com/foosel/OctoPrint.git
   become_user: debian
-
-
-#- name: Use pip to install Octoprint-filemanager
-#  pip:
-#    chdir: '{{ octoprint_home }}'
-#    virtualenv: '{{ octoprint_home }}/venv'
-#    state: latest
-#    name: https://github.com/Salandora/OctoPrint-FileManager/archive/master.zip
-#  become_user: debian
-
-#- name: Use pip to install Octoprint-SystemCommandEditor
-#  pip:
-#    chdir: '{{ octoprint_home }}'
-#    virtualenv: '{{ octoprint_home }}/venv'
-#    state: latest
-#    name: https://github.com/Salandora/OctoPrint-SystemCommandEditor/archive/master.zip
-#  become_user: debian
-
 
 - name: Have the upload folder ready
   file:
@@ -147,7 +134,6 @@
     owner: root
     group: root
     mode: 0644
-
 
 - name: enable octoprint service
   service:
