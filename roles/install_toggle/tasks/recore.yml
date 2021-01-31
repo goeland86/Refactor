@@ -70,7 +70,6 @@
       user = toggle
       authentication =
       apikey =
-      password =
 
 - name: enable the toggle service
   block:
