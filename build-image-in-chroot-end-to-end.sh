@@ -42,9 +42,7 @@ fi
 
 rm -f $TARGETIMAGE
 decompress || $(echo "check your Linux platform file is correct!"; exit) # defined in the BaseLinux/{platform}/Linux file
-#if [ $TARGET_PLATFORM == 'replicape' ]; then
-truncate -s 4G $TARGETIMAGE
-#fi
+truncate -s 3600M $TARGETIMAGE
 
 DEVICE=`losetup -P -f --show $TARGETIMAGE`
 
@@ -102,8 +100,8 @@ ansible-playbook ${SYSTEM_ANSIBLE} -T 180 --extra-vars '${ANSIBLE_PLATFORM_VARS}
 status=$?
 set -e
 
-lsof | grep pts
-
+rm -rf ${MOUNTPOINT}${REFACTOR_HOME}
+rm -rf ${MOUNTPOINT}/root/.ansible
 
 rm ${MOUNTPOINT}/etc/resolv.conf
 umount ${MOUNTPOINT}/proc

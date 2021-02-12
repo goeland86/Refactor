@@ -4,13 +4,13 @@
     pkg:
       - cmake
       - libjpeg-dev
-      - ffmpeg
     state: latest
 
 - name: clone git repo
   git:
     repo: https://github.com/xeno14/mjpg-streamer
     dest: /usr/src/mjpg-streamer
+    depth: 1
 
 - name: remove raspicam from camera list
   lineinfile:
