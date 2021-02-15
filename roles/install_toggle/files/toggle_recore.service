@@ -1,7 +1,7 @@
 [Unit]
 Description=3D-printer user interface
 After=weston.service
-StartLimitIntervalSec=500
+StartLimitIntervalSec=5
 StartLimitBurst=3
 
 [Service]
