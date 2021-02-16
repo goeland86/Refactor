@@ -22,6 +22,7 @@
 
       [shell]
       locking=false
+      panel-position=none
 
       [output]
       name=HDMI-A-1
