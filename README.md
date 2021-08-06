@@ -2,7 +2,7 @@
 Simplified Recore and Replicape board image generation toolset, based on Armbian for Recore or Ubuntu images from RCN for beaglebone.
 
 The starting point for Refactor is the Ubuntu console image, details are in the wiki here:
-http://wiki.thing-printer.com/index.php?title=ReFactor
+https://wiki.iagent.no/wiki/Refactor
 
 ReFactor is a build-tool to install a printer's Firmware (at the moment Klipper), a printer control interface (OctoPrint), a touch-screen interface (Toggle w/ OctoPrint) and a few miscellaneous items (webcam streamer, network file share for gcode file uploads, etc.).
 
