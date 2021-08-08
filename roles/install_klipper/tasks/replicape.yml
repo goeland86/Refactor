@@ -77,6 +77,16 @@
   become: true
   become_user: debian
 
+- name: Replicape - Stop klipper. The install script starts it.
+  systemd:
+    name: klipper.service
+    state: stopped
+
+- name: Replicape - Stop klipper_pru. It is hogging the pts.
+  systemd:
+    name: klipper_pru.service
+    state: stopped
+
 - name: Replicape - compile binary blobs for klippy
   shell:
     cmd: "cd {{ klipper_home }} ; cp {{ item }} .config ; make flash"

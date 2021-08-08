@@ -56,6 +56,11 @@
   become: true
   become_user: debian
 
+- name: Recore - Stop klipper. The install script starts it.
+  systemd:
+    name: klipper.service
+    state: stopped
+
 - name: Recore - Make out folder
   file:
     path: /home/debian/klipper/out/

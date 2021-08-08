@@ -70,6 +70,7 @@ mount ${DEVICE}p1 ${MOUNTPOINT}
 mount -o bind /dev ${MOUNTPOINT}/dev
 mount -o bind /sys ${MOUNTPOINT}/sys
 mount -o bind /proc ${MOUNTPOINT}/proc
+mount -o bind /dev/pts ${MOUNTPOINT}/dev/pts
 
 rm ${MOUNTPOINT}/etc/resolv.conf
 cp /etc/resolv.conf ${MOUNTPOINT}/etc/resolv.conf
@@ -103,6 +104,7 @@ rm -rf ${MOUNTPOINT}${REFACTOR_HOME}
 rm -rf ${MOUNTPOINT}/root/.ansible
 
 rm ${MOUNTPOINT}/etc/resolv.conf
+umount ${MOUNTPOINT}/dev/pts
 umount ${MOUNTPOINT}/dev
 umount ${MOUNTPOINT}/proc
 umount ${MOUNTPOINT}/sys
