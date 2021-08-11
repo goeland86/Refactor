@@ -6,8 +6,13 @@ https://wiki.iagent.no/wiki/Refactor
 
 ReFactor is a build-tool to install a printer's Firmware (at the moment Klipper), a printer control interface (OctoPrint), a touch-screen interface (Toggle w/ OctoPrint) and a few miscellaneous items (webcam streamer, network file share for gcode file uploads, etc.).
 
-It sets a default password for access as root on new images (**root:kamikaze**), but leaves the root account alone otherwise.
-SSH is meant to be active and allow root login. The `debian` user is normally also setup and runs OctoPrint and Klipper. Its password is set to `temppwd`. Both root and debian passwords will need to be changed upon first login.
+Hostname for Refactor Recore is based on the serial number. The serial number is written on the back of the board. For the board with serial number 0001, the hostname would be:  
+`recore-0001.local`
+
+It sets a default password for access as root on new images, but leaves the root account alone otherwise:
+SSH is meant to be active and allow root login. The `debian` user is normally also setup and runs OctoPrint and Klipper. Both root and debian passwords will need to be changed upon first login.  
+Username/password: `root`/`kamikaze`  
+Username/password: `debian`/`temppwd`  
 
 ## Usage
 The images generated are focused on being a boot-strapped firmware for Thing-Printer control boards, such as Replicape and Recore. However PRs to make ReFactor an image generation tool for a wider range of single-board controllers is completely welcome. To support multiple platforms, the build script usage has been modified:
@@ -20,8 +25,8 @@ If not specified, the _ansible-playbook_ that is used is ___SYSTEM_klipper_octop
 The platform (required parameter) is one of:
  * replicape
  * recore
- * pi
- * pi64
+ * (pi)
+ * (pi64)
 
 The script then exports the `platform` ansible variable, and sources the `BaseLinux/$platform/Linux` file for a number of items:
 * a URL for which base linux image to build from (pine64 armbian for `pi64` and `recore`, RCN-built console debian 10.3 for `replicape`, raspbian for `pi`)

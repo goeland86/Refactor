@@ -1,8 +1,7 @@
 ---
 - name: clone octoprint klipper plugin
   git:
-    repo: https://github.com/AliceGrey/OctoprintKlipperPlugin.git
-    version: configSanityCheck
+    repo: https://github.com/thelastWallE/OctoprintKlipperPlugin.git
     dest: /usr/src/octoprint_klipper
 
 - name: Change ownership

@@ -50,7 +50,7 @@
       - python-dev
 
 - name: Recore - install Klipper with install scripts
-  shell: "export USER=debian; {{ klipper_home }}/scripts/install-recore-a3.sh"
+  shell: "export USER=debian; {{ klipper_home }}/scripts/install-recore.sh"
   args:
     chdir: "{{ klipper_home }}"
   become: true
