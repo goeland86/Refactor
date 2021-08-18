@@ -70,6 +70,22 @@
       user = toggle
       authentication =
 
+- name: clone octoprint toggle plugin from git
+  git:
+    repo: https://github.com/intelligent-agent/octoprint_toggle
+    dest: /home/debian/octoprint_toggle
+
+- name: install octoprint toggle plugin in virtualenv
+  shell:
+    cmd: 'cd /home/debian/octoprint_toggle; {{ octoprint_home }}/venv/bin/python setup.py clean install'
+
+- name: Make toggle config files changeble from OctoPrint
+  file:
+    path: /etc/toggle
+    recurse: yes
+    owner: debian
+    group: debian
+
 - name: enable the toggle service
   block:
     - name: Attempt to enable toggle with systemd module
