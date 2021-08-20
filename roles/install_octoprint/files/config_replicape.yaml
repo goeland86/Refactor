@@ -1,5 +1,5 @@
 appearance:
-  name: KAMIKAZE
+  name: Replicape
 folder:
   uploads: /usr/share/models
 plugins:
@@ -16,8 +16,8 @@ server:
     systemRestartCommand: sudo reboot
     systemShutdownCommand: sudo shutdown -h now
 webcam:
-  stream: http://recore.local:8080/?action=stream
-  snapshot: http://recore.local:8080/?action=snapshot
+  stream: http://replicape.local:8080/?action=stream
+  snapshot: http://replicape.local:8080/?action=snapshot
   ffmpeg: /usr/bin/avconv
 serial:
     additionalPorts:

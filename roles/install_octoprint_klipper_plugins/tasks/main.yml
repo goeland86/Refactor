@@ -17,3 +17,25 @@
     cmd: 'cd /usr/src/octoprint_klipper ; {{ octoprint_home }}/venv/bin/python setup.py clean install'
   become: yes
   become_user: debian
+
+- name: clone octoprint top temp plugin
+  git:
+    repo: https://github.com/LazeMSS/OctoPrint-TopTemp.git
+    dest: /usr/src/octoprint_top_temp
+  when: platform == 'recore'
+
+- name: Change ownership
+  file:
+    path:  /usr/src/octoprint_top_temp
+    owner: debian
+    group: debian
+    state: directory
+    recurse: yes
+  when: platform == 'recore'
+
+- name: install octoprint top temp plugin in Octoprint virtual env
+  shell:
+    cmd: 'cd /usr/src/octoprint_top_temp ; {{ octoprint_home }}/venv/bin/python setup.py clean install'
+  become: yes
+  become_user: debian
+  when: platform == 'recore'

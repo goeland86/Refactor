@@ -64,7 +64,7 @@
 
 - name: Insert octoprint config
   copy:
-    src: "{{ role_path }}/files/config.yaml"
+    src: "{{ role_path }}/files/config_recore.yaml"
     dest: "{{ octoprint_home }}/../.octoprint/config.yaml"
     owner: debian
     group: debian

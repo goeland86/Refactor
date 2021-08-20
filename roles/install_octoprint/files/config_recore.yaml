@@ -1,0 +1,118 @@
+appearance:
+  name: Recore
+folder:
+  uploads: /usr/share/models
+plugins:
+  softwareupdate:
+    _config_version: 9
+    checks:
+      octoprint:
+        checkout_folder: /home/debian/OctoPrint
+        prerelease: false
+  toptemp:
+    tool0:
+      show: false
+    bed:
+      show: false
+    customMon:
+      cu2:
+        cmd: (?:B):.*? Board:([^ ]+)
+        colorIcons: false
+        decSep: .
+        graphSettings:
+          color: '#000000'
+          height: 50
+          opa: 0.2
+          show: false
+          width: 1
+        hideOnNoTarget: false
+        icon: fas fa-thermometer-full
+        interval: 25
+        isTemp: true
+        label: 'Board:'
+        name: Board
+        noDigits: '1'
+        postCalc: null
+        show: true
+        showPopover: true
+        showUnit: true
+        type: gcIn
+        unit: ''
+        updated: 1628968382280
+        waitForPrint: false
+        width: 0
+      cu3:
+        cmd: (?:B):.*? Voltage:([^ ]+)
+        colorChangeLevel: 60
+        colorIcons: false
+        decSep: .
+        graphSettings:
+          color: '#000000'
+          height: 50
+          opa: 0.2
+          show: false
+          width: 1
+        hideOnNoTarget: false
+        icon: fas fa-bolt
+        interval: 25
+        isTemp: false
+        label: Voltage
+        name: Voltage
+        noDigits: '1'
+        postCalc: null
+        show: true
+        showPopover: true
+        showUnit: true
+        type: gcIn
+        unit: V
+        updated: 1628968382280
+        waitForPrint: false
+        width: 0
+      cu4:
+        cmd: (?:B):.*? Current:([^ ]+)
+        colorChangeLevel: 60
+        colorIcons: false
+        decSep: .
+        graphSettings:
+          color: '#000000'
+          height: 50
+          opa: 0.2
+          show: false
+          width: 1
+        hideOnNoTarget: false
+        icon: fas fa-battery-full
+        interval: 25
+        isTemp: false
+        label: 'Current: '
+        name: Current
+        noDigits: '1'
+        postCalc: null
+        show: true
+        showPopover: true
+        showUnit: true
+        type: gcIn
+        unit: A
+        updated: 1628968382280
+        waitForPrint: false
+        width: 0
+    firstRun: false
+    sortOrder:
+    - bed
+    - tool0
+    - cu2
+    - cu3
+    - cu4
+server:
+  firstRun: true
+  commands:
+    serverRestartCommand: sudo systemctl restart octoprint.service
+    systemRestartCommand: sudo reboot
+    systemShutdownCommand: sudo shutdown -h now
+webcam:
+  stream: http://recore.local:8080/?action=stream
+  snapshot: http://recore.local:8080/?action=snapshot
+  ffmpeg: /usr/bin/avconv
+serial:
+    additionalPorts:
+    - /tmp/printer
+    port: /tmp/printer
