@@ -104,7 +104,7 @@ rm -rf ${MOUNTPOINT}${REFACTOR_HOME}
 rm -rf ${MOUNTPOINT}/root/.ansible
 
 rm ${MOUNTPOINT}/etc/resolv.conf
-umount ${MOUNTPOINT}/dev/pts
+umount -l ${MOUNTPOINT}/dev/pts
 umount ${MOUNTPOINT}/dev
 umount ${MOUNTPOINT}/proc
 umount ${MOUNTPOINT}/sys
