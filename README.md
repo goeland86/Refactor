@@ -1,6 +1,8 @@
 # Refactor
 Simplified Recore and Replicape board image generation toolset, based on Armbian for Recore or Ubuntu images from RCN for beaglebone.
 
+[![Build](https://github.com/intelligent-agent/Refactor/actions/workflows/main.yml/badge.svg)](https://github.com/intelligent-agent/Refactor/actions/workflows/main.yml)
+
 The starting point for Refactor is the Ubuntu console image, details are in the wiki here:
 https://wiki.iagent.no/wiki/Refactor
 
