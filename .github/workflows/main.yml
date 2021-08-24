@@ -1,13 +1,7 @@
-# This is a basic workflow to help you get started with Actions
-
 name: Build Refactor on AWS
-
-# Controls when the workflow will run
 on: push
-
 jobs:
   build-recore:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
     steps:
       - name: Build Refactor Recore on AWS
@@ -20,6 +14,7 @@ jobs:
             git checkout $branch
             git pull
             git log HEAD --oneline --no-walk
+            rm -rf Refactor-*.xz
             sudo ./build-image-in-chroot-end-to-end.sh recore
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
@@ -28,7 +23,6 @@ jobs:
           CI: true
 
   build-replicape:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
     steps:
       - name: Build Refactor Replicape on AWS
@@ -41,6 +35,7 @@ jobs:
             git checkout $branch
             git pull
             git log HEAD --oneline --no-walk
+            rm -rf Refactor-*.xz
             sudo ./build-image-in-chroot-end-to-end.sh replicape
           host: ${{ secrets.HOST_REPLICAPE }}
           username: ${{ secrets.USERNAME }}

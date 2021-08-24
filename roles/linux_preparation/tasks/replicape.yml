@@ -166,3 +166,14 @@
   apt:
     name: network-manager
     state: latest
+
+- name: Disable audio
+  lineinfile:
+    path: /boot/uEnv.txt
+    line: disable_uboot_overlay_audio=1
+    state: present
+
+- name: Reflash pru firmware
+  command:
+    chdir: /home/debian/klipper
+    cmd: ./scripts/flash-pru.sh
