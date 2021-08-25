@@ -21,6 +21,25 @@ jobs:
           privateKey: ${{ secrets.PRIVATE_KEY}}
         env:
           CI: true
+      - name: Download file via SSH if tagged
+        uses: nicklasfrahm/scp-action@main
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          direction: download
+          host: ${{ secrets.HOST }}
+          fingerprint: ${{ secrets.EC2_FINGERPRINT }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          source: /home/admin/Refactor/Refactor-recore-latest.img.xz
+          target: ./Refactor-recore-latest.img.xz
+      - name: Release if tagged
+        uses: ncipollo/release-action@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          allowUpdates: true
+          artifacts: Refactor-recore-latest.img.xz
+          token: ${{ secrets.GITHUB_TOKEN }}
+          prerelease: true
 
   build-replicape:
     runs-on: ubuntu-latest
@@ -42,3 +61,22 @@ jobs:
           privateKey: ${{ secrets.PRIVATE_KEY}}
         env:
           CI: true
+      - name: Download file via SSH if tagged
+        uses: nicklasfrahm/scp-action@main
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          direction: download
+          host: ${{ secrets.HOST_REPLICAPE }}
+          fingerprint: ${{ secrets.EC2_FINGERPRINT_REPLICAPE }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          source: /home/admin/Refactor/Refactor-replicape-latest.img.xz
+          target: ./Refactor-replicape-latest.img.xz
+      - name: Release if tagged
+        uses: ncipollo/release-action@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          allowUpdates: true
+          artifacts: Refactor-replicape-latest.img.xz
+          token: ${{ secrets.GITHUB_TOKEN }}
+          prerelease: true
