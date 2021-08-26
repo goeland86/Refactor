@@ -1,0 +1,9 @@
+#Systemd service file for klipper
+[Unit]
+Description=flashing the stm32 firmware
+
+[Install]
+WantedBy=basic.target
+
+[Service]
+ExecStart=/usr/local/bin/flash-stm32

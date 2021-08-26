@@ -76,6 +76,36 @@
     owner: debian
     group: debian
 
+- name: Recore - Copy STM32 config
+  copy:
+    src: "{{ role_path }}/files/stm32f0.config"
+    dest: "{{ klipper_home }}/.config"
+    owner: debian
+    group: debian
+
+- name: Recore - Compile STM32 binary
+  shell: |
+    make olddefconfig
+    make
+  args:
+    chdir: "{{ klipper_home }}"
+
+- name: Recore - Install stm32 flasher script
+  copy:
+    src: "{{ role_path }}/files/flash-stm32"
+    dest: "/usr/local/bin"
+    mode: '0755'
+
+- name: Recore - Install stm32 flasher service
+  copy:
+    src: "{{ role_path }}/files/flash-stm32.service"
+    dest: "/etc/systemd/system/"
+
+- name: Recore - Enable stm32 flasher service
+  service:
+    name: flash-stm32.service
+    enabled: yes
+
 - name: Recore - create recore klipper config file
   copy:
     src: "{{ klipper_home }}/config/generic-recore.cfg"

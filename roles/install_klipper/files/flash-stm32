@@ -1,0 +1,8 @@
+#!/bin/bash
+
+systemctl stop klipper
+cd /home/debian/klipper
+export FLASH_DEVICE=/dev/ttyS4
+make recoreflash
+systemctl disable flash-stm32
+systemctl start klipper
