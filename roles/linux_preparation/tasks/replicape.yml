@@ -34,6 +34,7 @@
       - curl
       - firmware-realtek
       - git
+      - usbutils
     state: present
 
 - name: Replicape - update RCN scripts
