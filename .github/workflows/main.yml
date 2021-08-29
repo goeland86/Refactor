@@ -15,6 +15,7 @@ jobs:
             git pull
             git log HEAD --oneline --no-walk
             rm -rf Refactor-*.xz
+            ls armbian*.img.xz | grep -v $(date +"%F") | xargs -d"\n" rm -rf
             sudo ./build-image-in-chroot-end-to-end.sh recore
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
