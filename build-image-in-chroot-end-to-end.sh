@@ -46,26 +46,30 @@ truncate -s 3600M $TARGETIMAGE
 
 DEVICE=`losetup -P -f --show $TARGETIMAGE`
 
-cat << EOF | fdisk ${DEVICE}
-p
-d
-n
-p
-1
-8192
+echo "preparing the partition layout"
+sed -i 's|/dev/loop8|${DEVICE}|g' image.layout
 
-p
-w
+sfdisk --delete ${DEVICE}
+sfdisk ${DEVICE} < image.layout
 
-EOF
+echo "fdisk has finished"
+
+if [[ $? -ne 0 ]]; then
+    echo "echo calling on partprobe because fdisk failed to read the partitions."
+    partprobe
+fi
+
+echo "checking the filesystem..."
 
 e2fsck -f -p ${DEVICE}p1
 clean_status=$?
 if [ "$clean_status" -ne "0" ]; then
 	echo "had to clear out something on the FS..."
 fi
+echo "resizing"
 resize2fs ${DEVICE}p1
 
+echo "Beginning the mount sequence."
 mount ${DEVICE}p1 ${MOUNTPOINT}
 mount -o bind /dev ${MOUNTPOINT}/dev
 mount -o bind /sys ${MOUNTPOINT}/sys
@@ -73,7 +77,7 @@ mount -o bind /proc ${MOUNTPOINT}/proc
 mount -o bind /dev/pts ${MOUNTPOINT}/dev/pts
 
 rm ${MOUNTPOINT}/etc/resolv.conf
-cp /etc/resolv.conf ${MOUNTPOINT}/etc/resolv.conf
+cp -L /etc/resolv.conf ${MOUNTPOINT}/etc/resolv.conf
 
 # don't git clone here - if someone did a commit since this script started, Unexpected Things will happen
 # instead, do a deep copy so the image has a git repo as well
@@ -84,11 +88,6 @@ shopt -s extglob # allow excluding so we can hide the img files
 cp -r `pwd`/!(*.img*|*.7z) ${MOUNTPOINT}${REFACTOR_HOME}
 shopt -u extglob
 shopt -u dotglob
-
-if [ -f "customize.sh" ]; then
-  add_custom_account
-  perform_minimal_reconfiguration
-fi
 
 set +e # allow this to fail - we'll check the return code
 chroot ${MOUNTPOINT} su -c "\
@@ -105,10 +104,10 @@ rm -rf ${MOUNTPOINT}/root/.ansible
 
 rm ${MOUNTPOINT}/etc/resolv.conf
 umount -l ${MOUNTPOINT}/dev/pts
-umount ${MOUNTPOINT}/dev
-umount ${MOUNTPOINT}/proc
-umount ${MOUNTPOINT}/sys
-umount ${MOUNTPOINT}
+umount -l ${MOUNTPOINT}/dev
+umount -l ${MOUNTPOINT}/proc
+umount -l ${MOUNTPOINT}/sys
+umount -l ${MOUNTPOINT}
 rmdir ${MOUNTPOINT}
 
 if [ $status -eq 0 ]; then
@@ -133,8 +132,6 @@ if [ $status -eq 0 ]; then
 		losetup -d $DEVICE
 else
     echo "image generation seems to have failed - cleaning up, returning $status"
-
-		losetup -d $DEVICE
-
-		exit ${status}
+    losetup -d $DEVICE
+    exit ${status}
 fi

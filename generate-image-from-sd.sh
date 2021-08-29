@@ -52,7 +52,7 @@ echo
 # Likely not needed but for the sake of making the image smaller we defrag first
 echo "Defragmenting partition mounted at ${MOUNTPOINT}."
 e4defrag -c ${MOUNTPOINT} > /dev/null
-umount ${MOUNTPOINT}
+umount -l ${MOUNTPOINT}
 echo
 
 # Run file system checks and then shrink the file system as much as possible
@@ -69,7 +69,7 @@ mount $PARTITION ${MOUNTPOINT}
 e4defrag -c ${MOUNTPOINT} > /dev/null
 dd if=/dev/zero of=${MOUNTPOINT}/zero_fill || true
 rm -rf ${MOUNTPOINT}/zero_fill
-umount ${MOUNTPOINT}
+umount -l ${MOUNTPOINT}
 echo
 
 # Run the file system checks and another series of file system shrinks just in case
@@ -122,7 +122,7 @@ e4defrag -c ${MOUNTPOINT} > /dev/null
 # ignore the failure on this line - it runs until it's out of space
 dd if=/dev/zero of=${MOUNTPOINT}/zero_fill || true
 rm -rf ${MOUNTPOINT}/zero_fill
-umount ${MOUNTPOINT}
+umount -l ${MOUNTPOINT}
 rmdir ${MOUNTPOINT}
 echo
 
