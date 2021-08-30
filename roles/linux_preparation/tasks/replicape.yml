@@ -178,3 +178,6 @@
   command:
     chdir: /home/debian/klipper
     cmd: ./scripts/flash-pru.sh
+
+- name: Replicape - fix home ownership
+  command: chown -R debian:debian /home/debian

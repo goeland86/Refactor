@@ -85,3 +85,6 @@
     path: /etc/default/haveged
     regexp: '"-w 1024"'
     replace: '"-w 1024 -d 16"'
+    
+- name: Recore - fix home ownership
+  command: chown -R debian:debian /home/debian
