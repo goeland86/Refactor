@@ -11,6 +11,7 @@ jobs:
             cd Refactor
             git fetch
             export branch=$(echo ${{github.ref}} |  cut -d'/' -f 3-)
+            git reset --hard
             git checkout $branch
             git pull
             git log HEAD --oneline --no-walk
@@ -52,6 +53,7 @@ jobs:
             cd Refactor
             git fetch
             export branch=$(echo ${{github.ref}} |  cut -d'/' -f 3-)
+            git reset --hard
             git checkout $branch
             git pull
             git log HEAD --oneline --no-walk
