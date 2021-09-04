@@ -53,7 +53,10 @@ echo
 echo "Defragmenting partition mounted at ${MOUNTPOINT}."
 e4defrag -c ${MOUNTPOINT} > /dev/null
 umount -l ${MOUNTPOINT}
-echo
+if [[ $(mount | grep ${PARTITION}) ]]; then
+    fuser -km ${MOUNTPOINT} # as described here: https://serverfault.com/a/59037
+    umount -l ${MOUNTPOINT}
+fi
 
 # Run file system checks and then shrink the file system as much as possible
 echo "Resizing filesystem."
@@ -70,6 +73,10 @@ e4defrag -c ${MOUNTPOINT} > /dev/null
 dd if=/dev/zero of=${MOUNTPOINT}/zero_fill || true
 rm -rf ${MOUNTPOINT}/zero_fill
 umount -l ${MOUNTPOINT}
+if [[ $(mount | grep ${PARTITION}) ]]; then
+    fuser -km ${MOUNTPOINT} # as described here: https://serverfault.com/a/59037
+    umount -l ${MOUNTPOINT}
+fi
 echo
 
 # Run the file system checks and another series of file system shrinks just in case
@@ -123,6 +130,10 @@ e4defrag -c ${MOUNTPOINT} > /dev/null
 dd if=/dev/zero of=${MOUNTPOINT}/zero_fill || true
 rm -rf ${MOUNTPOINT}/zero_fill
 umount -l ${MOUNTPOINT}
+if [[ $(mount | grep ${PARTITION}) ]]; then
+    fuser -km ${MOUNTPOINT} # as described here: https://serverfault.com/a/59037
+    umount -l ${MOUNTPOINT}
+fi
 rmdir ${MOUNTPOINT}
 echo
 
