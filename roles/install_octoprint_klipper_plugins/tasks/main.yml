@@ -104,6 +104,6 @@
     state: present
     line: "{{ item }}"
   loop:
-    - "/dev/sda1 /mnt/usb ext4 defaults"
-    - "/dev/mmcblk0p1 /mnt/emmc ext4 defaults"
+    - "/dev/sda1 /mnt/usb ext4 defaults,nofail"
+    - "/dev/mmcblk0p1 /mnt/emmc ext4 defaults,nofail"
   when: platform == 'recore'
