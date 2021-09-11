@@ -39,3 +39,71 @@
   become: yes
   become_user: debian
   when: platform == 'recore'
+
+- name: clone octoprint Refactor plugin
+  git:
+    repo: https://github.com/intelligent-agent/octoprint_refactor.git
+    dest: /usr/src/octoprint_refactor
+  when: platform == 'recore'
+
+- name: Change ownership
+  file:
+    path:  /usr/src/octoprint_refactor
+    owner: debian
+    group: debian
+    state: directory
+    recurse: yes
+  when: platform == 'recore'
+
+- name: install octoprint refactor plugin in Octoprint virtual env
+  shell:
+    cmd: 'cd /usr/src/octoprint_refactor ; {{ octoprint_home }}/venv/bin/python setup.py clean install'
+  become: yes
+  become_user: debian
+  when: platform == 'recore'
+
+- name: install the binary set-boot-media in /sbin
+  copy:
+    src: /usr/src/octoprint_refactor/bin/set-boot-media
+    dest: /sbin/
+    mode: '0755'
+    owner: root
+    group: root
+  when: platform == 'recore'
+
+- name: install the binary flash-recore in /sbin
+  copy:
+    src: /usr/src/octoprint_refactor/bin/flash-recore
+    dest: /sbin/
+    mode: '0755'
+    owner: root
+    group: root
+  when: platform == 'recore'
+
+- name: Crate images directory
+  file:
+    path: "/home/debian/images"
+    state: directory
+    mode: '0755'
+    owner: debian
+    group: debian
+
+- name: Recore, Create mount directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - /mnt/emmc
+    - /mnt/usb
+  when: platform == 'recore'
+
+- name: Recore, Update fstab, mount emmc and usb in known locations
+  lineinfile:
+    path: /etc/fstab
+    state: present
+    line: "{{ item }}"
+  loop:
+    - "/dev/sda1 /mnt/usb ext4 defaults"
+    - "/dev/mmcblk0p1 /mnt/emmc ext4 defaults"
+  when: platform == 'recore'
