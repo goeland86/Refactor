@@ -3,10 +3,10 @@ Simplified Recore and Replicape board image generation toolset, based on Armbian
 
 [![Build](https://github.com/intelligent-agent/Refactor/actions/workflows/main.yml/badge.svg)](https://github.com/intelligent-agent/Refactor/actions/workflows/main.yml)
 
-The starting point for Refactor is the Ubuntu console image, details are in the wiki here:
+The starting point for Refactor is the Arbian/Debian console image, details are in the wiki here:
 https://wiki.iagent.no/wiki/Refactor
 
-ReFactor is a build-tool to install a printer's Firmware (at the moment Klipper), a printer control interface (OctoPrint), a touch-screen interface (Toggle w/ OctoPrint) and a few miscellaneous items (webcam streamer, network file share for gcode file uploads, etc.).
+Refactor is a build-tool to install a printer's Firmware (at the moment Klipper), a printer control interface (OctoPrint), a touch-screen interface (Toggle w/ OctoPrint) and a few miscellaneous items (webcam streamer, network file share for gcode file uploads, etc.).
 
 Hostname for Refactor Recore is based on the serial number. The serial number is written on the back of the board. For the board with serial number 0001, the hostname would be:  
 `recore-0001.local`
