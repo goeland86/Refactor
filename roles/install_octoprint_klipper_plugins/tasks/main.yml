@@ -1,10 +1,10 @@
 ---
-- name: clone octoprint klipper plugin
+- name: Recore, clone octoprint klipper plugin
   git:
     repo: https://github.com/thelastWallE/OctoprintKlipperPlugin.git
     dest: /usr/src/octoprint_klipper
 
-- name: Change ownership
+- name: Recore, Change ownership
   file:
     path: /usr/src/octoprint_klipper
     owner: debian
@@ -12,19 +12,19 @@
     state: directory
     recurse: yes
 
-- name: install octoprint klipper plugin in Octoprint virtual env
+- name: Recore, install octoprint klipper plugin in Octoprint virtual env
   shell:
     cmd: 'cd /usr/src/octoprint_klipper ; {{ octoprint_home }}/venv/bin/python setup.py clean install'
   become: yes
   become_user: debian
 
-- name: clone octoprint top temp plugin
+- name: Recore, clone octoprint top temp plugin
   git:
     repo: https://github.com/LazeMSS/OctoPrint-TopTemp.git
     dest: /usr/src/octoprint_top_temp
   when: platform == 'recore'
 
-- name: Change ownership
+- name: Recore, Change ownership
   file:
     path:  /usr/src/octoprint_top_temp
     owner: debian
@@ -33,20 +33,20 @@
     recurse: yes
   when: platform == 'recore'
 
-- name: install octoprint top temp plugin in Octoprint virtual env
+- name: Recore, install octoprint top temp plugin in Octoprint virtual env
   shell:
     cmd: 'cd /usr/src/octoprint_top_temp ; {{ octoprint_home }}/venv/bin/python setup.py clean install'
   become: yes
   become_user: debian
   when: platform == 'recore'
 
-- name: clone octoprint Refactor plugin
+- name: Recore, clone octoprint Refactor plugin
   git:
     repo: https://github.com/intelligent-agent/octoprint_refactor.git
     dest: /usr/src/octoprint_refactor
   when: platform == 'recore'
 
-- name: Change ownership
+- name: Recore, Change ownership
   file:
     path:  /usr/src/octoprint_refactor
     owner: debian
@@ -55,14 +55,14 @@
     recurse: yes
   when: platform == 'recore'
 
-- name: install octoprint refactor plugin in Octoprint virtual env
+- name: Recore, install octoprint refactor plugin in Octoprint virtual env
   shell:
     cmd: 'cd /usr/src/octoprint_refactor ; {{ octoprint_home }}/venv/bin/python setup.py clean install'
   become: yes
   become_user: debian
   when: platform == 'recore'
 
-- name: install the binary set-boot-media in /sbin
+- name: Recore, install the binary set-boot-media in /sbin
   copy:
     src: /usr/src/octoprint_refactor/bin/set-boot-media
     dest: /sbin/
@@ -71,7 +71,7 @@
     group: root
   when: platform == 'recore'
 
-- name: install the binary flash-recore in /sbin
+- name: Recore, install the binary flash-recore in /sbin
   copy:
     src: /usr/src/octoprint_refactor/bin/flash-recore
     dest: /sbin/
@@ -80,7 +80,7 @@
     group: root
   when: platform == 'recore'
 
-- name: Crate images directory
+- name: Recore, Crate images directory
   file:
     path: "/home/debian/images"
     state: directory
