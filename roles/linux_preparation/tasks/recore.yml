@@ -4,6 +4,13 @@
     upgrade: dist
     update_cache: yes
 
+- name: remove unneeded packages
+  apt:
+    pkg:
+    - smartmontools
+    state: absent
+    autoremove: yes
+
 - name: install packages
   apt:
     pkg:
@@ -85,6 +92,6 @@
     path: /etc/default/haveged
     regexp: '"-w 1024"'
     replace: '"-w 1024 -d 16"'
-    
+
 - name: Recore - fix home ownership
   command: chown -R debian:debian /home/debian
