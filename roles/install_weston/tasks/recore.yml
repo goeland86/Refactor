@@ -35,16 +35,13 @@
     content: |
       [Unit]
       Description=Weston Wayland Compositor
-      After=user@0.service
-      Requires=user@0.service
 
       [Service]
-      Environment="XDG_RUNTIME_DIR=/run/user/0"
-      ExecStart=/usr/bin/weston-launch --user root
+      Environment="XDG_RUNTIME_DIR=/run/user/1000"
+      ExecStart=/usr/bin/weston-launch --user debian
 
       [Install]
       WantedBy=multi-user.target
 
 - name: Enable service weston
   shell: systemctl enable weston
-
