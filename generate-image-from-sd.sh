@@ -27,8 +27,13 @@ set -x
 echo
 
 DEVICE=$1
-PARTITION=${DEVICE}p1
 TARGET_PLATFORM=$2
+if [ ${TARGET_PLATFORM} == "recore" ]; then
+  PARTITION=${DEVICE}p2
+fi
+if [ ${TARGET_PLATFORM} == "replicape" ]; then
+  PARTITION=${DEVICE}p1
+fi
 
 echo "Device: $DEVICE"
 echo "Partition: $PARTITION"
@@ -97,15 +102,25 @@ partblockstart=$(fdisk -l -o Device,Start $DEVICE | grep $PARTITION | awk '{prin
 partsize=$((fsblockcount*fsblocksize/partblocksize))
 
 # Write out the partition layout that will replace the currently existing one.
-cat <<EOF > /shrink.layout
-# partition table of $DEVICE
+if [ ${TARGET_PLATFORM} == "recore" ]; then
+cat <<EOF > shrink.layout
+# partition table of ${DEVICE}
 unit: sectors
 
-$PARTITION : start=${partblockstart}, size=${partsize}, Id=83, bootable
+${DEVICE}p1 : start=8192, size=524288, type=83
+${DEVICE}p2 : start=${partblockstart}, size=${partsize}, Id=83
 EOF
+fi
+if [ ${TARGET_PLATFORM} == 'replicape' ]; then
+  cat <<EOF > shrink.layout
+# partition table of ${DEVICE}
+unit: sectors
 
+${DEVICE}p1 : start=${partblockstart}, size=${partsize}, type=83
+EOF
+fi
 # Perform actual modifications to the partition layout
-sfdisk $DEVICE < /shrink.layout
+sfdisk $DEVICE < shrink.layout
 #rm -rf /shrink.layout
 
 # Make sure the system sees the new partition layout, check the file system for issues

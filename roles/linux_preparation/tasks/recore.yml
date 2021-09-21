@@ -95,3 +95,9 @@
 
 - name: Recore - fix home ownership
   command: chown -R debian:debian /home/debian
+
+- name: Recore - Make boot partition read-only
+  replace:
+    path: /etc/fstab
+    regexp: "defaults,commit=600,errors=remount-ro 0 2"
+    replace: "ro,defaults 0 0"

@@ -3,4 +3,5 @@ label-id: 0x9e9adf64
 device: /dev/loop8
 unit: sectors
 
-/dev/loop8p1 : start=        8192, size=     7364608, type=83
+/dev/loop8p1 : start=        8192, size=      524288, type=83
+/dev/loop8p2 : start=      532480, size=    7364608, type=83

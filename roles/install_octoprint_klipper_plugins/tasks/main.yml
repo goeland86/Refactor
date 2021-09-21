@@ -64,7 +64,7 @@
 
 - name: Recore, install the binary set-boot-media in /sbin
   copy:
-    src: /usr/src/octoprint_refactor/bin/set-boot-media
+    src: files/set-boot-media
     dest: /sbin/
     mode: '0755'
     owner: root
@@ -73,7 +73,7 @@
 
 - name: Recore, install the binary flash-recore in /sbin
   copy:
-    src: /usr/src/octoprint_refactor/bin/flash-recore
+    src: files/flash-recore
     dest: /sbin/
     mode: '0755'
     owner: root
@@ -104,6 +104,6 @@
     state: present
     line: "{{ item }}"
   loop:
-    - "/dev/sda1 /mnt/usb ext4 defaults,nofail"
-    - "/dev/mmcblk0p1 /mnt/emmc ext4 defaults,nofail"
+    - "/dev/sda1 /mnt/usb ext4 ro,defaults,nofail"
+    - "/dev/mmcblk0p1 /mnt/emmc ext4 ro,defaults,nofail"
   when: platform == 'recore'

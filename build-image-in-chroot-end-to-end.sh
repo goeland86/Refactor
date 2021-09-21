@@ -37,40 +37,58 @@ MOUNTPOINT=$(mktemp -d /tmp/umikaze-root.XXXXXX)
 REFACTOR_HOME="/usr/src/Refactor"
 
 if [ ! -f $BASEIMAGE ]; then
-    wget $BASEIMAGE_URL -O $BASEIMAGE
+    wget -q $BASEIMAGE_URL -O $BASEIMAGE
 fi
 
 rm -f $TARGETIMAGE
 decompress || $(echo "check your Linux platform file is correct!"; exit) # defined in the BaseLinux/{platform}/Linux file
-truncate -s 3600M $TARGETIMAGE
-
-DEVICE=`losetup -P -f --show $TARGETIMAGE`
 
 echo "preparing the partition layout"
-sed -i 's|/dev/loop8|${DEVICE}|g' image.layout
+if [ ${TARGET_PLATFORM} == "recore" ]; then
+	truncate -s 3856M $TARGETIMAGE
+	DEVICE=`losetup -P -f --show $TARGETIMAGE`
 
-sfdisk --delete ${DEVICE}
-sfdisk ${DEVICE} < image.layout
+	PARTITION=${DEVICE}p2
+	cat <<EOF > image.layout
+# partition table of ${DEVICE}
+unit: sectors
 
-echo "fdisk has finished"
-
-if [[ $? -ne 0 ]]; then
-    echo "echo calling on partprobe because fdisk failed to read the partitions."
-    partprobe
+${DEVICE}p1 : start=8192, size=524288, type=83
+${DEVICE}p2 : start=532480, size=7364608, type=83
+EOF
 fi
 
+if [ ${TARGET_PLATFORM} == 'replicape' ]; then
+	truncate -s 3600M $TARGETIMAGE
+	DEVICE=`losetup -P -f --show $TARGETIMAGE`
+	PARTITION=${DEVICE}p1
+	cat <<EOF > image.layout
+# partition table of ${DEVICE}
+unit: sectors
+
+${DEVICE}p1 : start=8192, size=7364608, type=83
+EOF
+fi
+
+
+sfdisk --delete ${DEVICE}
+# Perform actual modifications to the partition layout
+sfdisk ${DEVICE} < image.layout
 echo "checking the filesystem..."
 
-e2fsck -f -p ${DEVICE}p1
+e2fsck -f -p ${PARTITION}
 clean_status=$?
 if [ "$clean_status" -ne "0" ]; then
 	echo "had to clear out something on the FS..."
 fi
 echo "resizing"
-resize2fs ${DEVICE}p1
+resize2fs ${PARTITION}
 
 echo "Beginning the mount sequence."
-mount ${DEVICE}p1 ${MOUNTPOINT}
+mount ${PARTITION} ${MOUNTPOINT}
+if [ ${TARGET_PLATFORM} == "recore" ]; then
+	mount ${DEVICE}p1 ${MOUNTPOINT}/boot
+fi
 mount -o bind /dev ${MOUNTPOINT}/dev
 mount -o bind /sys ${MOUNTPOINT}/sys
 mount -o bind /proc ${MOUNTPOINT}/proc
@@ -107,6 +125,9 @@ umount -l ${MOUNTPOINT}/dev/pts
 umount -l ${MOUNTPOINT}/dev
 umount -l ${MOUNTPOINT}/proc
 umount -l ${MOUNTPOINT}/sys
+if [ ${TARGET_PLATFORM} == "recore" ]; then
+	umount -l ${MOUNTPOINT}/boot
+fi
 umount -l ${MOUNTPOINT}
 rmdir ${MOUNTPOINT}
 
