@@ -113,6 +113,7 @@
       %debian ALL=NOPASSWD: /sbin/set-boot-media usb
       %debian ALL=NOPASSWD: /sbin/set-boot-media emmc
       %debian ALL=NOPASSWD: /sbin/flash-recore *.img.xz
+      %debian ALL=NOPASSWD: /sbin/get-boot-media
 
 - name: install service file for OctoPrint
   copy:
