@@ -2,9 +2,9 @@
 
 NEW_MEDIA=$1
 
-if [ ${NEW_MEDIA} == "usb" ]; then
+if [ "x${NEW_MEDIA}" == "xusb" ]; then
   NEW_DEV="/dev/sda2"
-elif [ ${NEW_MEDIA} == "emmc" ]; then
+elif [ "x${NEW_MEDIA}" == "xemmc" ]; then
   NEW_DEV="/dev/mmcblk0p2"
 else
   echo "usage $0 usb/emmc"

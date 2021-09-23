@@ -5,7 +5,7 @@ PATH_USB="/dev/sda2"
 UUID_EMMC=`blkid -s UUID -o value /dev/mmcblk0p2`
 UUID_USB=`blkid -s UUID -o value /dev/sda2`
 
-DEV=`grep "^rootdev=" /mnt/emmc/armbianEnv.txt | sed 's:rootdev=::'`
+DEV=`grep "^rootdev=" /mnt/emmc/armbianEnv.txt | sed 's:rootdev=::' | sed 's:UUID=::'`
 
 case $DEV in
   $PATH_EMMC | $UUID_EMMC)

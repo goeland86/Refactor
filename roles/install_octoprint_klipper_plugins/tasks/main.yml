@@ -62,22 +62,19 @@
   become_user: debian
   when: platform == 'recore'
 
-- name: Recore, install the binary set-boot-media in /sbin
+- name: Recore, install the binary files in /sbin
   copy:
-    src: files/set-boot-media
+    src: "files/{{ item }}"
     dest: /sbin/
     mode: '0755'
     owner: root
     group: root
-  when: platform == 'recore'
-
-- name: Recore, install the binary flash-recore in /sbin
-  copy:
-    src: files/flash-recore
-    dest: /sbin/
-    mode: '0755'
-    owner: root
-    group: root
+  loop:
+    - flash-recore
+    - set-boot-media
+    - get-boot-media
+    - is-media-present
+    - get-rootfs
   when: platform == 'recore'
 
 - name: Recore, Crate images directory
