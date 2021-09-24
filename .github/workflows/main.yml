@@ -4,6 +4,8 @@ jobs:
   build-recore:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Build Refactor Recore on AWS
         uses: garygrossgarten/github-action-ssh@release
         with:
@@ -34,18 +36,29 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           source: /home/admin/Refactor/Refactor-recore-latest.img.xz
           target: ./Refactor-recore-latest.img.xz
+      - name: Rename file
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          TAG=$(git log -n1 --pretty="format:%d" | sed "s/, /\n/g" | grep tag: | grep -v origin | sed "s/tag: \|)//g" | tr -d '\n')
+          if [[ $TAG == "" ]]; then
+            TAG=$(git reflog --decorate -1 | awk -F' ' '{print $1}' | tr -d '\n')
+          fi
+          DATE=$(date --iso-8601)
+          mv ./Refactor-recore-latest.img.xz Refactor-recore-${TAG}-${DATE}.img.xz
       - name: Release if tagged
         uses: ncipollo/release-action@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
           allowUpdates: true
-          artifacts: Refactor-recore-latest.img.xz
+          artifacts: Refactor-recore-*.img.xz
           token: ${{ secrets.GITHUB_TOKEN }}
           prerelease: true
 
   build-replicape:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Build Refactor Replicape on AWS
         uses: garygrossgarten/github-action-ssh@release
         with:
@@ -75,11 +88,20 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           source: /home/admin/Refactor/Refactor-replicape-latest.img.xz
           target: ./Refactor-replicape-latest.img.xz
+      - name: Rename file if tagged
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          TAG=$(git log -n1 --pretty="format:%d" | sed "s/, /\n/g" | grep tag: | grep -v origin | sed "s/tag: \|)//g" | tr -d '\n')
+          if [[ $TAG == "" ]]; then
+            TAG=$(git reflog --decorate -1 | awk -F' ' '{print $1}' | tr -d '\n')
+          fi
+          DATE=$(date --iso-8601)
+          mv ./Refactor-replicape-latest.img.xz Refactor-replicape-${TAG}-${DATE}.img.xz
       - name: Release if tagged
         uses: ncipollo/release-action@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
           allowUpdates: true
-          artifacts: Refactor-replicape-latest.img.xz
+          artifacts: Refactor-replicape-*.img.xz
           token: ${{ secrets.GITHUB_TOKEN }}
           prerelease: true
