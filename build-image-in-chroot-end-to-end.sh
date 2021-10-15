@@ -110,7 +110,7 @@ shopt -u dotglob
 set +e # allow this to fail - we'll check the return code
 chroot ${MOUNTPOINT} su -c "\
 cd ${REFACTOR_HOME} && \
-apt update && \
+apt update && apt -y upgrade && \
 apt install -y ansible python && \
 ansible-playbook ${SYSTEM_ANSIBLE} -T 180 --extra-vars '${ANSIBLE_PLATFORM_VARS}' -i hosts"
 
