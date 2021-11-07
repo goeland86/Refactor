@@ -139,25 +139,3 @@
     dest: /etc/systemd/system/
     owner: debian
     group: debian
-
-- name: Recore - Install KIAUH
-  git:
-    repo: https://github.com/th33xitus/kiauh.git
-    dest: '{{ klipper_home }}/../kiauh'
-    update: yes
-    clone: yes
-
-- name: Recore - Update KIAUH to call the right install script
-  replace:
-    path: '{{ klipper_home }}/../kiauh/scripts/{{ item }}'
-    regexp: install-octopi\.sh
-    after: install-recore-a3.sh
-  with_items:
-    - update.sh
-    - install_klipper.sh
-
-- name: Recore - Update KIAUH to use the recore upstream repo
-  replace:
-    path: '{{ klipper_home }}/../kiauh/kiauh.sh'
-    regexp: KLIPPER_REPO=.*
-    replace: KLIPPER_REPO=https://github.com/intelligent-agent/klipper.git

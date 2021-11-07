@@ -109,8 +109,9 @@
     line: '{{ platform }}'
 
 - name: set root password
-  shell:
-    cmd: "echo 'root:kamikaze' | chpasswd"
+  user:
+    name: root
+    password: "{{ 'kamikaze' | password_hash('sha512') }}"
 
 - name: force user to change debian password on first login
   shell:

@@ -55,8 +55,9 @@
     content: "{{ platform }}\n"
 
 - name: set root password
-  shell:
-    cmd: "echo 'root:kamikaze' | chpasswd"
+  user:
+    name: root
+    password: "{{ 'kamikaze' | password_hash('sha512') }}"
 
 - name: write issue and issue.net
   copy:

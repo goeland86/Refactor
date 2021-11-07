@@ -1,5 +1,5 @@
 ---
-- name: Install packages
+- name: Recore - Install packages
   apt:
     name:
       - nftables
@@ -12,12 +12,12 @@
       - pv
     state: present
 
-- name: verify python3-virtualenv is present
+- name: Recore - verify python3-virtualenv is present
   pip:
     name: virtualenv
     executable: pip3
 
-- name: ensure the debian user exists
+- name: Recore - ensure the debian user exists
   user:
     name: debian
     comment: Default user for OctoPrint
@@ -27,12 +27,12 @@
     expires: -1
     home: /home/debian
 
-- name: create nftables port forward from :80 to :5000
+- name: Recore - create nftables port forward from :80 to :5000
   copy:
     src: "{{ role_path }}/files/nftables.conf"
     dest: "/etc/nftables.conf"
 
-- name: Enable nftables
+- name: Recore - Enable nftables
   service:
     name: nftables
     enabled: yes
@@ -44,7 +44,7 @@
     owner: debian
     group: debian
 
-- name: give debian permissions to python folders for updates
+- name: Recore - give debian permissions to python folders for updates
   file:
     path: '{{ item }}'
     group: debian
@@ -57,14 +57,14 @@
     - /usr/local/lib/python3
     - /usr/local/bin
 
-- name: Make octoprint config folder
+- name: Recore - Make octoprint config folder
   file:
     path: "{{ octoprint_home}}/../.octoprint"
     state: directory
     owner: debian
     group: debian
 
-- name: Insert octoprint config
+- name: Recore - Insert octoprint config
   copy:
     src: "{{ role_path }}/files/config_recore.yaml"
     dest: "{{ octoprint_home }}/../.octoprint/config.yaml"
@@ -72,7 +72,7 @@
     group: debian
     force: no
 
-- name: Use pip to install OctoPrint
+- name: Recore - Use pip to install OctoPrint
   pip:
     chdir: '{{ octoprint_home }}'
     virtualenv: '{{ octoprint_home }}/venv'
@@ -81,7 +81,7 @@
     name: git+https://github.com/foosel/OctoPrint.git
   become_user: debian
 
-- name: Have the upload folder ready
+- name: Recore - Have the upload folder ready
   file:
     path: /usr/share/models
     state: directory
@@ -89,20 +89,20 @@
     group: debian
     mode: 0777
 
-- name: annotate OctoPrint port in services
+- name: Recore - annotate OctoPrint port in services
   lineinfile:
     path: /etc/services
     line: octoprint 5000/tcp
     state: present
 
-- name: make sure the sudoers.d/debian file exists
+- name: Recore - make sure the sudoers.d/debian file exists
   file:
     path: /etc/sudoers.d/debian
     owner: root
     group: root
     state: touch
 
-- name: grant debian user sudo privileges for some commands
+- name: Recore - grant debian user sudo privileges for some commands
   blockinfile:
     path: /etc/sudoers.d/debian
     block: |
@@ -115,7 +115,7 @@
       %debian ALL=NOPASSWD: /sbin/flash-recore *.img.xz
       %debian ALL=NOPASSWD: /sbin/get-boot-media
 
-- name: install service file for OctoPrint
+- name: Recore - install service file for OctoPrint
   copy:
     src: '{{ role_path }}/files/octoprint.service'
     dest: /lib/systemd/system/octoprint.service
@@ -123,12 +123,12 @@
     group: root
     mode: 0644
 
-- name: enable octoprint service
+- name: Recore - enable octoprint service
   service:
     name: octoprint
     enabled: yes
 
-- name: allow debian user access to relevant folders
+- name: Recore - allow debian user access to relevant folders
   file:
     path: "{{ item }}"
     owner: debian

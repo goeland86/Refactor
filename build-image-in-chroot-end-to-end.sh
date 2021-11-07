@@ -47,7 +47,6 @@ echo "preparing the partition layout"
 if [ ${TARGET_PLATFORM} == "recore" ]; then
 	truncate -s 3856M $TARGETIMAGE
 	DEVICE=`losetup -P -f --show $TARGETIMAGE`
-
 	PARTITION=${DEVICE}p2
 	cat <<EOF > image.layout
 # partition table of ${DEVICE}
@@ -95,7 +94,7 @@ mount -o bind /proc ${MOUNTPOINT}/proc
 mount -o bind /dev/pts ${MOUNTPOINT}/dev/pts
 
 rm ${MOUNTPOINT}/etc/resolv.conf
-cp -L /etc/resolv.conf ${MOUNTPOINT}/etc/resolv.conf
+echo "nameserver 8.8.8.8" >> ${MOUNTPOINT}/etc/resolv.conf
 
 # don't git clone here - if someone did a commit since this script started, Unexpected Things will happen
 # instead, do a deep copy so the image has a git repo as well

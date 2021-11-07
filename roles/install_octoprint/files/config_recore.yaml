@@ -116,3 +116,4 @@ serial:
     additionalPorts:
     - /tmp/printer
     port: /tmp/printer
+    disconnectOnErrors: false

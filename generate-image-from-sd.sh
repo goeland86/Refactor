@@ -65,6 +65,10 @@ fi
 
 # Run file system checks and then shrink the file system as much as possible
 echo "Resizing filesystem."
+if [[ $(mount | grep ${PARTITION}) ]]; then
+    fuser -km ${MOUNTPOINT}
+    umount -l ${MOUNTPOINT}
+fi
 e2fsck -f $PARTITION -y
 resize2fs -pM $PARTITION
 resize2fs -pM $PARTITION
