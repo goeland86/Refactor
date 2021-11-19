@@ -29,7 +29,7 @@ plugins:
         icon: fas fa-thermometer-full
         interval: 25
         isTemp: true
-        label: 'Board:'
+        label: 'Input:'
         name: Board
         noDigits: '1'
         postCalc: null
