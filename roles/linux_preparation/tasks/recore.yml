@@ -102,3 +102,26 @@
     path: /etc/fstab
     regexp: "defaults,commit=600,errors=remount-ro 0 2"
     replace: "ro,defaults 0 0"
+
+- name: Recore - Add ttyGS0 to /etc/securetty
+  lineinfile:
+    path: /etc/securetty
+    line: ttyGS0
+    state: present
+
+- name: Recore - Add g_serial to /etc/modules
+  lineinfile:
+    path: /etc/modules-load.d/modules.conf
+    line: g_serial
+    state: present
+
+- name: Recore - Add console log
+  lineinfile:
+    path: /boot/armbianEnv.txt
+    line: extraargs=console=ttyGS0,115200 console=tty1
+    state: present
+
+- name: Recore - Enable ttyGS0 getty service
+  service:
+    name: getty@ttyGS0.service
+    enabled: yes
