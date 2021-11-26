@@ -61,9 +61,9 @@
     name: klipper.service
     state: stopped
 
-- name: Recore - Make out folder
+- name: Recore - Make firmware folder
   file:
-    path: /home/debian/klipper/out/
+    path: /opt/firmware
     state: directory
     mode: '0755'
     owner: debian
@@ -72,7 +72,7 @@
 - name: Recore - Install ar100 binary
   copy:
     src: "{{ role_path }}/files/ar100.bin"
-    dest: /home/debian/klipper/out/ar100.bin
+    dest: /opt/firmware/ar100.bin
     owner: debian
     group: debian
 
@@ -89,6 +89,15 @@
     make
   args:
     chdir: "{{ klipper_home }}"
+
+- name: Recore - Copy STM32 binary
+  copy:
+    src: "{{ klipper_home }}/out/klipper.bin"
+    dest: /opt/firmware/stm32.bin
+    owner: debian
+    group: debian
+    remote_src: yes
+    force: no
 
 - name: Recore - Install stm32 flasher script
   copy:
