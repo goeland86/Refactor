@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 FLASH_DEVICE=/dev/ttyS4
 STM32_BINARY=/opt/firmware/stm32.bin
 
