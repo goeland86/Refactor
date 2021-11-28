@@ -123,5 +123,5 @@
 
 - name: Recore - Enable ttyGS0 getty service
   service:
-    name: getty@ttyGS0.service
+    name: serial-getty@ttyGS0.service
     enabled: yes
