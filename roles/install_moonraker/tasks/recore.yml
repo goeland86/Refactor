@@ -1,0 +1,8 @@
+---
+- name: Recore - Install Moonraker install script
+  copy:
+    src: "install-moonraker.sh"
+    dest: /home/debian
+    owner: debian
+    group: debian
+    mode: 0755

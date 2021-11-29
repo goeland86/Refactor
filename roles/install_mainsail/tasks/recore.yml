@@ -1,0 +1,14 @@
+---
+- name: Recore - Install Mainsail install script
+  copy:
+    src: "install-mainsail.sh"
+    dest: /home/debian
+    owner: debian
+    group: debian
+    mode: 0755
+
+- name: Recore - Install Mainsail switcheroo
+  copy:
+    src: enable-mainsail
+    dest: /usr/local/bin/
+    mode: 0700

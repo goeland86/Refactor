@@ -1,0 +1,13 @@
+#!/bin/bash
+
+systemctl disable nginx
+systemctl stop nginx
+
+systemctl disable moonraker
+systemctl stop moonraker
+
+systemctl enable octoprint
+systemctl start octoprint
+
+systemctl enable nftables
+systemctl start nftables

@@ -10,4 +10,6 @@
     - install_mjpgstreamer
     - install_weston
     - install_toggle
+    - install_moonraker
+    - install_mainsail
     - linux_preparation
