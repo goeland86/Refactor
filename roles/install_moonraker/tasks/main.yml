@@ -1,4 +1,4 @@
 ---
-- name: Recore - Install OctoPrint
+- name: Recore - Install Moonraker
   include: recore.yml
   when: platform == 'recore'
