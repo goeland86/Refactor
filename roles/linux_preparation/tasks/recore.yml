@@ -59,6 +59,11 @@
     name: root
     password: "{{ 'kamikaze' | password_hash('sha512') }}"
 
+- name: set debian password
+  user:
+    name: debian
+    password: "{{ 'temppwd' | password_hash('sha512') }}"
+
 - name: write issue and issue.net
   copy:
     dest: '{{ item }}'
