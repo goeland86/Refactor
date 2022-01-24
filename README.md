@@ -1,5 +1,5 @@
 # Refactor
-Simplified Recore and Replicape board image generation toolset, based on Armbian for Recore or Ubuntu images from RCN for beaglebone.
+Simplified Recore and Replicape board image generation toolset, based on Armbian for Recore or Debian images from RCN for beaglebone.
 
 [![Build](https://github.com/intelligent-agent/Refactor/actions/workflows/main.yml/badge.svg)](https://github.com/intelligent-agent/Refactor/actions/workflows/main.yml)
 
@@ -8,8 +8,7 @@ https://wiki.iagent.no/wiki/Refactor
 
 Refactor is a build-tool to install a printer's Firmware (at the moment Klipper), a printer control interface (OctoPrint), a touch-screen interface (Toggle w/ OctoPrint) and a few miscellaneous items (webcam streamer, network file share for gcode file uploads, etc.).
 
-Hostname for Refactor Recore is based on the serial number. The serial number is written on the back of the board. For the board with serial number 0001, the hostname would be:  
-`recore-0001.local`
+The hostname for Recore is `recore`. The hostname for replicape is `replicape`.
 
 It sets a default password for access as root on new images, but leaves the root account alone otherwise:
 SSH is meant to be active and allow root login. The `debian` user is normally also setup and runs OctoPrint and Klipper. Both root and debian passwords will need to be changed upon first login.  
