@@ -76,6 +76,13 @@
     owner: debian
     group: debian
 
+- name: Recore - Install bl31 binary
+  copy:
+    src: "{{ role_path }}/files/bl31.bin"
+    dest: /opt/firmware/bl31.bin
+    owner: debian
+    group: debian
+
 - name: Recore - Copy STM32 config
   copy:
     src: "{{ role_path }}/files/stm32f0.config"
