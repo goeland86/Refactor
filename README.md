@@ -3,7 +3,7 @@ Simplified Recore and Replicape board image generation toolset, based on Armbian
 
 [![Build](https://github.com/intelligent-agent/Refactor/actions/workflows/main.yml/badge.svg)](https://github.com/intelligent-agent/Refactor/actions/workflows/main.yml)
 
-The starting point for Refactor is the Arbian/Debian console image, details are in the wiki here:
+The starting point for Refactor is the Armbian/Debian console image, details are in the wiki here:
 https://wiki.iagent.no/wiki/Refactor
 
 Refactor is a build-tool to install a printer's Firmware (at the moment Klipper), a printer control interface (OctoPrint), a touch-screen interface (Toggle w/ OctoPrint) and a few miscellaneous items (webcam streamer, network file share for gcode file uploads, etc.).
