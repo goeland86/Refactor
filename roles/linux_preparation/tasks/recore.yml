@@ -92,6 +92,12 @@
     state: link
     force: yes
 
+- name: Recore - add script to choose revision
+  copy:
+    src: use-recore-revision
+    dest: /usr/local/bin
+    mode: '0755'
+
 - name: Recore - Replace platform name
   replace:
     path: /etc/armbian-release

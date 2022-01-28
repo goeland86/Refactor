@@ -1,0 +1,17 @@
+#!/bin/bash
+
+revision="$1"
+
+case $revision in
+    a3|a4|a5|a6)
+      echo "Using recore revision ${revision}"
+      mount -o remount,rw /dev/mmcblk0p1 /boot
+      cd /boot/dtb/allwinner/
+      ln -sf sun50i-a64-recore-$revision.dtb sun50i-a64-recore.dtb
+      mount -o remount,ro /dev/mmcblk0p1 /boot
+      ;;
+    *)
+      echo "usage: $0 a3|a4|a5|a6"
+      exit 1
+      ;;
+esac
