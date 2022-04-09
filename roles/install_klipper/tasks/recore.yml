@@ -56,6 +56,12 @@
   become: true
   become_user: debian
 
+- name: Recore - Install klipper service file
+  copy:
+    src: "{{ role_path }}/files/klipper-recore.service"
+    dest: "/etc/systemd/system/klipper.service"
+    mode: '0755'
+
 - name: Recore - Stop klipper. The install script starts it.
   systemd:
     name: klipper.service
@@ -122,10 +128,18 @@
     name: flash-stm32.service
     enabled: yes
 
+- name: Recore - Make Klipper config folder
+  file:
+    path: /home/debian/printer_config
+    state: directory
+    mode: '0755'
+    owner: debian
+    group: debian
+
 - name: Recore - create recore klipper config file
   copy:
     src: "{{ klipper_home }}/config/generic-recore.cfg"
-    dest: /home/debian/printer.cfg
+    dest: /home/debian/printer_config/printer.cfg
     owner: debian
     group: debian
     remote_src: yes

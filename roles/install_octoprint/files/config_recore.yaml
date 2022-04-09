@@ -9,6 +9,9 @@ plugins:
       octoprint:
         checkout_folder: /home/debian/OctoPrint
         prerelease: false
+  klipper:
+    configuration:
+      config_path: ~/printer_config
   toptemp:
     tool0:
       show: false

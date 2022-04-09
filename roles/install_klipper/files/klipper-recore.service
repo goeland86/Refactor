@@ -1,0 +1,18 @@
+#Systemd service file for klipper
+[Unit]
+Description=Starts klipper on startup
+After=network.target
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Type=simple
+User=debian
+RemainAfterExit=yes
+PermissionsStartOnly=true
+ExecStartPre=/usr/bin/gpioset 1 196=0
+ExecStartPre=/usr/bin/gpioget 1 196
+ExecStartPre=/home/debian/klipper/scripts/flash-ar100.py /opt/firmware/ar100.bin
+ExecStart=/home/debian/klippy-env/bin/python /home/debian/klipper/klippy/klippy.py /home/debian/printer_config/printer.cfg -l /tmp/klippy.log
+ExecStopPost=/home/debian/klipper/scripts/flash-ar100.py --bl31 --halt /opt/firmware/bl31.bin
