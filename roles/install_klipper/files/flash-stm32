@@ -9,7 +9,8 @@ systemctl stop klipper
 
 gpioset 1 197=1
 gpioset 1 196=0
-stm32flash -w ${STM32_BINARY} -v -i -196,196 -g 0 ${FLASH_DEVICE}
+gpioset 1 196=1
+stm32flash -w ${STM32_BINARY} -v -g 0 ${FLASH_DEVICE}
 gpioset 1 197=0
 gpioget 1 196
 

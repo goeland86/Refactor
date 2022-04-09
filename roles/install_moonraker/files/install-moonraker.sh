@@ -5,6 +5,7 @@ git clone https://github.com/Arksine/moonraker.git --depth 1
 chown -R debian:debian moonraker
 cd moonraker
 su - debian -c "/home/debian/moonraker/scripts/install-moonraker.sh"
+su - debian -c "/home/debian/moonraker/scripts/set-policykit-rules.sh"
 
 cp docs/moonraker.conf /home/debian
 chown debian:debian /home/debian/moonraker.conf
