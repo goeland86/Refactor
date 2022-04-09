@@ -56,6 +56,9 @@
   become: true
   become_user: debian
 
+- name: Recore - install Numpy
+  shell: "/home/debian/klippy-env/bin/pip install numpy"
+
 - name: Recore - Install klipper service file
   copy:
     src: "{{ role_path }}/files/klipper-recore.service"
