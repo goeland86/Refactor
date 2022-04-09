@@ -1,0 +1,8 @@
+#!/bin/bash
+
+partprobe
+mkdir -p /mnt/config
+if ! grep -qs '/mnt/config ' /proc/mounts; then
+    mount -r /dev/mmcblk0boot0p1 /mnt/config/
+fi
+cat /mnt/config/serial_number

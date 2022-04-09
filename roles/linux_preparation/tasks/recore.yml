@@ -94,9 +94,13 @@
 
 - name: Recore - add script to choose revision
   copy:
-    src: use-recore-revision
+    src: "{{ item }}"
     dest: /usr/local/bin
     mode: '0755'
+  with_items:
+    - use-recore-revision
+    - get-recore-config
+    - get-recore-serial-number
 
 - name: Recore - Replace platform name
   replace:

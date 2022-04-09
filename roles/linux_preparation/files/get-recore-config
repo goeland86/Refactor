@@ -1,0 +1,63 @@
+#!/bin/bash
+
+partprobe
+mkdir -p /mnt/config
+if ! grep -qs '/mnt/config ' /proc/mounts; then
+    mount -r /dev/mmcblk0boot0p1 /mnt/config/
+fi
+
+CONFIG=`ls /mnt/config/*.json`
+
+SENSOR=$1
+INPUT=$2
+SENSORS="thermocouple thermistor pt100 pt1000"
+INPUTS="T0 T1 T2 T3"
+
+usage() {
+  echo "Usage: $0 <sensor> <input>"
+  echo -e "\twhere sensor is one of '$SENSORS'"
+  echo -e "\tand input is one of '$INPUTS'"
+}
+
+if ! echo $INPUTS | grep -w -q "$INPUT"; then
+  usage
+  exit 1
+fi
+
+GAIN=`cat "$CONFIG" | jq -r ".Opamps.$INPUT.\"100\".gain"`
+OFFSET=`cat "$CONFIG" | jq -r ".Opamps.$INPUT.\"100\".offset"`
+OFFSET_SCALED=`echo "$OFFSET * 0.01" | bc -l`
+ADC_VDD=`cat "$CONFIG" | jq -r ".Voltages.\"3.3V_AREF\""`
+PULLUP=`cat "$CONFIG" | jq -r ".Opamps.pullups.$INPUT.resistance"`
+
+case $SENSOR in
+  thermocouple)
+    echo "[extruder]"
+    echo "sensor_type: Type K"
+    echo "gain: $GAIN"
+    echo "offset: $OFFSET_SCALED"
+    echo "adc_voltage: $ADC_VDD"
+    ;;
+
+  thermistor)
+    echo "[extruder]"
+    echo "sensor_type: EPCOS 100K B57560G104F"
+    echo "pullup_resistor: $PULLUP"
+    ;;
+
+  pt100)
+    echo "[extruder]"
+    echo "sensor_type: PT100 INA826"
+    echo "adc_voltage: $ADC_VDD"
+    ;;
+
+  pt1000)
+    echo "[extruder]"
+    echo "sensor_type: PT1000"
+    echo "pullup_resistor: $PULLUP"
+    ;;
+
+  *)
+    usage
+    ;;
+esac
