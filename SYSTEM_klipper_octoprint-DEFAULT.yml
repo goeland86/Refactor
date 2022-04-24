@@ -12,4 +12,5 @@
     - install_toggle
     - install_moonraker
     - install_mainsail
+    - install_klipperscreen
     - linux_preparation

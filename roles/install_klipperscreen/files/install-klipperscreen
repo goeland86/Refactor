@@ -1,0 +1,48 @@
+#!/bin/bash
+
+apt install -y libgirepository1.0-dev
+apt install -y libcairo2-dev
+apt install -y at-spi2-core
+
+su debian -c "\
+cd /home/debian; \
+git clone https://github.com/intelligent-agent/KlipperScreen.git; \
+cd KlipperScreen; \
+./scripts/KlipperScreen-install.sh; \
+"
+
+# Overwrite service file that works for Wayland
+cat << EOF > /etc/systemd/system/KlipperScreen.service
+[Unit]
+Description=a Klipper GUI for touch screens
+After=moonraker.service
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=debian
+Environment="GDK_BACKEND=wayland"
+Environment="XDG_RUNTIME_DIR=/run/user/1000"
+WorkingDirectory=/home/debian/KlipperScreen
+ExecStart=/home/debian/.KlipperScreen-env/bin/python /home/debian/KlipperScreen/screen.py
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Add config file that forces Wayland
+cat << EOF > /home/debian/KlipperScreen.conf
+[main]
+is_wayland: true
+EOF
+
+
+systemctl daemon-reload
+
+systemctl disable toggle
+systemctl stop toggle
+
+systemctl enable KlipperScreen
+systemctl restart KlipperScreen

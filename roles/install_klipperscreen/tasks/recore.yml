@@ -1,0 +1,12 @@
+---
+- name: Recore - Install KlipperScreen install script
+  copy:
+    src: install-klipperscreen
+    dest: /usr/local/bin
+    mode: 0700
+
+- name: Recore - Install KlipperScreen switcheroo
+  copy:
+    src: enable-klipperscreen
+    dest: /usr/local/bin/
+    mode: 0700
