@@ -32,7 +32,7 @@
 - name: add video udev rules
   lineinfile:
     path: /etc/udev/rules.d/50-video.rules
-    line: 'KERNEL=="video1", TAG+="systemd"'
+    line: 'SUBSYSTEM=="video4linux", ATTR{name}!="cedrus", ATTR{index}=="0", SYMLINK+="webcam", TAG+="systemd"'
     state: present
 
 - name: add debian sudo permission to restart the service

@@ -2,7 +2,7 @@
 Description=Mjpg streamer
 
 [Service]
-ExecStart=/usr/local/bin/mjpg_streamer -i "/usr/local/lib/mjpg-streamer/input_uvc.so -d /dev/video1" -o "/usr/local/lib/mjpg-streamer/output_http.so"
+ExecStart=/usr/local/bin/mjpg_streamer -i "/usr/local/lib/mjpg-streamer/input_uvc.so -d /dev/webcam" -o "/usr/local/lib/mjpg-streamer/output_http.so"
 
 [Install]
-WantedBy=dev-video1.device
+WantedBy=dev-webcam.device
