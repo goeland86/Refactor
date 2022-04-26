@@ -78,12 +78,37 @@
     owner: debian
     group: debian
 
-- name: Recore - Install ar100 binary
+- name: Recore - Get and extract toolchain
+  unarchive:
+    src: http://feeds.iagent.no/toolchains/or1k-linux-musl.tar.xz
+    dest: /opt/
+    owner: debian
+    group: debian
+    remote_src: yes
+
+- name: Recore - Copy AR100 config
   copy:
-    src: "{{ role_path }}/files/ar100.bin"
+    src: "{{ role_path }}/files/ar100.config"
+    dest: "{{ klipper_home }}/.config"
+    owner: debian
+    group: debian
+
+- name: Recore - Compile AR100 binary
+  shell: |
+    export PATH=$PATH:/opt/output/bin
+    make olddefconfig
+    make
+  args:
+    chdir: "{{ klipper_home }}"
+
+- name: Recore - Copy AR100 binary
+  copy:
+    src: "{{ klipper_home }}/out/ar100.bin"
     dest: /opt/firmware/ar100.bin
     owner: debian
     group: debian
+    remote_src: yes
+    force: no
 
 - name: Recore - Install bl31 binary
   copy:

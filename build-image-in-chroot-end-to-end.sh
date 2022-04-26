@@ -45,7 +45,7 @@ decompress || $(echo "check your Linux platform file is correct!"; exit) # defin
 
 echo "preparing the partition layout"
 if [ ${TARGET_PLATFORM} == "recore" ]; then
-	truncate -s 3856M $TARGETIMAGE
+	truncate -s 4500M $TARGETIMAGE
 	DEVICE=`losetup -P -f --show $TARGETIMAGE`
 	PARTITION=${DEVICE}p2
 	cat <<EOF > image.layout
@@ -53,7 +53,7 @@ if [ ${TARGET_PLATFORM} == "recore" ]; then
 unit: sectors
 
 ${DEVICE}p1 : start=8192, size=524288, type=83
-${DEVICE}p2 : start=532480, size=7364608, type=83
+${DEVICE}p2 : start=532480, size=8683520, type=83
 EOF
 fi
 
