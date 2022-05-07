@@ -122,6 +122,9 @@ systemctl restart nginx
 cd /home/debian/mainsail
 wget -q -O mainsail.zip https://github.com/mainsail-crew/mainsail/releases/latest/download/mainsail.zip && unzip mainsail.zip && rm mainsail.zip
 
+echo 'ACTION=="add", SUBSYSTEMS=="usb", SUBSYSTEM=="block", ENV{ID_FS_USAGE}=="filesystem", ATTR{partition}=="1", RUN{program}+="/usr/bin/systemd-mount -o ro --no-block --automount=yes --collect $devnode /home/debian/gcode_files/usb"' > /etc/udev/rules.d/60-usb-disk.rules
+
+
 systemctl stop octoprint
 systemctl disable octoprint
 systemctl stop nftables

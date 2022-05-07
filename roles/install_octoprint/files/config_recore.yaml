@@ -1,7 +1,7 @@
 appearance:
   name: Recore
 folder:
-  uploads: /usr/share/models
+  uploads: /home/debian/gcode_files
 plugins:
   softwareupdate:
     _config_version: 9

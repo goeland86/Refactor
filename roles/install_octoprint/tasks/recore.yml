@@ -83,7 +83,7 @@
 
 - name: Recore - Have the upload folder ready
   file:
-    path: /usr/share/models
+    path: /home/debian/gcode_files
     state: directory
     owner: debian
     group: debian
