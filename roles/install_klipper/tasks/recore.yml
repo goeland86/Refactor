@@ -63,7 +63,7 @@
   copy:
     src: "{{ role_path }}/files/klipper-recore.service"
     dest: "/etc/systemd/system/klipper.service"
-    mode: '0755'
+    mode: '0644'
 
 - name: Recore - Stop klipper. The install script starts it.
   systemd:

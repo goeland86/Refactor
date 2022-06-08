@@ -1,0 +1,23 @@
+---
+- name: Recore - disable unique naming scheme
+  file:
+    src: /dev/null
+    dest: /etc/systemd/network/99-default.link
+    state: link
+
+- name: Recore - install autohotspot bin file
+  copy:
+    src: autohotspot
+    dest: /usr/bin
+    mode: '0755'
+
+- name: Recore - install autohotspot service file
+  copy:
+    src: autohotspot.service
+    dest: /etc/systemd/system/
+
+- name: Recore - enable the autohotspot service
+  systemd:
+    name: autohotspot.service
+    state: stopped
+    enabled: yes

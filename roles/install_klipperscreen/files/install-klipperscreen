@@ -38,6 +38,7 @@ cat << EOF > /home/debian/KlipperScreen.conf
 is_wayland: true
 EOF
 
+sudo usermod -a -G netdev debian
 
 systemctl daemon-reload
 
