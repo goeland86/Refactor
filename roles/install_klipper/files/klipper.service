@@ -10,6 +10,6 @@ WantedBy=multi-user.target
 Type=simple
 User=debian
 RemainAfterExit=yes
-ExecStart=/home/debian/klippy-env/bin/python /home/debian/klipper/klippy/klippy.py /home/debian/printer.cfg -l /tmp/klippy.log
+ExecStart=/home/debian/klippy-env/bin/python /home/debian/klipper/klippy/klippy.py /home/debian/printer.cfg -l /tmp/klippy.log -a /tmp/klippy_uds
 Restart=always
 RestartSec=10

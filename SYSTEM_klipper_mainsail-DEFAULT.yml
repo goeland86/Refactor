@@ -4,11 +4,11 @@
   vars:
     - firmware: klipper
   roles:
-    - install_octoprint
     - install_klipper
-    - install_octoprint_klipper_plugins
     - install_mjpgstreamer
     - install_weston
-    - install_toggle
+    - install_moonraker
+    - install_mainsail
+    - install_klipperscreen
     - linux_preparation
     - install_autohotspot

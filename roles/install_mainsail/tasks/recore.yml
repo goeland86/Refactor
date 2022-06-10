@@ -1,14 +1,74 @@
 ---
-- name: Recore - Install Mainsail install script
+- name: Recore - Install ngnix
+  apt:
+    name:
+      - nginx
+    state: present
+
+- name: Recore - Install upstream.conf
   copy:
-    src: "install-mainsail.sh"
-    dest: /home/debian
+    src: upstreams.conf
+    dest: /etc/nginx/conf.d/
+    mode: 0700
+
+- name: Recore - Install common files
+  copy:
+    src: common_vars.conf
+    dest: /etc/nginx/conf.d/
+    mode: 0700
+
+- name: Recore - Install mainsail config
+  copy:
+    src: mainsail
+    dest: /etc/nginx/sites-available
+    mode: 0700
+
+- name: Recore - Create mainsail dir
+  file:
+    path: /home/debian/mainsail
+    state: directory
+    mode: '0755'
+
+- name: Recore - Remove default ngnix config
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: Recore - Symlink mainsail ngnix config
+  file:
+    path: /etc/nginx/sites-enabled/default
+    src: /etc/nginx/sites-available/mainsail
+    dest: /etc/nginx/sites-enabled/mainsail
+    state: link
+
+- name: Recore - Download mainsail
+  unarchive:
+    src: https://github.com/mainsail-crew/mainsail/releases/latest/download/mainsail.zip
+    dest: /home/debian/mainsail
+    remote_src: yes
+
+- name: Recore - Add USB disk rule
+  copy:
+    dest: /etc/udev/rules.d/60-usb-disk.rules
+    content: |
+        ACTION=="add", SUBSYSTEMS=="usb", SUBSYSTEM=="block", ENV{ID_FS_USAGE}=="filesystem", ATTR{partition}=="1", RUN{program}+="/usr/bin/systemd-mount -o ro --no-block --automount=yes --collect $devnode /home/debian/gcode_files/usb"
+
+- name: Recore - Enable ngnix
+  systemd:
+    name: nginx.service
+    enabled: yes
+
+- name: Recore - copy mainsail.cfg
+  copy:
+    src: mainsail.cfg
+    dest: /home/debian/printer_config
     owner: debian
     group: debian
-    mode: 0755
 
-- name: Recore - Install Mainsail switcheroo
-  copy:
-    src: enable-mainsail
-    dest: /usr/local/bin/
-    mode: 0700
+- name: Recore - Create gcode_files dir
+  file:
+    path: /home/debian/gcode_files
+    state: directory
+    owner: debian
+    group: debian
+    mode: '0777'

@@ -1,12 +1,12 @@
 name: Build Refactor on AWS
 on: push
 jobs:
-  build-recore:
+  build-recore-octoprint:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Build Refactor Recore on AWS
+      - name: Build Refactor Recore with OctoPrint on AWS
         uses: garygrossgarten/github-action-ssh@release
         with:
           command: |
@@ -35,7 +35,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.PRIVATE_KEY }}
           source: /home/admin/Refactor/Refactor-recore-latest.img.xz
-          target: ./Refactor-recore-latest.img.xz
+          target: ./Refactor-recore-octoprint-latest.img.xz
       - name: Rename file
         if: startsWith(github.ref, 'refs/tags/')
         run: |
@@ -44,22 +44,22 @@ jobs:
             TAG=$(git reflog --decorate -1 | awk -F' ' '{print $1}' | tr -d '\n')
           fi
           DATE=$(date --iso-8601)
-          mv ./Refactor-recore-latest.img.xz Refactor-recore-${TAG}-${DATE}.img.xz
+          mv ./Refactor-recore-octoprint-latest.img.xz Refactor-recore-octoprint-${TAG}-${DATE}.img.xz
       - name: Release if tagged
         uses: ncipollo/release-action@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
           allowUpdates: true
-          artifacts: Refactor-recore-*.img.xz
+          artifacts: Refactor-recore-octoprint-*.img.xz
           token: ${{ secrets.GITHUB_TOKEN }}
           prerelease: true
 
-  build-replicape:
+  build-recore-mainsail:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Build Refactor Replicape on AWS
+      - name: Build Refactor Recore with Mainsail on AWS
         uses: garygrossgarten/github-action-ssh@release
         with:
           command: |
@@ -71,7 +71,7 @@ jobs:
             git pull
             git log HEAD --oneline --no-walk
             rm -rf Refactor-*.xz
-            sudo ./build-image-in-chroot-end-to-end.sh replicape
+            sudo ./build-image-in-chroot-end-to-end.sh recore SYSTEM_klipper_mainsail-DEFAULT.yml
           host: ${{ secrets.HOST_REPLICAPE }}
           username: ${{ secrets.USERNAME }}
           privateKey: ${{ secrets.PRIVATE_KEY}}
@@ -86,8 +86,8 @@ jobs:
           fingerprint: ${{ secrets.EC2_FINGERPRINT_REPLICAPE }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.PRIVATE_KEY }}
-          source: /home/admin/Refactor/Refactor-replicape-latest.img.xz
-          target: ./Refactor-replicape-latest.img.xz
+          source: /home/admin/Refactor/Refactor-recore-latest.img.xz
+          target: ./Refactor-recore-mainsail-latest.img.xz
       - name: Rename file if tagged
         if: startsWith(github.ref, 'refs/tags/')
         run: |
@@ -96,12 +96,12 @@ jobs:
             TAG=$(git reflog --decorate -1 | awk -F' ' '{print $1}' | tr -d '\n')
           fi
           DATE=$(date --iso-8601)
-          mv ./Refactor-replicape-latest.img.xz Refactor-replicape-${TAG}-${DATE}.img.xz
+          mv ./Refactor-recore-latest-mainsail.img.xz Refactor-recore-mainsail-${TAG}-${DATE}.img.xz
       - name: Release if tagged
         uses: ncipollo/release-action@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
           allowUpdates: true
-          artifacts: Refactor-replicape-*.img.xz
+          artifacts: Refactor-recore-mainsail-*.img.xz
           token: ${{ secrets.GITHUB_TOKEN }}
           prerelease: true

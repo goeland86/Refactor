@@ -1,8 +1,38 @@
 ---
-- name: Recore - Install Moonraker install script
+- name: Recore - Install packages
+  apt:
+    name:
+      - unzip
+    state: present
+
+- name: Recore - Download moonraker
+  unarchive:
+    src: https://github.com/Arksine/moonraker/archive/refs/heads/master.zip
+    dest: /home/debian/
+    owner: debian
+    group: debian
+    remote_src: yes
+
+- name: Recore - Rename folder
+  command: mv /home/debian/moonraker-master  /home/debian/moonraker
+
+- name: Recore - Install moonraker
+  shell: |
+    /home/debian/moonraker/scripts/install-moonraker.sh
+    /home/debian/moonraker/scripts/set-policykit-rules.sh
+  sudo: yes
+  sudo_user: debian
+
+- name: Recore - copy config
   copy:
-    src: "install-moonraker.sh"
+    src: moonraker.conf
     dest: /home/debian
     owner: debian
     group: debian
-    mode: 0755
+
+- name: Recore - Create print config folder
+  file:
+    path: /home/debian/printer_config
+    state: directory
+    owner: debian
+    group: debian

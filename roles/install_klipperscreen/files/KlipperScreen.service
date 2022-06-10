@@ -1,0 +1,17 @@
+[Unit]
+Description=a Klipper GUI for touch screens
+After=moonraker.service
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=debian
+Environment="GDK_BACKEND=wayland"
+Environment="XDG_RUNTIME_DIR=/run/user/1000"
+WorkingDirectory=/home/debian/KlipperScreen
+ExecStart=/home/debian/.KlipperScreen-env/bin/python /home/debian/KlipperScreen/screen.py
+
+[Install]
+WantedBy=multi-user.target

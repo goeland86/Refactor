@@ -24,6 +24,16 @@
     autoremove: yes
     autoclean: yes
 
+- name: Recore - ensure the debian user exists
+  user:
+    name: debian
+    comment: Default user for OctoPrint
+    shell: /bin/bash
+    groups: tty,dialout
+    append: yes
+    expires: -1
+    home: /home/debian
+
 - name: enable ssh
   service:
     name: ssh
@@ -92,7 +102,7 @@
     state: link
     force: yes
 
-- name: Recore - add script to choose revision
+- name: Recore - add flashing scripts
   copy:
     src: "{{ item }}"
     dest: /usr/local/bin
@@ -101,6 +111,11 @@
     - use-recore-revision
     - get-recore-config
     - get-recore-serial-number
+    - flash-recore
+    - set-boot-media
+    - get-boot-media
+    - is-media-present
+    - get-rootfs
 
 - name: Recore - Replace platform name
   replace:
@@ -148,3 +163,29 @@
   service:
     name: serial-getty@ttyGS0.service
     enabled: yes
+
+- name: Recore, Crate images directory
+  file:
+    path: "/home/debian/images"
+    state: directory
+    mode: '0755'
+    owner: debian
+    group: debian
+
+- name: Recore, Create mount directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - /mnt/emmc
+    - /mnt/usb
+
+- name: Recore, Update fstab, mount emmc and usb in known locations
+  lineinfile:
+    path: /etc/fstab
+    state: present
+    line: "{{ item }}"
+  loop:
+    - "/dev/sda1 /mnt/usb ext4 ro,defaults,nofail"
+    - "/dev/mmcblk0p1 /mnt/emmc ext4 ro,defaults,nofail"

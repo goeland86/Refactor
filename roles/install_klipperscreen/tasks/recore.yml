@@ -1,12 +1,52 @@
 ---
-- name: Recore - Install KlipperScreen install script
+- name: Recore - Install packages
+  apt:
+    name:
+      - libgirepository1.0-dev
+      - libcairo2-dev
+      - at-spi2-core
+      - libdbus-1-3
+      - libdbus-1-dev
+    state: present
+
+- name: Recore - download klipperscreen
+  unarchive:
+    src: https://github.com/intelligent-agent/KlipperScreen/archive/refs/heads/master.zip
+    dest: /home/debian/
+    owner: debian
+    group: debian
+    remote_src: yes
+
+- name: Recore - Rename folder
+  command: mv /home/debian/KlipperScreen-master /home/debian/KlipperScreen
+
+- name: Recore - Install KlipperScreen
+  shell: |
+    /home/debian/KlipperScreen/scripts/KlipperScreen-install.sh
+  sudo: yes
+  sudo_user: debian
+
+- name: Recore - install service file
   copy:
-    src: install-klipperscreen
-    dest: /usr/local/bin
+    src: KlipperScreen.service
+    dest: /etc/systemd/system/
     mode: 0700
 
-- name: Recore - Install KlipperScreen switcheroo
+- name: Recore - install config file
   copy:
-    src: enable-klipperscreen
-    dest: /usr/local/bin/
-    mode: 0700
+    src: KlipperScreen.conf
+    dest: /home/debian/
+    owner: debian
+    group: debian
+    mode: 0755
+
+- name: Recore - Enable KlipperScreen
+  systemd:
+    name: KlipperScreen.service
+    enabled: yes
+
+- name: Recore - Add debian to netdev
+  user:
+    name: debian
+    groups: netdev
+    append: yes

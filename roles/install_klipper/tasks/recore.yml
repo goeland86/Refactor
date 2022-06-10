@@ -1,4 +1,36 @@
 ---
+- name: Recore - Install packages
+  apt:
+    name:
+      - libgpiod-dev
+      - gpiod
+      - git
+    state: present
+
+- name: Recore - ensure the debian user exists
+  user:
+    name: debian
+    comment: Default user for OctoPrint
+    shell: /bin/bash
+    groups: tty,dialout
+    append: yes
+    expires: -1
+    home: /home/debian
+
+- name: Recore - give debian permissions to python folders for updates
+  file:
+    path: '{{ item }}'
+    group: debian
+    owner: debian
+    mode: 0755
+    recurse: yes
+    state: directory
+  with_items:
+    - /home/debian
+    - /usr/local/lib/python3
+    - /usr/local/bin
+
+
 - name: Recore - clone klipper from the repository
   git:
     repo: https://github.com/intelligent-agent/klipper
@@ -13,13 +45,6 @@
     append: yes
     groups: tty
     name: debian
-
-- name: Recore - Install libgpiod-dev
-  apt:
-    name:
-      - libgpiod-dev
-      - gpiod
-    state: present
 
 - name: Recore - adjust ownership of klipper source
   file:
@@ -173,27 +198,9 @@
     remote_src: yes
     force: no
 
-- name: Recore - determine if config is the default OctoPrint config or not
-  lineinfile:
-    path: /home/debian/.octoprint/config.yaml
-    line: 'firstRun: true'
-    state: present
-  check_mode: yes
-  register: replace_default_octoprint_config
-
-- name: Recore - place Klipper-friendly config for octoprint in place
-  copy:
-    src: "{{ role_path }}/files/octoprint_config.yaml"
-    dest: /home/debian/.octoprint/config.yaml
-    owner: debian
-    group: debian
-    remote_src: yes
-    force: no
-  when: replace_default_octoprint_config == 'True'
-
-- name: Recore - place Klipper-service files in place
-  copy:
-    src: "{{ role_path }}/files/octoprint.service"
-    dest: /etc/systemd/system/
-    owner: debian
-    group: debian
+- name: Recore - make sure the sudoers.d/debian file exists
+  file:
+    path: /etc/sudoers.d/debian
+    owner: root
+    group: root
+    state: touch

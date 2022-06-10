@@ -110,15 +110,15 @@
       %debian ALL=NOPASSWD: /sbin/reboot
       %debian ALL=NOPASSWD: /sbin/shutdown -h now
       %debian ALL=NOPASSWD: /sbin/poweroff
-      %debian ALL=NOPASSWD: /sbin/set-boot-media usb
-      %debian ALL=NOPASSWD: /sbin/set-boot-media emmc
-      %debian ALL=NOPASSWD: /sbin/flash-recore *.img.xz
-      %debian ALL=NOPASSWD: /sbin/get-boot-media
+      %debian ALL=NOPASSWD: /usr/local/bin/set-boot-media usb
+      %debian ALL=NOPASSWD: /usr/local/bin/set-boot-media emmc
+      %debian ALL=NOPASSWD: /usr/local/bin/flash-recore *.img.xz
+      %debian ALL=NOPASSWD: /usr/local/bin/get-boot-media
 
 - name: Recore - install service file for OctoPrint
   copy:
     src: '{{ role_path }}/files/octoprint.service'
-    dest: /lib/systemd/system/octoprint.service
+    dest: /etc/systemd/system/octoprint.service
     owner: root
     group: root
     mode: 0644

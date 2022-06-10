@@ -1,6 +1,0 @@
-#!/bin/bash
-systemctl disable toggle
-systemctl stop toggle
-
-systemctl enable klipperscreen
-systemctl start klipperscreen
