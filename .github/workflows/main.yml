@@ -96,7 +96,7 @@ jobs:
             TAG=$(git reflog --decorate -1 | awk -F' ' '{print $1}' | tr -d '\n')
           fi
           DATE=$(date --iso-8601)
-          mv ./Refactor-recore-latest-mainsail.img.xz Refactor-recore-mainsail-${TAG}-${DATE}.img.xz
+          mv ./Refactor-recore-mainsail-latest.img.xz Refactor-recore-mainsail-${TAG}-${DATE}.img.xz
       - name: Release if tagged
         uses: ncipollo/release-action@v1
         if: startsWith(github.ref, 'refs/tags/')
