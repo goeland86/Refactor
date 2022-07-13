@@ -20,6 +20,7 @@
     - byobu
     - htop
     - cpufrequtils
+    - pv
     state: present
     autoremove: yes
     autoclean: yes
