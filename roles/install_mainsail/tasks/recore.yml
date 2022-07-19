@@ -61,7 +61,7 @@
 - name: Recore - copy mainsail.cfg
   copy:
     src: mainsail.cfg
-    dest: /home/debian/printer_config
+    dest: /home/debian/klipper_config
     owner: debian
     group: debian
 

@@ -5,16 +5,16 @@
       - unzip
     state: present
 
-- name: Recore - Download moonraker
-  unarchive:
-    src: https://github.com/Arksine/moonraker/archive/refs/heads/master.zip
-    dest: /home/debian/
-    owner: debian
-    group: debian
-    remote_src: yes
-
-- name: Recore - Rename folder
-  command: mv /home/debian/moonraker-master  /home/debian/moonraker
+- name: Recore - clone klipper from the master repository
+  git:
+    repo: https://github.com/Arksine/moonraker
+    version: master
+    dest: /home/debian/moonraker
+    update: yes
+    clone: yes
+    depth: 1
+  become: yes
+  become_user: debian
 
 - name: Recore - Install moonraker
   shell: |
@@ -32,7 +32,7 @@
 
 - name: Recore - Create print config folder
   file:
-    path: /home/debian/printer_config
+    path: /home/debian/klipper_config
     state: directory
     owner: debian
     group: debian
