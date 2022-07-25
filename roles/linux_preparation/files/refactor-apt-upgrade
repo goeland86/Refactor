@@ -1,0 +1,17 @@
+#!/bin/bash
+
+partprobe
+mkdir -p /mnt/config
+if ! grep -qs '/mnt/config ' /proc/mounts; then
+    echo 0 > /sys/block/mmcblk0boot0/force_ro
+    mount -rw /dev/mmcblk0boot0p1 /mnt/config/
+fi
+
+cp  /boot/dtb/allwinner/sun50i-a64-recore*.dtb /mnt/config/
+
+mount -o remount,rw /boot
+apt update
+apt upgrade
+cp /mnt/config/sun50i-a64-recore*.dtb /boot/dtb/allwinner/
+sync
+mount -o remount,ro /boot

@@ -117,6 +117,7 @@
     - get-boot-media
     - is-media-present
     - get-rootfs
+    - refactor-apt-upgrade
 
 - name: Recore - Replace platform name
   replace:
