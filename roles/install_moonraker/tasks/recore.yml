@@ -35,3 +35,10 @@
     state: directory
     owner: debian
     group: debian
+
+- name: Recore - Install set_boot_media component
+  copy:
+    src: set_boot_media.py
+    dest: /home/debian/moonraker/moonraker/components
+    owner: debian
+    group: debian
