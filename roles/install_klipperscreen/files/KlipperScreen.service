@@ -1,7 +1,8 @@
 [Unit]
 Description=a Klipper GUI for touch screens
 After=moonraker.service
-StartLimitIntervalSec=0
+StartLimitIntervalSec=120
+StartLimitBurst=3
 
 [Service]
 Type=simple
