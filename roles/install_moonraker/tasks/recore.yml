@@ -40,7 +40,7 @@
   file:
     path: /var/log/klipper_logs
     state: directory
-    mode: '0755'
+    mode: 0755
     owner: debian
     group: debian
 
@@ -49,6 +49,12 @@
     src: moonraker.service
     dest: /etc/systemd/system
     mode: 0644
+
+- name: Recore - Make sure the mainsail include is enabled by default
+  lineinfile:
+    dest: /home/debian/klipper_config/printer.cfg
+    regexp: '^#\s*\[include mainsail.cfg\]*$'
+    line: '[include mainsail.cfg]'
 
 - name: Recore - Install set_boot_media component
   copy:

@@ -30,15 +30,15 @@
   copy:
     src: KlipperScreen.service
     dest: /etc/systemd/system/
-    mode: 0700
+    mode: 0644
 
 - name: Recore - install config file
   copy:
     src: KlipperScreen.conf
-    dest: /home/debian/
+    dest: /home/debian/klipper_config
     owner: debian
     group: debian
-    mode: 0644
+    mode: 0755
 
 - name: Recore - Enable KlipperScreen
   systemd:

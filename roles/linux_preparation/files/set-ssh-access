@@ -1,0 +1,14 @@
+#!/bin/bash
+
+IS_ENABLED=$1
+
+if [ "x${IS_ENABLED}" == "xtrue" ]; then
+  systemctl enable ssh
+  systemctl start ssh
+elif [ "x${IS_ENABLED}" == "xfalse" ]; then
+  systemctl stop ssh
+  systemctl disable ssh
+else
+  echo "usage $0 true/false"
+  exit 1
+fi

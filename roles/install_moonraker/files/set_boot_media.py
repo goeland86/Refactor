@@ -11,6 +11,8 @@ class SetBootMedia:
         self.server = config.get_server()
         self.server.register_remote_method(
             "set_boot_media", self.set_boot_media)
+        self.server.register_remote_method(
+            "set_ssh_access", self.set_ssh_access)
 
     def set_boot_media(self, boot_media: str) -> None:
         if boot_media in ["usb", "emmc"]:
@@ -18,6 +20,14 @@ class SetBootMedia:
             os.system(f"sudo set-boot-media {boot_media}")
         else:
             logging.error("boot_media not 'usb' or 'emmc'")
+
+    def set_ssh_access(self, is_enabled: bool) -> None:
+        if is_enabled:
+            logging.info(f"Enabling ssh access")
+            os.system(f"sudo set-ssh-access true")
+        else:
+            logging.info(f"Enabling ssh access")
+            os.system(f"sudo set-ssh-access false")
 
 def load_component(config):
     return SetBootMedia(config)

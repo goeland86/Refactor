@@ -11,8 +11,10 @@ RestartSec=1
 User=debian
 Environment="GDK_BACKEND=wayland"
 Environment="XDG_RUNTIME_DIR=/run/user/1000"
+Environment=KLIPPERSCREEN_CONFIG=/home/debian/klipper_config/KlipperScreen.conf
+Environment=KLIPPERSCREEN_LOG=/var/log/klipper_logs/KlipperScreen.log
 WorkingDirectory=/home/debian/KlipperScreen
-ExecStart=/home/debian/.KlipperScreen-env/bin/python /home/debian/KlipperScreen/screen.py
+ExecStart=/home/debian/.KlipperScreen-env/bin/python /home/debian/KlipperScreen/screen.py -c ${KLIPPERSCREEN_CONFIG} -l ${KLIPPERSCREEN_LOG}
 
 [Install]
 WantedBy=multi-user.target

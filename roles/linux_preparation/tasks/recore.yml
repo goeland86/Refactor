@@ -38,12 +38,12 @@
 - name: enable ssh
   service:
     name: ssh
-    enabled: yes
+    enabled: no
 
 - name: enable root login via ssh
   lineinfile:
     path: /etc/ssh/sshd_config
-    line: 'PermitRootLogin yes'
+    line: 'PermitRootLogin no'
     state: present
 
 - name: get date
@@ -118,6 +118,7 @@
     - is-media-present
     - get-rootfs
     - refactor-apt-upgrade
+    - set-ssh-access
 
 - name: Recore - Replace platform name
   replace:
