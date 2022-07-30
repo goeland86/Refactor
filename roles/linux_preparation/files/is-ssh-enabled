@@ -1,0 +1,6 @@
+#!/bin/bash
+if systemctl is-active --quiet ssh; then
+    echo "yes"
+else
+    echo "no"
+fi

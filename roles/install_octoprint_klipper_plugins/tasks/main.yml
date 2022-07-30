@@ -22,7 +22,6 @@
   git:
     repo: https://github.com/LazeMSS/OctoPrint-TopTemp.git
     dest: /usr/src/octoprint_top_temp
-  when: platform == 'recore'
 
 - name: Recore, Change ownership
   file:
@@ -31,20 +30,18 @@
     group: debian
     state: directory
     recurse: yes
-  when: platform == 'recore'
 
 - name: Recore, install octoprint top temp plugin in Octoprint virtual env
   shell:
     cmd: 'cd /usr/src/octoprint_top_temp ; {{ octoprint_home }}/venv/bin/python setup.py clean install'
   become: yes
   become_user: debian
-  when: platform == 'recore'
 
 - name: Recore, clone octoprint Refactor plugin
   git:
     repo: https://github.com/intelligent-agent/octoprint_refactor.git
     dest: /usr/src/octoprint_refactor
-  when: platform == 'recore'
+    version: main
 
 - name: Recore, Change ownership
   file:
@@ -53,11 +50,9 @@
     group: debian
     state: directory
     recurse: yes
-  when: platform == 'recore'
 
 - name: Recore, install octoprint refactor plugin in Octoprint virtual env
   shell:
     cmd: 'cd /usr/src/octoprint_refactor ; {{ octoprint_home }}/venv/bin/python setup.py clean install'
   become: yes
   become_user: debian
-  when: platform == 'recore'

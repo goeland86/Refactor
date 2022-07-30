@@ -12,6 +12,7 @@ plugins:
   klipper:
     configuration:
       config_path: ~/klipper_config
+      logpath: /var/log/klipper_logs/klippy.log
   toptemp:
     tool0:
       show: false

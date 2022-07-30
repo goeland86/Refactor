@@ -119,6 +119,7 @@
     - get-rootfs
     - refactor-apt-upgrade
     - set-ssh-access
+    - is-ssh-enabled
 
 - name: Recore - Replace platform name
   replace:
