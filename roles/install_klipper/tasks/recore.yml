@@ -203,3 +203,11 @@
     owner: root
     group: root
     state: touch
+
+- name: Recore - create folder for klipper logs in /var/log
+  file:
+    path: /var/log/klipper_logs
+    state: directory
+    mode: '0755'
+    owner: debian
+    group: debian

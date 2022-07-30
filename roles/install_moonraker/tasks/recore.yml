@@ -22,19 +22,33 @@
   sudo: yes
   sudo_user: debian
 
-- name: Recore - copy config
-  copy:
-    src: moonraker.conf
-    dest: /home/debian
-    owner: debian
-    group: debian
-
 - name: Recore - Create print config folder
   file:
     path: /home/debian/klipper_config
     state: directory
     owner: debian
     group: debian
+
+- name: Recore - copy config
+  copy:
+    src: moonraker.conf
+    dest: /home/debian/klipper_config
+    owner: debian
+    group: debian
+
+- name: Recore - create folder for klipper logs in /var/log
+  file:
+    path: /var/log/klipper_logs
+    state: directory
+    mode: '0755'
+    owner: debian
+    group: debian
+
+- name: Recore - copy service file
+  copy:
+    src: moonraker.service
+    dest: /etc/systemd/system
+    mode: 0644
 
 - name: Recore - Install set_boot_media component
   copy:

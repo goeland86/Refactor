@@ -38,7 +38,7 @@
     dest: /home/debian/
     owner: debian
     group: debian
-    mode: 0755
+    mode: 0644
 
 - name: Recore - Enable KlipperScreen
   systemd:

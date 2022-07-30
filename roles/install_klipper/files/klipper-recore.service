@@ -7,6 +7,9 @@ After=network.target
 WantedBy=multi-user.target
 
 [Service]
+Environment=KLIPPER_CONFIG=/home/debian/klipper_config/printer.cfg
+Environment=KLIPPER_LOG=/var/log/klipper_logs/klippy.log
+Environment=KLIPPER_SOCKET=/tmp/klippy_uds
 Type=simple
 User=debian
 RemainAfterExit=yes
@@ -14,5 +17,5 @@ PermissionsStartOnly=true
 ExecStartPre=/usr/bin/gpioset 1 196=0
 ExecStartPre=/usr/bin/gpioget 1 196
 ExecStartPre=/home/debian/klipper/scripts/flash-ar100.py /opt/firmware/ar100.bin
-ExecStart=/home/debian/klippy-env/bin/python /home/debian/klipper/klippy/klippy.py /home/debian/klipper_config/printer.cfg -l /tmp/klippy.log -a /tmp/klippy_uds
+ExecStart=/home/debian/klippy-env/bin/python /home/debian/klipper/klippy/klippy.py ${KLIPPER_CONFIG} -l ${KLIPPER_LOG} -a ${KLIPPER_SOCKET}
 ExecStopPost=/home/debian/klipper/scripts/flash-ar100.py --bl31 --halt /opt/firmware/bl31.bin
