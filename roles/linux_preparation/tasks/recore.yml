@@ -40,11 +40,11 @@
     name: ssh
     enabled: no
 
-- name: enable root login via ssh
-  lineinfile:
+- name: Recore - disable root login
+  replace:
     path: /etc/ssh/sshd_config
-    line: 'PermitRootLogin no'
-    state: present
+    regexp: '^.*PermitRootLogin.*$'
+    replace: '#PermitRootLogin'
 
 - name: get date
   command: 'date --iso-8601'
