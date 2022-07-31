@@ -193,3 +193,6 @@
   loop:
     - "/dev/sda1 /mnt/usb ext4 ro,defaults,nofail"
     - "/dev/mmcblk0p1 /mnt/emmc ext4 ro,defaults,nofail"
+
+- name: Recore - force debian password reset
+  shell: chage -d 0 debian
