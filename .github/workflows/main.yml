@@ -63,7 +63,6 @@ jobs:
         with:
           direction: upload
           host: ${{ secrets.NIGHTLY_HOST }}
-          fingerprint: ${{ secrets.NIGHTLY_FINGERPRINT }}
           username: ${{ secrets.NIGHTLY_USER }}
           key: ${{ secrets.NIGHTLY_PRIVATE_KEY }}
           source: ./Refactor-recore-octoprint-*.img.xz
@@ -135,7 +134,6 @@ jobs:
         with:
           direction: upload
           host: ${{ secrets.NIGHTLY_HOST }}
-          fingerprint: ${{ secrets.NIGHTLY_FINGERPRINT }}
           username: ${{ secrets.NIGHTLY_USER }}
           key: ${{ secrets.NIGHTLY_PRIVATE_KEY }}
           source: ./Refactor-recore-mainsail-*.img.xz
