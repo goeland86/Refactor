@@ -25,9 +25,8 @@ jobs:
           privateKey: ${{ secrets.PRIVATE_KEY}}
         env:
           CI: true
-      - name: Download file via SSH if tagged
+      - name: Download file via SSH
         uses: nicklasfrahm/scp-action@main
-        if: startsWith(github.ref, 'refs/tags/')
         with:
           direction: download
           host: ${{ secrets.HOST }}
@@ -36,7 +35,7 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           source: /home/admin/Refactor/Refactor-recore-latest.img.xz
           target: ./Refactor-recore-octoprint-latest.img.xz
-      - name: Rename file
+      - name: Rename file if tagged
         if: startsWith(github.ref, 'refs/tags/')
         run: |
           TAG=$(git log -n1 --pretty="format:%d" | sed "s/, /\n/g" | grep tag: | grep -v origin | sed "s/tag: \|)//g" | tr -d '\n')
@@ -45,6 +44,11 @@ jobs:
           fi
           DATE=$(date --iso-8601)
           mv ./Refactor-recore-octoprint-latest.img.xz Refactor-recore-octoprint-${TAG}-${DATE}.img.xz
+      - name: Rename file if nightly build
+        if: startsWith(github.ref, 'refs/tags/') != true
+        run: |
+          DATE=$(date --iso-8601)
+          mv ./Refactor-recore-octoprint-latest.img.xz Refactor-recore-octoprint-${DATE}.img.xz
       - name: Release if tagged
         uses: ncipollo/release-action@v1
         if: startsWith(github.ref, 'refs/tags/')
@@ -53,6 +57,22 @@ jobs:
           artifacts: Refactor-recore-octoprint-*.img.xz
           token: ${{ secrets.GITHUB_TOKEN }}
           prerelease: true
+      - name: Upload to nightly repo if not tagged
+        uses: nicklasfrahm/scp-action@main
+        if: startsWith(github.ref, 'refs/tags/') != true
+        with:
+          direction: upload
+          host: ${{ secrets.NIGHTLY_HOST }}
+          fingerprint: ${{ secrets.NIGHTLY_FINGERPRINT }}
+          username: ${{ secrets.NIGHTLY_USER }}
+          key: ${{ secrets.NIGHTLY_PRIVATE_KEY }}
+          source: ./Refactor-recore-octoprint-*.img.xz
+          target: /mnt/pi/Refactor_nightly/
+      - name: Cleanup after nightly upload
+        if: startsWith(github.ref, 'refs/tags/') != true
+        run: |
+          DATE=$(date --iso-8601)
+          rm ./Refactor-recore-octoprint-${DATE}.img.xz
 
   build-recore-mainsail:
     runs-on: ubuntu-latest
@@ -77,9 +97,8 @@ jobs:
           privateKey: ${{ secrets.PRIVATE_KEY}}
         env:
           CI: true
-      - name: Download file via SSH if tagged
+      - name: Download file via SSH
         uses: nicklasfrahm/scp-action@main
-        if: startsWith(github.ref, 'refs/tags/')
         with:
           direction: download
           host: ${{ secrets.HOST_REPLICAPE }}
@@ -97,6 +116,11 @@ jobs:
           fi
           DATE=$(date --iso-8601)
           mv ./Refactor-recore-mainsail-latest.img.xz Refactor-recore-mainsail-${TAG}-${DATE}.img.xz
+      - name: Rename file if nightly build
+        if: startsWith(github.ref, 'refs/tags/') != true
+        run: |
+          DATE=$(date --iso-8601)
+          mv ./Refactor-recore-mainsail-latest.img.xz Refactor-recore-mainsail-${DATE}.img.xz
       - name: Release if tagged
         uses: ncipollo/release-action@v1
         if: startsWith(github.ref, 'refs/tags/')
@@ -105,3 +129,19 @@ jobs:
           artifacts: Refactor-recore-mainsail-*.img.xz
           token: ${{ secrets.GITHUB_TOKEN }}
           prerelease: true
+      - name: Upload to nightly repo if not tagged
+        uses: nicklasfrahm/scp-action@main
+        if: startsWith(github.ref, 'refs/tags/') != true
+        with:
+          direction: upload
+          host: ${{ secrets.NIGHTLY_HOST }}
+          fingerprint: ${{ secrets.NIGHTLY_FINGERPRINT }}
+          username: ${{ secrets.NIGHTLY_USER }}
+          key: ${{ secrets.NIGHTLY_PRIVATE_KEY }}
+          source: ./Refactor-recore-mainsail-*.img.xz
+          target: /mnt/pi/Refactor_nightly/
+      - name: Cleanup after nightly upload
+        if: startsWith(github.ref, 'refs/tags/') != true
+        run: |
+          DATE=$(date --iso-8601)
+          rm ./Refactor-recore-mainsail-${DATE}.img.xz
