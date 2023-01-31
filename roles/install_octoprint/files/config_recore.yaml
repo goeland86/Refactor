@@ -1,7 +1,7 @@
 appearance:
   name: Recore
 folder:
-  uploads: /home/debian/gcode_files
+  uploads: /home/debian/printer_data/gcodes
 plugins:
   softwareupdate:
     _config_version: 9
@@ -11,7 +11,7 @@ plugins:
         prerelease: false
   klipper:
     configuration:
-      config_path: ~/klipper_config
+      config_path: ~/printer_data/config
       logpath: /var/log/klipper_logs/klippy.log
   toptemp:
     tool0:

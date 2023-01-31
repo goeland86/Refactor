@@ -182,7 +182,7 @@
 
 - name: Recore - Make Klipper config folder
   file:
-    path: /home/debian/klipper_config
+    path: /home/debian/printer_data/config/
     state: directory
     mode: '0755'
     owner: debian
@@ -191,7 +191,7 @@
 - name: Recore - create recore klipper config file
   copy:
     src: "{{ klipper_home }}/config/generic-recore.cfg"
-    dest: /home/debian/klipper_config/printer.cfg
+    dest: /home/debian/printer_data/config/printer.cfg
     owner: debian
     group: debian
     remote_src: yes

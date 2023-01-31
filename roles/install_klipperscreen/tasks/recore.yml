@@ -35,7 +35,7 @@
 - name: Recore - install config file
   copy:
     src: KlipperScreen.conf
-    dest: /home/debian/klipper_config
+    dest: /home/debian/printer_data/config
     owner: debian
     group: debian
     mode: 0755
