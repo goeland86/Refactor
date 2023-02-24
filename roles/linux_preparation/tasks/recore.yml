@@ -95,10 +95,11 @@
     - sun50i-a64-recore-a4.dtb
     - sun50i-a64-recore-a5.dtb
     - sun50i-a64-recore-a6.dtb
+    - sun50i-a64-recore-a7.dtb
 
 - name: Recore - symlink dtb to latest
   file:
-    src: sun50i-a64-recore-a6.dtb
+    src: sun50i-a64-recore-a7.dtb
     dest: /boot/dtb/allwinner/sun50i-a64-recore.dtb
     state: link
     force: yes
