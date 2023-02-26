@@ -2,7 +2,12 @@
 
 set -e
 
-FLASH_DEVICE=/dev/ttyS4
+if test -f /dev/ttyS4; then
+        FLASH_DEVICE=/dev/ttyS4
+else
+        FLASH_DEVICE=/dev/ttyS2
+fi
+
 STM32_BINARY=/opt/firmware/stm32.bin
 
 systemctl stop klipper
