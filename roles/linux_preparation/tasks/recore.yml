@@ -113,7 +113,6 @@
     - use-recore-revision
     - get-recore-config
     - get-recore-serial-number
-    - flash-recore
     - set-boot-media
     - get-boot-media
     - is-media-present
