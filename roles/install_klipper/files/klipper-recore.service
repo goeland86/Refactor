@@ -7,7 +7,7 @@ After=network.target
 WantedBy=multi-user.target
 
 [Service]
-Environment=KLIPPER_CONFIG=/home/debian/klipper_config/printer.cfg
+Environment=KLIPPER_CONFIG=/home/debian/printer_data/config/printer.cfg
 Environment=KLIPPER_LOG=/var/log/klipper_logs/klippy.log
 Environment=KLIPPER_SOCKET=/tmp/klippy_uds
 Type=simple

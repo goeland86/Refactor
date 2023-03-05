@@ -3,7 +3,7 @@
 revision="$1"
 
 case $revision in
-    a3|a4|a5|a6)
+    a3|a4|a5|a6|a7)
       echo "Using recore revision ${revision}"
       mount -o remount,rw /dev/mmcblk0p1 /boot
       cd /boot/dtb/allwinner/
@@ -11,7 +11,7 @@ case $revision in
       mount -o remount,ro /dev/mmcblk0p1 /boot
       ;;
     *)
-      echo "usage: $0 a3|a4|a5|a6"
+      echo "usage: $0 a3|a4|a5|a6|a7"
       exit 1
       ;;
 esac

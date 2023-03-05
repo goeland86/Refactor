@@ -24,7 +24,7 @@
 
 - name: Recore - Create print config folder
   file:
-    path: /home/debian/klipper_config
+    path: /home/debian/printer_data/config/
     state: directory
     owner: debian
     group: debian
@@ -32,7 +32,7 @@
 - name: Recore - copy config
   copy:
     src: moonraker.conf
-    dest: /home/debian/klipper_config
+    dest: /home/debian/printer_data/config/
     owner: debian
     group: debian
 
@@ -44,6 +44,19 @@
     owner: debian
     group: debian
 
+- name: Recore - remove logs folder
+  file:
+    path: /home/debian/printer_data/logs
+    state: absent
+
+- name: Recore - Symlink logs to /var/log
+  file:
+    src: /var/log/klipper_logs
+    dest: /home/debian/printer_data/logs
+    owner: debian
+    group: debian
+    state: link
+
 - name: Recore - copy service file
   copy:
     src: moonraker.service
@@ -52,13 +65,29 @@
 
 - name: Recore - Make sure the mainsail include is enabled by default
   lineinfile:
-    dest: /home/debian/klipper_config/printer.cfg
+    dest: /home/debian/printer_data/config/printer.cfg
     regexp: '^#\s*\[include mainsail.cfg\]*$'
     line: '[include mainsail.cfg]'
 
-- name: Recore - Install set_boot_media component
-  copy:
-    src: set_boot_media.py
-    dest: /home/debian/moonraker/moonraker/components
+- name: Recore - Create moonraker_components
+  file:
+    path: /home/debian/moonraker_components
+    state: directory
     owner: debian
     group: debian
+    mode: '0755'
+
+- name: Recore - Add recore moonraker component
+  copy:
+    src: recore.py
+    dest: /home/debian/moonraker_components
+    owner: debian
+    group: debian
+
+- name: Recore - Symlink recore moonraker component
+  file:
+    src: /home/debian/moonraker_components/recore.py
+    dest: /home/debian/moonraker/moonraker/components/recore.py
+    owner: debian
+    group: debian
+    state: link

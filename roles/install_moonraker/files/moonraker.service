@@ -1,6 +1,6 @@
-#Systemd service file for moonraker
+# systemd service file for moonraker
 [Unit]
-Description=API Server for Klipper
+Description=API Server for Klipper SV1
 Requires=network-online.target
 After=network-online.target
 
@@ -8,13 +8,12 @@ After=network-online.target
 WantedBy=multi-user.target
 
 [Service]
-Environment=MOONRAKER_CONFIG=/home/debian/klipper_config/moonraker.conf
-Environment=MOONRAKER_LOG=/var/log/klipper_logs/moonraker.log
 Type=simple
 User=debian
 SupplementaryGroups=moonraker-admin
 RemainAfterExit=yes
 WorkingDirectory=/home/debian/moonraker
-ExecStart=/home/debian/moonraker-env/bin/python /home/debian/moonraker/moonraker/moonraker.py -c ${MOONRAKER_CONFIG} -l ${MOONRAKER_LOG}
+EnvironmentFile=/home/debian/printer_data/systemd/moonraker.env
+ExecStart=/home/debian/moonraker-env/bin/python $MOONRAKER_ARGS
 Restart=always
 RestartSec=10

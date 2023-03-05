@@ -1,33 +1,29 @@
 # Refactor
-Simplified Recore and Replicape board image generation toolset, based on Armbian for Recore or Debian images from RCN for beaglebone.
+Refactor is a Linux distro for Recore based on Armbian.
 
 [![Build](https://github.com/intelligent-agent/Refactor/actions/workflows/main.yml/badge.svg)](https://github.com/intelligent-agent/Refactor/actions/workflows/main.yml)
 
-The starting point for Refactor is the Armbian/Debian console image, details are in the wiki here:
+The starting point for Refactor is the Armbian console image, details are in the wiki here:
 https://wiki.iagent.no/wiki/Refactor
 
-Refactor is a build-tool to install a printer's Firmware (at the moment Klipper), a printer control interface (OctoPrint), a touch-screen interface (Toggle w/ OctoPrint) and a few miscellaneous items (webcam streamer, network file share for gcode file uploads, etc.).
+This build system will install Klipper and the choice of OctoPrint or Mainsail and Moonraker.
+A touch screen interface is also insttalled, either Toggle for OctoPrint or KlipperScreen for Mainsail.
+In addition, there are some other programs such as mjpg-streamer to add webcam functionality and the setting up the
+right folders and config files so the software is ready to use out of the box.
 
-The hostname for Recore is `recore`. The hostname for replicape is `replicape`.
+The hostname for Recore is `recore`.
 
-It sets a default password for access as root on new images, but leaves the root account alone otherwise:
-SSH is meant to be active and allow root login. The `debian` user is normally also setup and runs OctoPrint and Klipper. Both root and debian passwords will need to be changed upon first login.  
+During installation using Reflash, the user can choose to leave the SSH access for user `debian` open or closed. If you choose to have it open, you should log in as user `debian` which will force a change of password. The USB C connector also presents the a serial port which will always allow anyone with physical access to the board to log in. Default passwords are:
 Username/password: `root`/`kamikaze`  
 Username/password: `debian`/`temppwd`  
 
-## Usage
-The images generated are focused on being a boot-strapped firmware for Thing-Printer control boards, such as Replicape and Recore. However PRs to make ReFactor an image generation tool for a wider range of single-board controllers is completely welcome. To support multiple platforms, the build script usage has been modified:
+## Running the image generation on the command line
+The images generated are focused on being a boot-strapped firmware for Thing-Printer control boards, such as Replicape and Recore. PRs to make Refactor better are welcome. To support multiple platforms, the build script usage has been modified:
 ```
 cd <path to Refactor git clone>
 sudo ./build-image-in-chroot-end-to-end.sh <platform> [OPTIONAL: system setup script]
 ```
 If not specified, the _ansible-playbook_ that is used is ___SYSTEM_klipper_octoprint-DEFAULT.yml___
-
-The platform (required parameter) is one of:
- * replicape
- * recore
- * (pi)
- * (pi64)
 
 The script then exports the `platform` ansible variable, and sources the `BaseLinux/$platform/Linux` file for a number of items:
 * a URL for which base linux image to build from (pine64 armbian for `pi64` and `recore`, RCN-built console debian 10.3 for `replicape`, raspbian for `pi`)

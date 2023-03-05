@@ -83,7 +83,7 @@
 
 - name: Recore - Have the upload folder ready
   file:
-    path: /home/debian/gcode_files
+    path: /home/debian/printer_data/gcodes
     state: directory
     owner: debian
     group: debian

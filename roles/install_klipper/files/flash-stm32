@@ -2,7 +2,25 @@
 
 set -e
 
-FLASH_DEVICE=/dev/ttyS4
+partprobe
+
+OUTFILE="/dev/"`lsblk -n -o NAME | grep 'mmcblk[0-2]$'`
+
+mkdir -p /mnt/config
+if ! grep -qs '/mnt/config ' /proc/mounts; then
+    mount -r ${OUTFILE}boot0p1 /mnt/config/
+fi
+
+CONFIG=`ls /mnt/config/*.json`
+REVISION=`cat "$CONFIG" | jq -r ".Revision" | tr '[:upper:]' '[:lower:]'`
+
+
+if [ "${REVISION}" == "a7" ]; then
+        FLASH_DEVICE=/dev/ttyS2
+else
+        FLASH_DEVICE=/dev/ttyS4
+fi
+
 STM32_BINARY=/opt/firmware/stm32.bin
 
 systemctl stop klipper
