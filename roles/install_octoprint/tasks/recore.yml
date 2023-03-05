@@ -27,11 +27,6 @@
     expires: -1
     home: /home/debian
 
-- name: Recore - create nftables port forward from :80 to :5000
-  copy:
-    src: "{{ role_path }}/files/nftables.conf"
-    dest: "/etc/nftables.conf"
-
 - name: Recore - Enable nftables
   service:
     name: nftables
