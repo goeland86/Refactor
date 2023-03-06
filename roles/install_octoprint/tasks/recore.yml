@@ -72,7 +72,7 @@
   pip:
     chdir: '{{ octoprint_home }}'
     virtualenv: '{{ octoprint_home }}/venv'
-    virtualenv_python: python3.7
+    virtualenv_python: python3
     state: latest
     name: git+https://github.com/foosel/OctoPrint.git
   become_user: debian
