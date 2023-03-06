@@ -1,5 +1,5 @@
 # This specifies the base Ubuntu system
-BASEIMAGE_URL=https://redirect.armbian.com/pine64/Jammy_current
+BASEIMAGE_URL=http://feeds.iagent.no/images/bullseye/Armbian_22.05.0-trunk_Recore_bullseye_edge_5.17.4_minimal.img.xz
 
 BASEIMAGE=armbian_pine64_current_$(date --iso-8601).img.xz
 
