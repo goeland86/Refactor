@@ -71,15 +71,15 @@
       - libc6-dev
       - python-dev
 
-- name: Recore - install Numpy lxml and cffi
-  shell: "/home/debian/klippy-env/bin/pip2 install numpy lxml cffi"
-
 - name: Recore - install Klipper with install scripts
   shell: "export USER=debian; {{ klipper_home }}/scripts/install-recore.sh"
   args:
     chdir: "{{ klipper_home }}"
   become: true
   become_user: debian
+
+- name: Recore - install Numpy lxml and cffi
+  shell: "/home/debian/klippy-env/bin/pip2 install numpy lxml cffi"
 
 - name: Recore - Install klipper service file
   copy:
