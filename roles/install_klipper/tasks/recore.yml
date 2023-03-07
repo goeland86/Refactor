@@ -68,12 +68,11 @@
   apt:
     name:
       - build-essential
-      - python-cffi
       - libc6-dev
       - python-dev
 
-- name: Recore - install Numpy
-  shell: "/home/debian/klippy-env/bin/pip install numpy lxml"
+- name: Recore - install Numpy lxml and cffi
+  shell: "/home/debian/klippy-env/bin/pip install numpy lxml cffi"
 
 - name: Recore - install Klipper with install scripts
   shell: "export USER=debian; {{ klipper_home }}/scripts/install-recore.sh"
