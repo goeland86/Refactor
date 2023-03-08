@@ -188,15 +188,6 @@
     owner: debian
     group: debian
 
-- name: Recore - create recore klipper config file
-  copy:
-    src: "{{ klipper_home }}/config/generic-recore-a7.cfg"
-    dest: /home/debian/printer_data/config/printer.cfg
-    owner: debian
-    group: debian
-    remote_src: yes
-    force: no
-
 - name: Recore - make sure the sudoers.d/debian file exists
   file:
     path: /etc/sudoers.d/debian
