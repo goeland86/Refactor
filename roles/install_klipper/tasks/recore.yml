@@ -34,7 +34,7 @@
 - name: Recore - clone klipper from the repository
   git:
     repo: https://github.com/intelligent-agent/klipper
-    version: master
+    version: chore/update-package-names
     dest: '{{ klipper_home }}'
     update: yes
     clone: yes
