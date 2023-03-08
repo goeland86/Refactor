@@ -2,6 +2,7 @@
 - name: Recore - Install packages
   apt:
     name:
+      - python3-virtualenv
       - libgpiod-dev
       - gpiod
       - git
@@ -79,7 +80,7 @@
   become_user: debian
 
 - name: Recore - install Numpy lxml and cffi
-  shell: "/home/debian/klippy-env/bin/pip2 install numpy lxml cffi"
+  shell: "/home/debian/klippy-env/bin/pip3 install numpy lxml cffi"
 
 - name: Recore - Install klipper service file
   copy:
