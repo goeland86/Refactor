@@ -12,7 +12,6 @@
     dest: /home/debian/moonraker
     update: yes
     clone: yes
-  become: yes
   become_user: debian
 
 - name: Recore - Install moonraker
@@ -20,6 +19,7 @@
     /home/debian/moonraker/scripts/install-moonraker.sh
     /home/debian/moonraker/scripts/set-policykit-rules.sh
   sudo_user: debian
+  sudo: yes
 
 - name: Recore - Create print config folder
   file:
