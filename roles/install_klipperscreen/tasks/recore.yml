@@ -22,7 +22,7 @@
 
 - name: Recore - Install KlipperScreen
   shell: 
-    cmd: "sudo -u debian /home/debian/KlipperScreen/scripts/KlipperScreen-install.sh"
+    cmd: "DEBIAN_FRONTEND=noninteractive sudo -u debian /home/debian/KlipperScreen/scripts/KlipperScreen-install.sh"
   
 
 - name: Recore - install service file
