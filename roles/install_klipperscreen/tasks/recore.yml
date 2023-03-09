@@ -21,11 +21,9 @@
   command: mv /home/debian/KlipperScreen-master /home/debian/KlipperScreen
 
 - name: Recore - Install KlipperScreen
-  shell: |
-    /home/debian/KlipperScreen/scripts/KlipperScreen-install.sh
-  sudo: yes
-  sudo_user: debian
-
+  shell: 
+    cmd: "sudo -u debian /home/debian/KlipperScreen/scripts/KlipperScreen-install.sh"
+  
 - name: Recore - install service file
   copy:
     src: KlipperScreen.service
