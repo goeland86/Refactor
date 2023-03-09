@@ -24,6 +24,7 @@
   shell: 
     cmd: "sudo -u debian /home/debian/KlipperScreen/scripts/KlipperScreen-install.sh"
   
+
 - name: Recore - install service file
   copy:
     src: KlipperScreen.service

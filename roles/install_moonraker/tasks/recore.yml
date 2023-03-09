@@ -12,14 +12,13 @@
     dest: /home/debian/moonraker
     update: yes
     clone: yes
-  become: yes
   become_user: debian
 
 - name: Recore - Install moonraker
-  shell: |
-    /home/debian/moonraker/scripts/install-moonraker.sh
-    /home/debian/moonraker/scripts/set-policykit-rules.sh
-  sudo_user: debian
+  ansible.builtin.shell:
+    cmd: |
+      sudo -u debian /home/debian/moonraker/scripts/install-moonraker.sh
+      sudo -u debian /home/debian/moonraker/scripts/set-policykit-rules.sh
 
 - name: Recore - Create print config folder
   file:
@@ -66,7 +65,7 @@
   lineinfile:
     dest: /home/debian/printer_data/config/printer.cfg
     regexp: '^#\s*\[include mainsail.cfg\]*$'
-    line: '[include mainsail.cfg]'
+    line: "[include mainsail.cfg]"
 
 - name: Recore - Create moonraker_components
   file:
@@ -74,7 +73,7 @@
     state: directory
     owner: debian
     group: debian
-    mode: '0755'
+    mode: "0755"
 
 - name: Recore - Add recore moonraker component
   copy:
