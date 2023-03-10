@@ -34,7 +34,7 @@
 - name: Recore - clone klipper from the repository
   git:
     repo: https://github.com/intelligent-agent/klipper
-    version: master
+    version: tags/Refactor-v3.1.1
     dest: '{{ klipper_home }}'
     update: yes
     clone: yes
