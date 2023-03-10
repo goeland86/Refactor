@@ -1,7 +1,7 @@
 ---
 - name: Recore - clean up unneeded packages
   shell:
-    cmd: "DEBIAN_FRONTEND=noninteractive sudo apt -y autoremove"
+    cmd: "DEBIAN_FRONTEND=noninteractive sudo apt -y autoremove && sudo rm /var/cache/apt/archives/*.deb"
 
 - name: Recore - download klipperscreen
   unarchive:
