@@ -15,7 +15,7 @@
 - name: Recore, install octoprint klipper plugin in Octoprint virtual env
   shell:
     cmd: 'cd /usr/src/octoprint_klipper ; {{ octoprint_home }}/venv/bin/python setup.py clean install'
-  become: yes
+  become: true
   become_user: debian
 
 - name: Recore, clone octoprint top temp plugin
@@ -34,7 +34,7 @@
 - name: Recore, install octoprint top temp plugin in Octoprint virtual env
   shell:
     cmd: 'cd /usr/src/octoprint_top_temp ; {{ octoprint_home }}/venv/bin/python setup.py clean install'
-  become: yes
+  become: true
   become_user: debian
 
 - name: Recore, clone octoprint Refactor plugin
@@ -54,5 +54,5 @@
 - name: Recore, install octoprint refactor plugin in Octoprint virtual env
   shell:
     cmd: 'cd /usr/src/octoprint_refactor ; {{ octoprint_home }}/venv/bin/python setup.py clean install'
-  become: yes
+  become: true
   become_user: debian
