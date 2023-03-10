@@ -12,6 +12,10 @@
       - python3-gi-cairo
       - pkg-config
       - gcc
+      - xinit
+      - xinput
+      - x11-xserver-utils
+      - xdotool
     state: latest
 
 - name: Recore - download klipperscreen
