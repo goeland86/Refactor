@@ -16,6 +16,7 @@
       - xinput
       - x11-xserver-utils
       - xdotool
+      - xserver-xorg-video-fbdev
     state: latest
 
 - name: Recore - download klipperscreen
