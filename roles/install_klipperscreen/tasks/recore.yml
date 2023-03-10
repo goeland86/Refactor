@@ -19,6 +19,10 @@
       - xserver-xorg-video-fbdev
     state: latest
 
+- name: Recore - clean up unneeded packages
+  shell:
+    cmd: "sudo apt -y autoremove"
+
 - name: Recore - download klipperscreen
   unarchive:
     src: https://github.com/intelligent-agent/KlipperScreen/archive/refs/heads/master.zip
