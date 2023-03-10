@@ -1,27 +1,7 @@
 ---
-- name: Recore - Install packages
-  apt:
-    name:
-      - libgirepository1.0-dev
-      - libcairo2-dev
-      - at-spi2-core
-      - libdbus-1-3
-      - libdbus-1-dev
-      - gir1.2-gtk-3.0
-      - python3-gi
-      - python3-gi-cairo
-      - pkg-config
-      - gcc
-      - xinit
-      - xinput
-      - x11-xserver-utils
-      - xdotool
-      - xserver-xorg-video-fbdev
-    state: latest
-
 - name: Recore - clean up unneeded packages
   shell:
-    cmd: "sudo apt -y autoremove"
+    cmd: "DEBIAN_FRONTEND=noninteractive sudo apt -y autoremove"
 
 - name: Recore - download klipperscreen
   unarchive:
