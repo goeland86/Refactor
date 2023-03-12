@@ -111,7 +111,8 @@ chroot ${MOUNTPOINT} su -c "\
 cd ${REFACTOR_HOME} && \
 apt update && DEBIAN_FRONTEND=noninteractive apt -y upgrade && \
 DEBIAN_FRONTEND=noninteractive apt install -y ansible python3 python2 && \
-ansible-playbook ${SYSTEM_ANSIBLE} -T 180 --extra-vars '${ANSIBLE_PLATFORM_VARS}' -i hosts"
+ansible-playbook ${SYSTEM_ANSIBLE} -T 180 --extra-vars '${ANSIBLE_PLATFORM_VARS}' -i hosts && \
+apt clean"
 
 status=$?
 set -e
