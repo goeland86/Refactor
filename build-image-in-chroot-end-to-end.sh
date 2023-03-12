@@ -53,7 +53,7 @@ if [ ${TARGET_PLATFORM} == "recore" ]; then
 unit: sectors
 
 ${DEVICE}p1 : start=8192, size=524288, type=83
-${DEVICE}p2 : start=532480, size=9303520, type=83
+${DEVICE}p2 : start=532480, size=6000M, type=83
 EOF
 fi
 
