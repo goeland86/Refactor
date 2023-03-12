@@ -3,6 +3,13 @@
   shell:
     cmd: "sudo apt clean"
 
+- name: Recore - install dependencies
+  apt:
+    name:
+      - libdbus-1-dev
+      - libdbus-glib-1-dev
+    state: latest
+
 - name: Recore - download klipperscreen
   unarchive:
     src: https://github.com/intelligent-agent/KlipperScreen/archive/refs/heads/master.zip
