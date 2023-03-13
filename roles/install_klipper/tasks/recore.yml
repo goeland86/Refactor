@@ -214,6 +214,7 @@
 - name: Recore - clean the compilation folder to keep the repo clean
   shell:
     cmd: make clean
-    chdir: /home/debian/klipper/
+    args:
+      chdir: /home/debian/klipper/
     become: true
     become_user: debian
