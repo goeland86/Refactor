@@ -215,5 +215,3 @@
   shell: " make clean"
   args:
     chdir: /home/debian/klipper/
-  become: true
-  become_user: debian
