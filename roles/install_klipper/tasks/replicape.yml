@@ -102,6 +102,11 @@
     - "{{ role_path }}/files/pru_config"
     - "{{ role_path }}/files/replicape_linux_config"
 
+- name: Replicape - Check if Octoprint is installed
+  stat:
+    path: /home/debian/.octoprint
+  register: octoprint_present
+
 - name: Replicape - create klipper config file
   copy:
     src: "{{ klipper_home }}/config/generic-replicape.cfg"
@@ -110,11 +115,17 @@
     group: debian
     remote_src: yes
     force: no
+  when: not octoprint_present.stat.exists
 
-- name: Replicape - Check if Octoprint is installed
-  stat:
-    path: /home/debian/.octoprint
-  register: octoprint_present
+- name: Replicape - create klipper config file
+  copy:
+    src: "{{ klipper_home }}/config/generic-replicape.cfg"
+    dest: /home/debian/printer.cfg
+    owner: debian
+    group: debian
+    remote_src: yes
+    force: no
+  when: octoprint_present.stat.exists
 
 - name: Replicape - determine if config is the default OctoPrint config or not
   lineinfile:
@@ -141,6 +152,13 @@
     dest: /etc/systemd/system/
     owner: debian
     group: debian
+
+- name: Replicape - update systemd file with the klipper config path
+  when: not octoprint_present.stat.exists
+  replace:
+    path: /etc/systemd/system/klipper.service
+    replace: /home/debian/printer_data/config/printer.cfg
+    before: /home/debian/printer.cfg
 
 - name: Replicape - move the init.d/klipper_pru file
   shell: mv /etc/init.d/klipper_pru /etc/systemd/system/klipper_pru
@@ -178,19 +196,3 @@
     insertbefore: enable_uboot_cape_universal=1
     state: present
     path: /boot/uEnv.txt
-
-- name: Replicape - Install KIAUH
-  git:
-    repo: https://github.com/th33xitus/kiauh.git
-    dest: '{{ klipper_home }}/../kiauh'
-    update: yes
-    clone: yes
-
-- name: Replicape - Update KIAUH to call the right install script
-  replace:
-    path: '{{ klipper_home }}/../kiauh/scripts/{{ item }}'
-    regexp: install-octopi\.sh
-    after: install-beaglebone.sh
-  with_items:
-    - update.sh
-    - install_klipper.sh
