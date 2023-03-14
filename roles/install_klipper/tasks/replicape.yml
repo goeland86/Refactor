@@ -166,8 +166,8 @@
   when: not octoprint_present.stat.exists
   replace:
     path: /etc/systemd/system/klipper.service
+    regexp: /home/debian/printer.cfg
     replace: /home/debian/printer_data/config/printer.cfg
-    before: /home/debian/printer.cfg
 
 - name: Replicape - move the init.d/klipper_pru file
   shell: mv /etc/init.d/klipper_pru /etc/systemd/system/klipper_pru
