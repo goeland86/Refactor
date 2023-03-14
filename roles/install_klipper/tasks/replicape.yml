@@ -30,7 +30,9 @@
 
 - name: Replicape - install pru gcc
   apt:
-    name: gcc-pru
+    name:
+      - gcc-pru
+      - git
     state: latest
 
 - name: Replicape - adjust ownership of klipper source
