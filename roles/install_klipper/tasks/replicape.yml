@@ -107,6 +107,15 @@
     path: /home/debian/.octoprint
   register: octoprint_present
 
+- name: Replicape - create klipper config folder
+  when: octoprint_present.stat.exists
+  file:
+    path: /home/debian/printer_data/config/
+    state: directory
+    mode: '0755'
+    owner: debian
+    group: debian
+
 - name: Replicape - create klipper config file
   copy:
     src: "{{ klipper_home }}/config/generic-replicape.cfg"
