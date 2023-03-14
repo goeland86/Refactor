@@ -37,7 +37,7 @@
 
 - name: add debian sudo permission to restart the service
   lineinfile:
-    path: /etc/sudoers.d/debian
+    path: /etc/sudoers
     line: '%debian ALL=NOPASSWD: /bin/systemctl restart mjpg.service'
     state: present
 
