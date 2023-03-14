@@ -108,7 +108,7 @@
   register: octoprint_present
 
 - name: Replicape - create klipper config folder
-  when: octoprint_present.stat.exists
+  when: not octoprint_present.stat.exists
   file:
     path: /home/debian/printer_data/config/
     state: directory
