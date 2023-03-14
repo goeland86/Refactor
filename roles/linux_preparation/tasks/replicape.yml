@@ -40,7 +40,9 @@
 - name: Replicape - update RCN scripts
   command:
     chdir: /opt/scripts
-    cmd: 'git pull'
+    cmd: |
+      git config --global --add safe.directory /opt/scripts
+      git pull
 
 - name: update package list
   apt:
