@@ -41,7 +41,7 @@
   command:
     chdir: /opt/scripts
     cmd: |
-      git config --global --add safe.directory /opt/scripts
+      git config --local --add safe.directory /opt/scripts
       git pull
 
 - name: update package list
