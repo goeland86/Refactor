@@ -38,7 +38,7 @@
     state: present
 
 - name: Replicape - update RCN scripts
-  command:
+  shell:
     chdir: /opt/scripts
     cmd: |
       chown -R root /opt/scripts
