@@ -1,0 +1,92 @@
+---
+- name: Recore - Install packages
+  apt:
+    name:
+      - unzip
+    state: present
+
+- name: Recore - clone klipper from the master repository
+  git:
+    repo: https://github.com/Arksine/moonraker
+    version: master
+    dest: /home/debian/moonraker
+    update: yes
+    clone: yes
+  become: yes
+  become_user: debian
+
+- name: Recore - Install moonraker
+  shell:
+    cmd: |
+      sudo -u debian /home/debian/moonraker/scripts/install-moonraker.sh
+      sudo -u debian /home/debian/moonraker/scripts/set-policykit-rules.sh
+
+- name: Recore - Create print config folder
+  file:
+    path: /home/debian/printer_data/config/
+    state: directory
+    owner: debian
+    group: debian
+
+- name: Recore - copy config
+  copy:
+    src: moonraker.conf
+    dest: /home/debian/printer_data/config/
+    owner: debian
+    group: debian
+
+- name: Recore - create folder for klipper logs in /var/log
+  file:
+    path: /var/log/klipper_logs
+    state: directory
+    mode: 0755
+    owner: debian
+    group: debian
+
+- name: Recore - remove logs folder
+  file:
+    path: /home/debian/printer_data/logs
+    state: absent
+
+- name: Recore - Symlink logs to /var/log
+  file:
+    src: /var/log/klipper_logs
+    dest: /home/debian/printer_data/logs
+    owner: debian
+    group: debian
+    state: link
+
+- name: Recore - copy service file
+  copy:
+    src: moonraker.service
+    dest: /etc/systemd/system
+    mode: 0644
+
+- name: Recore - Make sure the mainsail include is enabled by default
+  lineinfile:
+    dest: /home/debian/printer_data/config/printer.cfg
+    regexp: '^#\s*\[include mainsail.cfg\]*$'
+    line: '[include mainsail.cfg]'
+
+- name: Recore - Create moonraker_components
+  file:
+    path: /home/debian/moonraker_components
+    state: directory
+    owner: debian
+    group: debian
+    mode: '0755'
+
+- name: Recore - Add recore moonraker component
+  copy:
+    src: recore.py
+    dest: /home/debian/moonraker_components
+    owner: debian
+    group: debian
+
+- name: Recore - Symlink recore moonraker component
+  file:
+    src: /home/debian/moonraker_components/recore.py
+    dest: /home/debian/moonraker/moonraker/components/recore.py
+    owner: debian
+    group: debian
+    state: link

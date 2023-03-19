@@ -1,4 +1,8 @@
 ---
-- name: Recore - Install OctoPrint
+- name: Recore - Install Mainsail
   include: recore.yml
   when: platform == 'recore'
+
+- name: Replicape - Install Mainsail
+  include: replicape.yml
+  when: platform == 'replicape'

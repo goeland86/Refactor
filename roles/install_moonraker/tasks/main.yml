@@ -2,3 +2,7 @@
 - name: Recore - Install Moonraker
   include: recore.yml
   when: platform == 'recore'
+
+- name: Replicape - Install Moonraker
+  include: replicape.yml
+  when: platform == 'replicape'
