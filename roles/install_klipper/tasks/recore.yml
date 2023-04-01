@@ -33,17 +33,39 @@
 
 - name: Recore - clone klipper from the repository
   git:
-    repo: https://github.com/intelligent-agent/klipper
-    version: tags/Refactor-v3.1.1
+    repo: https://github.com/Klipper3d/klipper
+    version: master
     dest: '{{ klipper_home }}'
     update: yes
     clone: yes
 
-- name: Recore - add debian user to tty group
-  user:
-    append: yes
-    groups: tty
-    name: debian
+- name: Recore - add missing Recore py
+  copy:
+    src: files/recore.py
+    dest: "{{ klipper_home }}/klippy/extras/"
+    mode: '0644'
+
+- name: Recore - add missing Thermocouple py
+  copy:
+    src: files/thermocouple.py
+    dest: "{{ klipper_home }}/klippy/extras/"
+    mode: '0644'
+
+- name: Recore - add missing install script
+  copy:
+    src: files/install-recore.sh
+    dest: "{{ klipper_home }}/scripts/"
+    mode: '0755'
+
+- name: Recore - add config files
+  copy:
+    src: "files/{{ item }}"
+    dest: "{{ klipper_home }}/config/"
+    mode: '0644'
+  with_items:
+    - generic-recore-a5.cfg
+    - generic-recore-a6.cfg
+    - generic-recore-a7.cfg
 
 - name: Recore - adjust ownership of klipper source
   file:
