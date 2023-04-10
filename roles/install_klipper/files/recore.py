@@ -1,7 +1,7 @@
 # Config for Recore,
 #
 # Copyright (C) 2017-2019  Kevin O'Connor <kevin@koconnor.net>
-# Copyright (C) 2019-2022  Elias Bakken <elias@iagent.no>
+# Copyright (C) 2019-2023  Elias Bakken <elias@iagent.no>
 #
 # This file may be distributed under the terms of the GNU GPLv3 license.
 import logging, os
@@ -23,18 +23,6 @@ pins = {
         'offset_t1': 'ar100:PG1',
         'offset_t2': 'ar100:PG2',
         'offset_t3': 'ar100:PG3'
-    },
-    "A5": {
-        'enable_pin': 'ar100:PG2',
-        'oc_reset_pin': 'ar100:PG1',
-        'gain_enable_t0': 'ar100:PD4',
-        'gain_enable_t1': 'ar100:PH11',
-        'gain_enable_t2': 'ar100:PE17',
-        'gain_enable_t3': 'ar100:PB2',
-        'pullup_t0': 'ar100:PD6',
-        'pullup_t1': 'ar100:PD24',
-        'pullup_t2': 'ar100:PF0',
-        'pullup_t3': 'ar100:PF1'
     }
 }
 
@@ -44,10 +32,9 @@ class recore:
         printer = config.get_printer()
         ppins = printer.lookup_object('pins')
         ppins.register_chip('recore', self)
-        revisions = {'A' + str(i): 'A' + str(i) for i in range(8)}
+        revisions = {'A6', 'A7'}
         self.revision = config.getchoice('revision', revisions)
 
-        pins["A3"] = pins["A4"] = pins["A5"]
         pins["A6"] = pins["A7"]
         # Setup enable pin
         enable_pin = config.get('enable_pin',
@@ -77,10 +64,7 @@ class recore:
                 pin = ppins.setup_pin('endstop', pin_name)
             else:
                 pin = ppins.setup_pin('digital_out', pin_name)
-                if self.revision in ['A6', 'A7']:
-                    value = 1.0
-                else:
-                    value = 0.0
+                value = 1.0
                 pin.setup_start_value(start_value=value,
                                       shutdown_value=value,
                                       is_static=True)
@@ -96,18 +80,17 @@ class recore:
                 pin.setup_start_value(start_value=1.,
                                       shutdown_value=1.,
                                       is_static=True)
-            if self.revision in ['A6', 'A7']:
-                offset = config.get('offset_t' + str(idx), '1')
-                if offset not in ['0', '1']:
-                    raise Exception("Offset not 0 or 1")
-                pin_name = pins[self.revision]['offset_t' + str(idx)]
-                if offset == '0':
-                    pin = ppins.setup_pin('endstop', pin_name)
-                else:
-                    pin = ppins.setup_pin('digital_out', pin_name)
-                    pin.setup_start_value(start_value=1.,
-                                          shutdown_value=1.,
-                                          is_static=True)
+            offset = config.get('offset_t' + str(idx), '1')
+            if offset not in ['0', '1']:
+                raise Exception("Offset not 0 or 1")
+            pin_name = pins[self.revision]['offset_t' + str(idx)]
+            if offset == '0':
+                pin = ppins.setup_pin('endstop', pin_name)
+            else:
+                pin = ppins.setup_pin('digital_out', pin_name)
+                pin.setup_start_value(start_value=1.,
+                                      shutdown_value=1.,
+                                      is_static=True)
 
 
 def load_config(config):

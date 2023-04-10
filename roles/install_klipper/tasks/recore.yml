@@ -5,6 +5,21 @@
       - libgpiod-dev
       - gpiod
       - git
+      - virtualenv
+      - python-dev
+      - libffi-dev
+      - build-essential
+      - libncurses-dev
+      - libusb-dev
+      - libusb-1.0
+      - stm32flash
+      - libnewlib-arm-none-eabi
+      - binutils-arm-none-eabi
+      - gcc-arm-none-eabi
+      - pkg-config
+      - python-libxml2
+      - python-cffi
+      - libc6-dev
     state: present
 
 - name: Recore - ensure the debian user exists
@@ -29,7 +44,6 @@
     - /home/debian
     - /usr/local/lib/python3
     - /usr/local/bin
-
 
 - name: Recore - clone klipper from the repository
   git:
@@ -86,19 +100,13 @@
     line: "%sudo   ALL=(ALL:ALL) ALL"
     state: absent
 
-- name: Recore - install build packages
-  apt:
-    name:
-      - build-essential
-      - python-libxml2
-      - python-cffi
-      - libc6-dev
-      - python-dev
+- name: Recore - Create virtual env
+  shell: virtualenv -p python2 /home/debian/klippy-env
+  become: true
+  become_user: debian
 
-- name: Recore - install Klipper with install scripts
-  shell: "export USER=debian; {{ klipper_home }}/scripts/install-recore.sh"
-  args:
-    chdir: "{{ klipper_home }}"
+- name: Recore - install requirements
+  shell: /home/debian/klippy-env/bin/pip install -r /home/debian/klipper/scripts/klippy-requirements.txt
   become: true
   become_user: debian
 
@@ -110,11 +118,6 @@
     src: "{{ role_path }}/files/klipper-recore.service"
     dest: "/etc/systemd/system/klipper.service"
     mode: '0644'
-
-- name: Recore - Stop klipper. The install script starts it.
-  systemd:
-    name: klipper.service
-    state: stopped
 
 - name: Recore - Make firmware folder
   file:
