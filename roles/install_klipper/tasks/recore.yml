@@ -118,6 +118,11 @@
     dest: "/etc/systemd/system/klipper.service"
     mode: '0644'
 
+- name: Recore - Enable klipper service
+  service:
+    name: klipper.service
+    enabled: yes
+
 - name: Recore - Make firmware folder
   file:
     path: /opt/firmware
