@@ -32,7 +32,7 @@ class recore:
         printer = config.get_printer()
         ppins = printer.lookup_object('pins')
         ppins.register_chip('recore', self)
-        revisions = {'A6':_'A6', 'A7':'A7'}
+        revisions = {'A6':'A6', 'A7':'A7'}
         self.revision = config.getchoice('revision', revisions)
 
         pins["A6"] = pins["A7"]
