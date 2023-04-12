@@ -11,7 +11,7 @@
 
 - name: Recore - download klipperscreen
   unarchive:
-    src: https://github.com/intelligent-agent/KlipperScreen/archive/refs/heads/master.zip
+    src: https://github.com/jordanruthe/KlipperScreen/archive/refs/heads/master.zip
     dest: /home/debian/
     owner: debian
     group: debian
