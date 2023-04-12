@@ -9,16 +9,14 @@
       - libdbus-1-dev
     state: present
 
-- name: Recore - download klipperscreen
-  unarchive:
-    src: https://github.com/jordanruthe/KlipperScreen/archive/refs/heads/master.zip
-    dest: /home/debian/
-    owner: debian
-    group: debian
-    remote_src: yes
-
-- name: Recore - Rename folder
-  command: mv /home/debian/KlipperScreen-master /home/debian/KlipperScreen
+- name: Recore - clone KlipperScreen from the master repository
+  git:
+    repo: https://github.com/jordanruthe/KlipperScreen
+    version: master
+    dest: /home/debian/KlipperScreen
+    clone: yes
+  become: yes
+  become_user: debian
 
 - name: Recore - Install KlipperScreen
   shell: |
