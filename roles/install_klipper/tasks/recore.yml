@@ -6,7 +6,7 @@
       - gpiod
       - git
       - virtualenv
-      - python-dev
+      - python3-dev
       - libffi-dev
       - build-essential
       - libncurses-dev
@@ -100,7 +100,7 @@
     state: absent
 
 - name: Recore - Create virtual env
-  shell: virtualenv -p python2 /home/debian/klippy-env
+  shell: virtualenv -p python3 /home/debian/klippy-env
   become: true
   become_user: debian
 
