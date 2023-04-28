@@ -51,7 +51,7 @@
   copy:
     dest: /etc/udev/rules.d/60-usb-disk.rules
     content: |
-        ACTION=="add", SUBSYSTEMS=="usb", SUBSYSTEM=="block", ENV{ID_FS_USAGE}=="filesystem", ATTR{partition}=="1", RUN{program}+="/usr/bin/systemd-mount -o ro --owner=debian --no-block --automount=yes --collect $devnode /home/debian/printer_data/gcodes/usb"
+        ACTION=="add", SUBSYSTEMS=="usb", SUBSYSTEM=="block", ENV{ID_FS_USAGE}=="filesystem", ATTR{partition}=="1", RUN{program}+="/usr/bin/systemd-mount -o ro --no-block --automount=yes --collect $devnode /home/debian/printer_data/gcodes/usb"
 
 - name: Recore - Enable ngnix
   systemd:

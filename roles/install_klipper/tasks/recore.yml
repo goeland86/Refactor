@@ -5,6 +5,20 @@
       - libgpiod-dev
       - gpiod
       - git
+      - virtualenv
+      - python3-dev
+      - libffi-dev
+      - build-essential
+      - libncurses-dev
+      - libusb-dev
+      - stm32flash
+      - libnewlib-arm-none-eabi
+      - binutils-arm-none-eabi
+      - gcc-arm-none-eabi
+      - pkg-config
+      - python-libxml2
+      - python-cffi
+      - libc6-dev
     state: present
 
 - name: Recore - ensure the debian user exists
@@ -30,20 +44,41 @@
     - /usr/local/lib/python3
     - /usr/local/bin
 
-
 - name: Recore - clone klipper from the repository
   git:
-    repo: https://github.com/intelligent-agent/klipper
+    repo: https://github.com/Klipper3d/klipper
     version: master
     dest: '{{ klipper_home }}'
     update: yes
     clone: yes
 
-- name: Recore - add debian user to tty group
-  user:
-    append: yes
-    groups: tty
-    name: debian
+- name: Recore - add missing Recore py
+  copy:
+    src: files/recore.py
+    dest: "{{ klipper_home }}/klippy/extras/"
+    mode: '0644'
+
+- name: Recore - add missing Thermocouple py
+  copy:
+    src: files/thermocouple.py
+    dest: "{{ klipper_home }}/klippy/extras/"
+    mode: '0644'
+
+- name: Recore - add missing install script
+  copy:
+    src: files/install-recore.sh
+    dest: "{{ klipper_home }}/scripts/"
+    mode: '0755'
+
+- name: Recore - add config files
+  copy:
+    src: "files/{{ item }}"
+    dest: "{{ klipper_home }}/config/"
+    mode: '0644'
+  with_items:
+    - generic-recore-a5.cfg
+    - generic-recore-a6.cfg
+    - generic-recore-a7.cfg
 
 - name: Recore - adjust ownership of klipper source
   file:
@@ -64,19 +99,13 @@
     line: "%sudo   ALL=(ALL:ALL) ALL"
     state: absent
 
-- name: Recore - install build packages
-  apt:
-    name:
-      - build-essential
-      - python-libxml2
-      - python-cffi
-      - libc6-dev
-      - python-dev
+- name: Recore - Create virtual env
+  shell: virtualenv -p python3 /home/debian/klippy-env
+  become: true
+  become_user: debian
 
-- name: Recore - install Klipper with install scripts
-  shell: "export USER=debian; {{ klipper_home }}/scripts/install-recore.sh"
-  args:
-    chdir: "{{ klipper_home }}"
+- name: Recore - install requirements
+  shell: /home/debian/klippy-env/bin/pip install -r /home/debian/klipper/scripts/klippy-requirements.txt
   become: true
   become_user: debian
 
@@ -89,10 +118,10 @@
     dest: "/etc/systemd/system/klipper.service"
     mode: '0644'
 
-- name: Recore - Stop klipper. The install script starts it.
-  systemd:
+- name: Recore - Enable klipper service
+  service:
     name: klipper.service
-    state: stopped
+    enabled: yes
 
 - name: Recore - Make firmware folder
   file:
@@ -187,15 +216,6 @@
     mode: '0755'
     owner: debian
     group: debian
-
-- name: Recore - create recore klipper config file
-  copy:
-    src: "{{ klipper_home }}/config/generic-recore-a7.cfg"
-    dest: /home/debian/printer_data/config/printer.cfg
-    owner: debian
-    group: debian
-    remote_src: yes
-    force: no
 
 - name: Recore - make sure the sudoers.d/debian file exists
   file:
