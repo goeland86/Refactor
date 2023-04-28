@@ -1,0 +1,4 @@
+---
+- name: Recore - Install Mjpg
+  include: recore.yml
+  when: platform == 'recore'
