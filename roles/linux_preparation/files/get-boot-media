@@ -2,10 +2,10 @@
 
 PATH_EMMC="/dev/mmcblk0p2"
 PATH_USB="/dev/sda2"
-UUID_EMMC=`lsblk -o UUID -n /dev/mmcblk0p2`
-UUID_USB=`lsblk -o UUID -n /dev/sda2`
+UUID_EMMC=`lsblk -o UUID -n /dev/mmcblk0p2 2>/dev/null`
+UUID_USB=`lsblk -o UUID -n /dev/sda2 2>/dev/null`
 
-DEV=`grep "^rootdev=" /mnt/emmc/armbianEnv.txt | sed 's:rootdev=::' | sed 's:UUID=::'`
+DEV=`grep "^rootdev=" /boot/armbianEnv.txt | sed 's:rootdev=::' | sed 's:UUID=::'`
 
 case $DEV in
   $PATH_EMMC | $UUID_EMMC)

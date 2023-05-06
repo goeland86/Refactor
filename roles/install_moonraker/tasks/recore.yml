@@ -62,12 +62,6 @@
     dest: /etc/systemd/system
     mode: 0644
 
-- name: Recore - Make sure the mainsail include is enabled by default
-  lineinfile:
-    dest: /home/debian/printer_data/config/printer.cfg
-    regexp: '^#\s*\[include mainsail.cfg\]*$'
-    line: '[include mainsail.cfg]'
-
 - name: Recore - Create moonraker_components
   file:
     path: /home/debian/moonraker_components
