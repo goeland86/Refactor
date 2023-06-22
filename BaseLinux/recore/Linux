@@ -1,9 +1,9 @@
-# This specifies the base Ubuntu system
-BASEIMAGE_URL=http://feeds.iagent.no/images/buster/Armbian_21.11.0-trunk_Recore_buster_current_5.10.60_minimal.img.xz
+# This specifies the base image system
+BASEIMAGE_URL=https://github.com/intelligent-agent/Rebuild/releases/download/v0.0.1-RC5/rebuild-barebone-v0.0.1-RC5.img.xz
 
-BASEIMAGE=armbian_pine64_current_$(date --iso-8601).img.xz
+BASEIMAGE=rebuild-barebone-v0.0.1-RC5.img.xz
 
-ANSIBLE_PLATFORM_VARS='{"platform":"recore", "packaging":"apt"}'
+ANSIBLE_PLATFORM_VARS='{"platform":"recore", "packaging":"apt", "ansible_python_interpreter": "/usr/bin/python3"}'
 
 function decompress {
 	xz -T0 -vc -c -d $BASEIMAGE >> $TARGETIMAGE

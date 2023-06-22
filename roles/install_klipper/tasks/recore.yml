@@ -16,8 +16,8 @@
       - binutils-arm-none-eabi
       - gcc-arm-none-eabi
       - pkg-config
-      - python-libxml2
-      - python-cffi
+      - python3-libxml2
+      - python3-cffi
       - libc6-dev
     state: present
 
@@ -52,17 +52,19 @@
     update: yes
     clone: yes
 
-- name: Recore - add missing Recore py
+- name: Recore - add missing files for klipper
   copy:
-    src: files/recore.py
+    src: 'files/{{ item }}'
     dest: "{{ klipper_home }}/klippy/extras/"
     mode: '0644'
-
-- name: Recore - add missing Thermocouple py
-  copy:
-    src: files/thermocouple.py
-    dest: "{{ klipper_home }}/klippy/extras/"
-    mode: '0644'
+  with_items:
+    - thermocouple.py
+    - recore.py
+    - recore_a5.py
+    - tmc2130_a5.py
+    - tmc2209_a5.py
+    - recore_thermistor.py
+    - recore_adc_temperature.py
 
 - name: Recore - add missing install script
   copy:
@@ -133,7 +135,7 @@
 
 - name: Recore - Get and extract toolchain
   unarchive:
-    src: http://feeds.iagent.no/toolchains/or1k-linux-musl.tar.xz
+    src: http://feeds.iagent.no/toolchains/or1k-linux-musl-11.2.0.tar.xz
     dest: /opt/
     owner: debian
     group: debian

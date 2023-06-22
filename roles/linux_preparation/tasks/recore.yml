@@ -86,64 +86,8 @@
     - /etc/issue.net
     - /etc/issue
 
-- name: Recore - copy dtb and dts device trees
-  copy:
-    src: '{{ role_path }}/files/{{ item }}'
-    dest: "/boot/dtb/allwinner/{{ item }}"
-  with_items:
-    - sun50i-a64-recore-a3.dtb
-    - sun50i-a64-recore-a4.dtb
-    - sun50i-a64-recore-a5.dtb
-    - sun50i-a64-recore-a6.dtb
-    - sun50i-a64-recore-a7.dtb
-
-- name: Recore - symlink dtb to latest
-  file:
-    src: sun50i-a64-recore-a7.dtb
-    dest: /boot/dtb/allwinner/sun50i-a64-recore.dtb
-    state: link
-    force: yes
-
-- name: Recore - add flashing scripts
-  copy:
-    src: "{{ item }}"
-    dest: /usr/local/bin
-    mode: '0755'
-  with_items:
-    - use-recore-revision
-    - get-recore-config
-    - get-recore-serial-number
-    - set-boot-media
-    - get-boot-media
-    - is-media-present
-    - get-rootfs
-    - refactor-apt-upgrade
-    - set-ssh-access
-    - is-ssh-enabled
-
-- name: Recore - Replace platform name
-  replace:
-    path: /etc/armbian-release
-    regexp: "{{ item.regexp1 }}"
-    replace: "{{ item.replace }}"
-  with_items:
-    - { regexp1: 'Pine64', replace: 'Recore'}
-    - { regexp1: 'pine64', replace: 'recore'}
-
-- name: Recore - Fix haveged
-  replace:
-    path: /etc/default/haveged
-    regexp: '"-w 1024"'
-    replace: '"-w 1024 -d 16"'
-
 - name: Recore - fix home ownership
   command: chown -R debian:debian /home/debian
-
-- name: Recore - Make boot partition read-only
-  replace:
-    path: /etc/fstab
-    regexp: "defaults,commit=600,errors=remount-ro 0 2"
-    replace: "ro,defaults 0 0"
 
 - name: Recore - Add ttyGS0 to /etc/securetty
   lineinfile:
@@ -151,39 +95,10 @@
     line: ttyGS0
     state: present
 
-- name: Recore - Add g_serial to /etc/modules
-  lineinfile:
-    path: /etc/modules-load.d/modules.conf
-    line: g_serial
-    state: present
-
-- name: Recore - Add console log
-  lineinfile:
-    path: /boot/armbianEnv.txt
-    line: extraargs=console=ttyGS0,115200 console=tty1
-    state: present
-
 - name: Recore - Enable ttyGS0 getty service
   service:
     name: serial-getty@ttyGS0.service
     enabled: yes
-
-- name: Recore, Crate images directory
-  file:
-    path: "/home/debian/images"
-    state: directory
-    mode: '0755'
-    owner: debian
-    group: debian
-
-- name: Recore, Create mount directories
-  file:
-    path: "{{ item }}"
-    state: directory
-    mode: '0755'
-  loop:
-    - /mnt/emmc
-    - /mnt/usb
 
 - name: Recore - force debian password reset
   shell: chage -d 0 debian

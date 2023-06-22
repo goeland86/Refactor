@@ -19,8 +19,8 @@
   shell: |
     /home/debian/moonraker/scripts/install-moonraker.sh
     /home/debian/moonraker/scripts/set-policykit-rules.sh
-  sudo: yes
-  sudo_user: debian
+  become: yes
+  become_user: debian
 
 - name: Recore - Create print config folder
   file:

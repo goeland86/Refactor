@@ -3,3 +3,4 @@ customize.sh
 *.img
 *.img.*
 _config.yml
+image.layout

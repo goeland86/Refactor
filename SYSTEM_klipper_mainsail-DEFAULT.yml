@@ -6,7 +6,6 @@
   roles:
     - install_klipper
     - install_ustreamer
-    - install_weston
     - install_moonraker
     - install_mainsail
     - install_klipperscreen

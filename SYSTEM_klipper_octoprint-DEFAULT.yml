@@ -4,8 +4,8 @@
   vars:
     - firmware: klipper
   roles:
-    - install_octoprint
     - install_klipper
+    - install_octoprint
     - install_octoprint_klipper_plugins
     - install_mjpgstreamer
     - install_weston

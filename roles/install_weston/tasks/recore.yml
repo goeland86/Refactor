@@ -4,6 +4,7 @@
   apt:
     pkg:
       - weston
+      - librsvg2-common
 
 - name: make weston ini directory
   tags: weston
@@ -26,7 +27,7 @@
 
       [output]
       name=HDMI-A-1
-      transform=270
+      transform=normal
 
 - name: make weston service file
   tags: weston

@@ -3,7 +3,7 @@
   apt:
     name:
       - nftables
-      - python3.7
+      - python3.9
       - python3-pip
       - python3-dev
       - git
@@ -76,7 +76,7 @@
   pip:
     chdir: '{{ octoprint_home }}'
     virtualenv: '{{ octoprint_home }}/venv'
-    virtualenv_python: python3.7
+    virtualenv_python: python3.9
     state: latest
     name: git+https://github.com/foosel/OctoPrint.git
   become_user: debian
@@ -138,9 +138,3 @@
   with_items:
     - /usr/src/Refactor
     - /home/debian
-
-- name: Recore - Install OctoPrint switcheroo
-  copy:
-    src: enable-octoprint
-    dest: /usr/local/bin/
-    mode: 0700
