@@ -38,9 +38,11 @@
     state: present
 
 - name: Replicape - update RCN scripts
-  command:
+  shell:
     chdir: /opt/scripts
-    cmd: 'git pull'
+    cmd: |
+      chown -R root /opt/scripts
+      git pull
 
 - name: update package list
   apt:

@@ -13,6 +13,13 @@
     name: linux-image-4.19.94-ti-r57
     state: absent
 
+- name: Replicape - install git
+  apt:
+    name:
+      - git
+    state: latest
+
+
 - name: Replicape - clone klipper from the master repository
   git:
     repo: https://github.com/KevinOConnor/klipper
@@ -30,7 +37,8 @@
 
 - name: Replicape - install pru gcc
   apt:
-    name: gcc-pru
+    name:
+      - gcc-pru
     state: latest
 
 - name: Replicape - adjust ownership of klipper source
@@ -94,6 +102,30 @@
     - "{{ role_path }}/files/pru_config"
     - "{{ role_path }}/files/replicape_linux_config"
 
+- name: Replicape - Check if Octoprint is installed
+  stat:
+    path: /home/debian/.octoprint
+  register: octoprint_present
+
+- name: Replicape - create klipper config folder
+  when: not octoprint_present.stat.exists
+  file:
+    path: /home/debian/printer_data/config/
+    state: directory
+    mode: '0755'
+    owner: debian
+    group: debian
+
+- name: Replicape - create klipper config file
+  copy:
+    src: "{{ klipper_home }}/config/generic-replicape.cfg"
+    dest: /home/debian/printer_data/config/printer.cfg
+    owner: debian
+    group: debian
+    remote_src: yes
+    force: no
+  when: not octoprint_present.stat.exists
+
 - name: Replicape - create klipper config file
   copy:
     src: "{{ klipper_home }}/config/generic-replicape.cfg"
@@ -102,6 +134,7 @@
     group: debian
     remote_src: yes
     force: no
+  when: octoprint_present.stat.exists
 
 - name: Replicape - determine if config is the default OctoPrint config or not
   lineinfile:
@@ -109,6 +142,7 @@
     line: 'firstRun: true'
     state: present
   check_mode: yes
+  when: octoprint_present.stat.exists
   register: replace_default_octoprint_config
 
 - name: Replicape - place Klipper-friendly config for octoprint in place
@@ -119,6 +153,7 @@
     group: debian
     remote_src: yes
     force: no
+  when: octoprint_present.stat.exists
 
 - name: Replicape - place Klipper-service files in place
   copy:
@@ -126,6 +161,13 @@
     dest: /etc/systemd/system/
     owner: debian
     group: debian
+
+- name: Replicape - update systemd file with the klipper config path
+  when: not octoprint_present.stat.exists
+  replace:
+    path: /etc/systemd/system/klipper.service
+    regexp: /home/debian/printer.cfg
+    replace: /home/debian/printer_data/config/printer.cfg
 
 - name: Replicape - move the init.d/klipper_pru file
   shell: mv /etc/init.d/klipper_pru /etc/systemd/system/klipper_pru
@@ -163,19 +205,3 @@
     insertbefore: enable_uboot_cape_universal=1
     state: present
     path: /boot/uEnv.txt
-
-- name: Replicape - Install KIAUH
-  git:
-    repo: https://github.com/th33xitus/kiauh.git
-    dest: '{{ klipper_home }}/../kiauh'
-    update: yes
-    clone: yes
-
-- name: Replicape - Update KIAUH to call the right install script
-  replace:
-    path: '{{ klipper_home }}/../kiauh/scripts/{{ item }}'
-    regexp: install-octopi\.sh
-    after: install-beaglebone.sh
-  with_items:
-    - update.sh
-    - install_klipper.sh

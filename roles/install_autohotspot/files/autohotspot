@@ -8,7 +8,9 @@ create_hotspot() {
   echo "Creating hotspot"
   nmcli con add type wifi ifname wlan0 con-name Hotspot ssid "$hotspot_SSID"
   nmcli con modify Hotspot 802-11-wireless.mode ap
-  nmcli con modify Hotspot ipv4.method auto ipv4.addresses 192.168.50.1/24
+  nmcli con modify Hotspot 802-11-wireless.band bg
+  nmcli con modify Hotspot ipv4.method shared
+  nmcli con modify Hotspot ipv4.addresses 192.168.50.1/24
   nmcli con modify Hotspot connection.autoconnect-priority -10
   nmcli con modify Hotspot connection.autoconnect yes
   nmcli con modify Hotspot wifi-sec.key-mgmt wpa-psk

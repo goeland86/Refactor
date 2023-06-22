@@ -1,4 +1,11 @@
 ---
+- name: Recore - install packages
+  apt:
+    name:
+      - iptables
+      - dnsmasq-base
+    state: present
+
 - name: Recore - disable unique naming scheme
   file:
     src: /dev/null

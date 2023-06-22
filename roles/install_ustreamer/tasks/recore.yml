@@ -1,0 +1,48 @@
+---
+- name: install dependencies
+  apt:
+    pkg:
+      - build-essential
+      - libevent-dev
+      - libjpeg-dev
+      - libbsd-dev
+    state: latest
+
+- name: clone git repo
+  git:
+    repo: https://github.com/pikvm/ustreamer
+    dest: /home/debian/ustreamer
+    depth: 1
+
+- name: compile ustreamer
+  shell: make
+  args:
+    chdir: /home/debian/ustreamer
+    creates: /home/debian/ustreamer/ustreamer
+
+- name: add video udev rule file
+  file:
+    path: /etc/udev/rules.d/50-video.rules
+    state: touch
+
+- name: add video udev rules
+  lineinfile:
+    path: /etc/udev/rules.d/50-video.rules
+    line: 'SUBSYSTEM=="video4linux", ATTR{name}!="cedrus", ATTR{index}=="0", SYMLINK+="webcam", TAG+="systemd"'
+    state: present
+
+- name: add debian sudo permission to restart the service
+  lineinfile:
+    path: /etc/sudoers.d/debian
+    line: '%debian ALL=NOPASSWD: /bin/systemctl restart ustreamer.service'
+    state: present
+
+- name: deploy service file
+  copy:
+    src: '{{ role_path }}/files/ustreamer.service'
+    dest: /etc/systemd/system/ustreamer.service
+
+- name: enable the video streaming service
+  service:
+    name: ustreamer.service
+    enabled: yes

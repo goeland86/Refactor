@@ -185,14 +185,5 @@
     - /mnt/emmc
     - /mnt/usb
 
-- name: Recore, Update fstab, mount emmc and usb in known locations
-  lineinfile:
-    path: /etc/fstab
-    state: present
-    line: "{{ item }}"
-  loop:
-    - "/dev/sda1 /mnt/usb ext4 ro,defaults,nofail"
-    - "/dev/mmcblk0p1 /mnt/emmc ext4 ro,defaults,nofail"
-
 - name: Recore - force debian password reset
   shell: chage -d 0 debian
