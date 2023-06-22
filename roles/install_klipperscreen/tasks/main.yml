@@ -2,3 +2,6 @@
 - name: Recore - Install KlipperScreen
   include: recore.yml
   when: platform == 'recore'
+  dependencies:
+    - role: install_weston
+    - role: install_moonraker

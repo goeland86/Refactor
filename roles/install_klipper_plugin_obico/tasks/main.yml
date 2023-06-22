@@ -10,11 +10,3 @@
   when: platform == 'recore'
   dependencies:
     - role: linux_preparation
-
-- name: Pi - Install Klipper
-  include: pi.yml
-  when: platform == 'pi'
-
-- name: Pi64 - Install Klipper
-  include: pi.yml
-  when: platform == 'pi64'

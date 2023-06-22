@@ -1,44 +1,10 @@
 ---
-- name: upgrade packages
-  apt:
-    upgrade: dist
-    update_cache: yes
-
 - name: remove unneeded packages
   apt:
     pkg:
     - smartmontools
     state: absent
     autoremove: yes
-
-- name: install packages
-  apt:
-    pkg:
-    - unzip
-    - libavahi-compat-libdnssd1
-    - libnss-mdns
-    - byobu
-    - htop
-    - cpufrequtils
-    - pv
-    state: present
-    autoremove: yes
-    autoclean: yes
-
-- name: Recore - ensure the debian user exists
-  user:
-    name: debian
-    comment: Default user for OctoPrint
-    shell: /bin/bash
-    groups: tty,dialout
-    append: yes
-    expires: -1
-    home: /home/debian
-
-- name: enable ssh
-  service:
-    name: ssh
-    enabled: no
 
 - name: Recore - disable root login
   replace:
@@ -65,16 +31,6 @@
     dest: /etc/hostname
     content: "{{ platform }}\n"
 
-- name: set root password
-  user:
-    name: root
-    password: "{{ 'kamikaze' | password_hash('sha512') }}"
-
-- name: set debian password
-  user:
-    name: debian
-    password: "{{ 'temppwd' | password_hash('sha512') }}"
-
 - name: write issue and issue.net
   copy:
     dest: '{{ item }}'
@@ -85,24 +41,6 @@
   with_items:
     - /etc/issue.net
     - /etc/issue
-
-- name: Recore - copy dtb and dts device trees
-  copy:
-    src: '{{ role_path }}/files/{{ item }}'
-    dest: "/boot/dtb/allwinner/{{ item }}"
-  with_items:
-    - sun50i-a64-recore-a3.dtb
-    - sun50i-a64-recore-a4.dtb
-    - sun50i-a64-recore-a5.dtb
-    - sun50i-a64-recore-a6.dtb
-    - sun50i-a64-recore-a7.dtb
-
-- name: Recore - symlink dtb to latest
-  file:
-    src: sun50i-a64-recore-a7.dtb
-    dest: /boot/dtb/allwinner/sun50i-a64-recore.dtb
-    state: link
-    force: yes
 
 - name: Recore - add flashing scripts
   copy:
@@ -145,12 +83,6 @@
     regexp: "defaults,commit=600,errors=remount-ro 0 2"
     replace: "ro,defaults 0 0"
 
-- name: Recore - Add ttyGS0 to /etc/securetty
-  lineinfile:
-    path: /etc/securetty
-    line: ttyGS0
-    state: present
-
 - name: Recore - Add g_serial to /etc/modules
   lineinfile:
     path: /etc/modules-load.d/modules.conf
@@ -168,15 +100,15 @@
     name: serial-getty@ttyGS0.service
     enabled: yes
 
-- name: Recore, Crate images directory
+- name: Recore - Create images directory
   file:
-    path: "/home/debian/images"
+    path: "{{ debian.home }}/images"
     state: directory
     mode: '0755'
     owner: debian
     group: debian
 
-- name: Recore, Create mount directories
+- name: Recore - Create mount directories
   file:
     path: "{{ item }}"
     state: directory
@@ -184,6 +116,3 @@
   loop:
     - /mnt/emmc
     - /mnt/usb
-
-- name: Recore - force debian password reset
-  shell: chage -d 0 debian

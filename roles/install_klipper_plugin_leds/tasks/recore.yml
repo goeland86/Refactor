@@ -1,0 +1,18 @@
+---
+- Recore: git clone klipper leds plugin
+  git:
+    repo: https://github.com/julianschill/klipper-led_effect.git
+    version: master
+    dest: '{{ debian.home }}/klipper-led_effect'
+    update: yes
+    clone: yes
+  register: klipper_led_plugin
+
+- Recore: install klipper leds plugin
+  shell: "{{ klipper_led_plugin.dest }}/install-led_effect.sh"
+
+- Recore: copy sample led config file
+  copy:
+    src: "{{ klipper_led_plugin.dest }}/examples/Voron_Stealburner/stealthburner_led_effects_3_leds.cfg"
+    dest: "{{ debian.home }}/printer_data/config/leds.cfg"
+    remote_src: true

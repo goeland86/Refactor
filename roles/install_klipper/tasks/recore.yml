@@ -21,16 +21,6 @@
       - libc6-dev
     state: present
 
-- name: Recore - ensure the debian user exists
-  user:
-    name: debian
-    comment: Default user for OctoPrint
-    shell: /bin/bash
-    groups: tty,dialout
-    append: yes
-    expires: -1
-    home: /home/debian
-
 - name: Recore - give debian permissions to python folders for updates
   file:
     path: '{{ item }}'
@@ -40,7 +30,7 @@
     recurse: yes
     state: directory
   with_items:
-    - /home/debian
+    - '{{ debian.home }}'
     - /usr/local/lib/python3
     - /usr/local/bin
 
@@ -100,17 +90,17 @@
     state: absent
 
 - name: Recore - Create virtual env
-  shell: virtualenv -p python3 /home/debian/klippy-env
+  shell: virtualenv -p python3 {{ debian.home }}/klippy-env
   become: true
   become_user: debian
 
 - name: Recore - install requirements
-  shell: /home/debian/klippy-env/bin/pip install -r /home/debian/klipper/scripts/klippy-requirements.txt
+  shell: {{ debian.home }}/klippy-env/bin/pip install -r {{ debian.home }}/klipper/scripts/klippy-requirements.txt
   become: true
   become_user: debian
 
 - name: Recore - install Numpy
-  shell: "/home/debian/klippy-env/bin/pip install numpy"
+  shell: "{{ debian.home }}/klippy-env/bin/pip install numpy"
 
 - name: Recore - Install klipper service file
   copy:
@@ -211,7 +201,7 @@
 
 - name: Recore - Make Klipper config folder
   file:
-    path: /home/debian/printer_data/config/
+    path: {{ debian.home }}/printer_data/config/
     state: directory
     mode: '0755'
     owner: debian
@@ -223,11 +213,3 @@
     owner: root
     group: root
     state: touch
-
-- name: Recore - create folder for klipper logs in /var/log
-  file:
-    path: /var/log/klipper_logs
-    state: directory
-    mode: '0755'
-    owner: debian
-    group: debian

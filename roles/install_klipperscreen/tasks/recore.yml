@@ -13,14 +13,14 @@
   git:
     repo: https://github.com/jordanruthe/KlipperScreen
     version: master
-    dest: /home/debian/KlipperScreen
+    dest: '{{ debian.home }}/KlipperScreen'
     clone: yes
   become: yes
   become_user: debian
 
 - name: Recore - Install KlipperScreen
   shell: |
-    /home/debian/KlipperScreen/scripts/KlipperScreen-install.sh
+    '{{ debian.home }}/KlipperScreen/scripts/KlipperScreen-install.sh'
   sudo: yes
   sudo_user: debian
 
@@ -33,7 +33,7 @@
 - name: Recore - install config file
   copy:
     src: KlipperScreen.conf
-    dest: /home/debian/printer_data/config
+    dest: '{{ klipper_data }}/config'
     owner: debian
     group: debian
     mode: 0755

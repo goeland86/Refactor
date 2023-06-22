@@ -1,0 +1,11 @@
+---
+- Recore: git clone moonraker-obico
+  git:
+    repo: https://github.com/TheSpaghettiDetective/moonraker-obico.git
+    version: master
+    dest: '{{ debian.home }}/moonraker-obico'
+    update: yes
+    clone: yes  
+    
+- Recore: install moonraker-obico
+  shell: '{{ debian.home }}/moonraker-obico/install.sh -f -L -H localhost -p 7125 -C {{ debian.home }}/printer_data/config/moonraker.conf -l {{ debian.home }}/printer_data/logs/'

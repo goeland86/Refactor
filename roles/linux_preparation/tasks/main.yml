@@ -10,7 +10,3 @@
 - name: Pi - Prepare Linux
   include: pi.yml
   when: platform == 'pi'
-
-- name: Pi64 - Prepare Linux
-  include: pi.yml
-  when: platform == 'pi64'

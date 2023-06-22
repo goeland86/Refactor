@@ -11,14 +11,14 @@
 - name: clone git repo
   git:
     repo: https://github.com/pikvm/ustreamer
-    dest: /home/debian/ustreamer
+    dest: '{{ debian.home }}/ustreamer'
     depth: 1
 
 - name: compile ustreamer
   shell: make
   args:
-    chdir: /home/debian/ustreamer
-    creates: /home/debian/ustreamer/ustreamer
+    chdir: '{{ debian.home }}/ustreamer'
+    creates: '{{ debian.home }}/ustreamer/ustreamer'
 
 - name: add video udev rule file
   file:

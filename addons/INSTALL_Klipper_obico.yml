@@ -1,0 +1,5 @@
+---
+- hosts: localhost
+  connection: local
+  roles:
+    - install_klipper_plugin_obico

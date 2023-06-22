@@ -2,7 +2,11 @@
 - name: Recore - Install Mainsail
   include: recore.yml
   when: platform == 'recore'
+  dependencies:
+    - role: install_moonraker
 
 - name: Replicape - Install Mainsail
   include: replicape.yml
   when: platform == 'replicape'
+  dependencies:
+    - role: install_moonraker
