@@ -43,32 +43,48 @@
     clone: yes
 
 - name: Recore - add missing Recore py
-  copy:
-    src: files/recore.py
-    dest: "{{ klipper_home }}/klippy/extras/"
+  get_url:
+    src: "https://raw.githubusercontent.com/intelligent-agent/klipper/master/klippy/extras/{{ item }}"
+    dest: "{{ klipper_home }}/klippy/extras/{{ item }}"
     mode: '0644'
+  with_items:
+    - recore.py
+    - thermocouple.py
 
-- name: Recore - add missing Thermocouple py
-  copy:
-    src: files/thermocouple.py
-    dest: "{{ klipper_home }}/klippy/extras/"
+- name: Recore - Add A5 compatibility
+  get_url:
+    src: "https://raw.githubusercontent.com/intelligent-agent/Rebuild/main/userpatches/overlay/klipper/{{ item }}"
+    dest: "{{ klipper_home }}/klippy/extras/{{ item }}"
     mode: '0644'
+  with_items: 
+    - recore_a5.py
+    - recore_adc_temperature.py
+    - recore_thermistor.py
+    - tmc2209_a5.py
+    - tmc2130_a5.py
 
 - name: Recore - add missing install script
-  copy:
+  get_url:
     src: files/install-recore.sh
     dest: "{{ klipper_home }}/scripts/"
     mode: '0755'
 
 - name: Recore - add config files
-  copy:
-    src: "files/{{ item }}"
+  get_url:
+    src: "https://raw.githubusercontent.com/intelligent-agent/klipper/master/config/{{ item }}"
+    dest: "{{ klipper_home }}/config/"
+    mode: '0644'
+  with_items:
+    - generic-recore-a6.cfg
+    - generic-recore-a7.cfg
+
+- name: Recore - add config files
+  get_url:
+    src: "https://raw.githubusercontent.com/intelligent-agent/Rebuild/main/userpatches/overlay/klipper/{{ item }}"
     dest: "{{ klipper_home }}/config/"
     mode: '0644'
   with_items:
     - generic-recore-a5.cfg
-    - generic-recore-a6.cfg
-    - generic-recore-a7.cfg
 
 - name: Recore - adjust ownership of klipper source
   file:
@@ -95,7 +111,7 @@
   become_user: debian
 
 - name: Recore - install requirements
-  shell: {{ debian.home }}/klippy-env/bin/pip install -r {{ debian.home }}/klipper/scripts/klippy-requirements.txt
+  shell: "{{ debian.home }}/klippy-env/bin/pip install -r {{ debian.home }}/klipper/scripts/klippy-requirements.txt"
   become: true
   become_user: debian
 
@@ -139,6 +155,7 @@
 - name: Recore - Compile AR100 binary
   shell: |
     export PATH=$PATH:/opt/output/bin
+    echo "export PATH=$PATH:/opt/output/bin" >> /home/debian/.bashrc
     make olddefconfig
     make
   args:
@@ -201,15 +218,8 @@
 
 - name: Recore - Make Klipper config folder
   file:
-    path: {{ debian.home }}/printer_data/config/
+    path: "{{ debian.home }}/printer_data/config/"
     state: directory
     mode: '0755'
     owner: debian
     group: debian
-
-- name: Recore - make sure the sudoers.d/debian file exists
-  file:
-    path: /etc/sudoers.d/debian
-    owner: root
-    group: root
-    state: touch
