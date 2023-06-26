@@ -140,6 +140,10 @@
     owner: debian
     group: debian
     remote_src: yes
+    
+- name: Recore - copy or1k toolchain to proper path
+  shell: |
+    rsync -a /opt/output/ /usr/local && rm -r /opt/output
 
 - name: Recore - Copy AR100 config
   copy:
@@ -150,7 +154,6 @@
 
 - name: Recore - Compile AR100 binary
   shell: |
-    export PATH=$PATH:/opt/output/bin
     make olddefconfig
     make
   args:
