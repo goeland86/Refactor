@@ -21,6 +21,7 @@
     - htop
     - cpufrequtils
     - pv
+    - git
     state: present
     autoremove: yes
     autoclean: yes
