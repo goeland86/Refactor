@@ -17,16 +17,6 @@
     name: virtualenv
     executable: pip3
 
-- name: Recore - ensure the debian user exists
-  user:
-    name: debian
-    comment: Default user for OctoPrint
-    shell: /bin/bash
-    groups: tty,dialout
-    append: yes
-    expires: -1
-    home: /home/debian
-
 - name: Recore - create nftables port forward from :80 to :5000
   copy:
     src: "{{ role_path }}/files/nftables.conf"
@@ -94,13 +84,6 @@
     path: /etc/services
     line: octoprint 5000/tcp
     state: present
-
-- name: Recore - make sure the sudoers.d/debian file exists
-  file:
-    path: /etc/sudoers.d/debian
-    owner: root
-    group: root
-    state: touch
 
 - name: Recore - grant debian user sudo privileges for some commands
   blockinfile:

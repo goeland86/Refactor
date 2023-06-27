@@ -35,6 +35,37 @@
     expires: -1
     home: /home/debian
 
+- name: Recore - make sure the sudoers.d/debian file exists
+  file:
+    path: /etc/sudoers.d/debian
+    owner: root
+    group: root
+    state: touch
+
+- name: Recore - create folder for klipper logs in /var/log
+  file:
+    path: /var/log/klipper_logs
+    state: directory
+    mode: '0755'
+    owner: debian
+    group: debian
+
+- name: Recore - create folder printer_data in /home/debian
+  file:
+    path: /home/debian/printer_data
+    state: directory
+    mode: '0755'
+    owner: debian
+    group: debian
+
+- name: Recore - create a symlink for the /home/debian/printer_data/logs to store them in /var/log
+  file:
+    src: /var/log/klipper_logs
+    dest: /home/debian/printer_data/logs
+    state: link
+    owner: debian
+    group: debian
+
 - name: enable ssh
   service:
     name: ssh

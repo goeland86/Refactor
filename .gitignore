@@ -3,4 +3,5 @@ customize.sh
 *.img
 *.img.*
 _config.yml
+.vscode
 image.layout

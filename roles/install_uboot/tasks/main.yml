@@ -1,8 +1,0 @@
----
-- name: Replicape - Install U-Boot
-  include: replicape.yml
-  when: platform == 'replicape'
-
-- name: Recore - Install U-Boot
-  include: recore.yml
-  when: platform == 'recore'

@@ -21,16 +21,6 @@
       - libc6-dev
     state: present
 
-- name: Recore - ensure the debian user exists
-  user:
-    name: debian
-    comment: Default user for OctoPrint
-    shell: /bin/bash
-    groups: tty,dialout
-    append: yes
-    expires: -1
-    home: /home/debian
-
 - name: Recore - give debian permissions to python folders for updates
   file:
     path: '{{ item }}'
@@ -217,21 +207,6 @@
 - name: Recore - Make Klipper config folder
   file:
     path: /home/debian/printer_data/config/
-    state: directory
-    mode: '0755'
-    owner: debian
-    group: debian
-
-- name: Recore - make sure the sudoers.d/debian file exists
-  file:
-    path: /etc/sudoers.d/debian
-    owner: root
-    group: root
-    state: touch
-
-- name: Recore - create folder for klipper logs in /var/log
-  file:
-    path: /var/log/klipper_logs
     state: directory
     mode: '0755'
     owner: debian

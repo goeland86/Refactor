@@ -1,0 +1,5 @@
+---
+dependencies:
+  - { role: install_klipper }
+  - { role: install_moonraker }
+  - { role: linux_preparation }
