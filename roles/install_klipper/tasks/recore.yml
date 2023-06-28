@@ -167,7 +167,7 @@
 
 - name: Recore - Copy STM32 config
   copy:
-    src: "{{ role_path }}/files/stm32f0.config"
+    src: "{{ role_path }}/files/stm32f031-serial.config"
     dest: "{{ klipper_home }}/.config"
     owner: debian
     group: debian
