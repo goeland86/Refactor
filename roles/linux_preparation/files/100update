@@ -1,0 +1,2 @@
+DPkg::Pre-Invoke {"mount -o remount,rw /boot";};
+DPkg::Post-Invoke {"mount -o remount,ro /boot";};

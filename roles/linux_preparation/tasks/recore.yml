@@ -156,3 +156,9 @@
     daemon-reload: true
     enabled: true
     name: cpufreq
+
+- name: Recore - add support for system upgrade
+  copy:
+    src: 100update
+    dest: /etc/apt/apt.conf.d/100update
+    mode: '0644'
