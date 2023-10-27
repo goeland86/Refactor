@@ -134,3 +134,25 @@
 
 - name: Recore - force debian password reset
   shell: chage -d 0 debian
+
+- name: Recore - install script to set CPU to use performance governor
+  copy:
+    src: '{{ role_path }}/files/cpufreq.sh'
+    dest: /opt/cpufreq.sh
+    mode: '0755'
+    owner: debian
+    group: debian
+
+- name: Recore - install service for CPU performance governor use
+  copy:
+    src: '{{ role_path }}/files/cpufreq.service'
+    dest: /etc/systemd/system/cpufreq.service
+    mode: '0644'
+    owner: root
+    group: root
+
+- name: Recore - enable the CPU performance governor usage
+  systemd:
+    daemon-reload: true
+    enabled: true
+    name: cpufreq
