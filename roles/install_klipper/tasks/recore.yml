@@ -189,6 +189,49 @@
     remote_src: yes
     force: no
 
+- name: Recore - Copy patch
+  copy:
+    src: "{{ role_path }}/files/enable-i2c.patch"
+    dest: "{{ klipper_home }}"
+    owner: debian
+    group: debian
+
+- name: Recore - Increase flash size and add i2c
+  shell: |
+    patch -p1 < enable-i2c.patch
+  args:
+    chdir: "{{ klipper_home }}"
+  
+- name: Recore - Copy STM32 config with 32 KB flash
+  copy:
+    src: "{{ role_path }}/files/stm32f031-32KB-serial.config"
+    dest: "{{ klipper_home }}/.config"
+    owner: debian
+    group: debian
+
+- name: Recore - Compile STM32 binary with 32 KB flash
+  shell: |
+    make clean
+    make olddefconfig
+    make -j
+  args:
+    chdir: "{{ klipper_home }}"
+
+- name: Recore - Copy STM32 binary with 32 KB flash
+  copy:
+    src: "{{ klipper_home }}/out/klipper.bin"
+    dest: /opt/firmware/stm32-32KB.bin
+    owner: debian
+    group: debian
+    remote_src: yes
+    force: no
+
+- name: Recore - reset folder
+  shell: |
+    git reset --hard
+  args:
+    chdir: "{{ klipper_home }}"
+
 - name: Recore - Install stm32 flasher script
   copy:
     src: "{{ role_path }}/files/flash-stm32"
