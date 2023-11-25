@@ -110,7 +110,7 @@ set +e # allow this to fail - we'll check the return code
 chroot ${MOUNTPOINT} su -c "\
 export DEBIAN_FRONTEND=noninteractive && \
 cd ${REFACTOR_HOME} && \
-apt update && apt -y upgrade -o Dpkg::Options::="--force-confold" && \
+apt update && \
 apt install -y ansible python && \
 ansible-playbook ${SYSTEM_ANSIBLE} -T 180 --extra-vars '${ANSIBLE_PLATFORM_VARS}' -i hosts"
 
