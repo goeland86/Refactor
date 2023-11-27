@@ -1,7 +1,7 @@
 # This specifies the base image system
-BASEIMAGE_URL=https://github.com/intelligent-agent/Rebuild/releases/download/v0.0.1-RC6/rebuild-barebone-v0.0.1-RC6.img.xz
+BASEIMAGE_URL=https://github.com/intelligent-agent/Rebuild/releases/download/v0.0.1-RC7/rebuild-barebone-v0.0.1-RC7.img.xz
 
-BASEIMAGE=rebuild-barebone-v0.0.1-RC6.img.xz
+BASEIMAGE=rebuild-barebone-v0.0.1-RC7.img.xz
 
 ANSIBLE_PLATFORM_VARS='{"platform":"recore", "packaging":"apt", "ansible_python_interpreter": "/usr/bin/python3"}'
 
