@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if ! lscpu | grep -q Cortex-A53; then
+    exit 0
+fi
+
+REVISION=`get-recore-revision`
+set-recore-revision $REVISION

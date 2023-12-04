@@ -157,3 +157,13 @@
     src: 100update
     dest: /etc/apt/apt.conf.d/100update
     mode: '0644'
+
+- name: Recore - add files for updating dtb
+  copy:
+    src: '{{item}}'
+    dest: /usr/local/bin
+    mode: '0755'
+  loop:
+    - get-recore-revision
+    - set-recore-revision
+    - update-recore-revision
