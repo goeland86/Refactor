@@ -1,5 +1,5 @@
 # This specifies the base Ubuntu system
-BASEIMAGE_URL=https://debian.beagleboard.org/images/bone-debian-10.3-console-armhf-2020-04-06-1gb.img.xz
+BASEIMAGE_URL=https://files.beagle.cc/file/beagleboard-public-2021/images/am335x-debian-11.7-iot-armhf-2023-09-02-4gb.img.xz
 BASEIMAGE=`basename ${BASEIMAGE_URL}`
 
 
