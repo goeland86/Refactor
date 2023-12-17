@@ -19,10 +19,9 @@
   become_user: debian
 
 - name: Recore - Install KlipperScreen
-  shell: |
-    /home/debian/KlipperScreen/scripts/KlipperScreen-install.sh
-  sudo: yes
-  sudo_user: debian
+  shell: /home/debian/KlipperScreen/scripts/KlipperScreen-install.sh
+  become: yes
+  become_user: debian
 
 - name: Recore - install service file
   copy:
