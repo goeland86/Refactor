@@ -108,7 +108,6 @@ shopt -u dotglob
 
 set +e # allow this to fail - we'll check the return code
 chroot ${MOUNTPOINT} su -c "\
-DEBIAN_FRONTEND=noninteractive apt -y remove python2.7 python2 python-is-python2 ; \
 cd ${REFACTOR_HOME} && \
 apt update && DEBIAN_FRONTEND=noninteractive apt -y upgrade && \
 DEBIAN_FRONTEND=noninteractive apt install -y ansible python3 python-is-python3 && \
