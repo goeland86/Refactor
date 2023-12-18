@@ -3,10 +3,11 @@
   shell: ls /lib/modules
   register: kernel_version
 
-- name: Replicape - set kernel version to 4.14
-  shell:
-    cmd: 'FORCEMACHINE=TI_AM335x_BeagleBoneBlack /opt/scripts/tools/update_kernel.sh --lts-4_14 --ti-kernel'
-  when: ('"4.14" not in kernel_version.stdout')
+- name: Replicape - set kernel version to 4.19-ti
+  apt:
+    name: 
+      - bbb.io-kernel-4.19-ti-am335x
+    state: present
 
 - name: Replicape - Remove kernel 4.19
   apt:
