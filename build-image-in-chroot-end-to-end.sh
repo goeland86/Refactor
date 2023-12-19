@@ -110,7 +110,6 @@ set +e # allow this to fail - we'll check the return code
 chroot ${MOUNTPOINT} su -c "\
 cd ${REFACTOR_HOME} && \
 apt update && DEBIAN_FRONTEND=noninteractive apt -y upgrade && \
-if [[ $platform == "replicape" ]]; then DEBIAN_FRONTEND=noninteractive apt install -y ansible python3 python-is-python3 ; else echo "Python3 is good." fi && \
 ansible-playbook ${SYSTEM_ANSIBLE} -T 180 --extra-vars '${ANSIBLE_PLATFORM_VARS}' -i hosts"
 
 status=$?
