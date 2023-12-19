@@ -42,13 +42,6 @@
       - gcc-pru
     state: latest
 
-- name: Replicape - adjust ownership of klipper source
-  file:
-    path: "{{ klipper_home }}"
-    owner: debian
-    group: debian
-    recurse: yes
-
 - name: Replicape - give debian user the klipper service permissions
   lineinfile:
     path: /etc/sudoers
@@ -79,6 +72,13 @@
   with_items:
     - install-debian.sh
 
+- name: Replicape - adjust ownership of klipper source
+  file:
+    path: "{{ klipper_home }}"
+    owner: debian
+    group: debian
+    recurse: yes
+
 - name: Replicape - install Klipper with the install scripts
   shell: "export USER=debian; {{ klipper_home }}/scripts/install-beaglebone.sh"
   args:
@@ -95,6 +95,13 @@
   systemd:
     name: klipper_pru.service
     state: stopped
+
+- name: Replicape - adjust ownership of klipper source
+  file:
+    path: "{{ klipper_home }}"
+    owner: debian
+    group: debian
+    recurse: yes
 
 - name: Replicape - compile binary blobs for klippy
   shell:
