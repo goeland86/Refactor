@@ -50,11 +50,6 @@
     state: present
     line: "debian ALL=NOPASSWD: ALL"
 
-- name: Replicape - git safe directory config
-  shell: git config --global --add safe.directory /home/debian/klipper
-  become: yes
-  become_user: debian
-
 - name: Replicape - remove sudoers group authorization
   lineinfile:
     path: /etc/sudoers
@@ -109,6 +104,11 @@
     owner: debian
     group: debian
     recurse: yes
+
+- name: Replicape - git safe directory config
+  shell: git config --global --add safe.directory /home/debian/klipper
+  become: yes
+  become_user: debian
 
 - name: Replicape - compile binary blobs for klippy
   shell:
