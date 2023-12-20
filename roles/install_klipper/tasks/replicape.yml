@@ -3,6 +3,13 @@
   shell: ls /lib/modules
   register: kernel_version
 
+- name: Replicape - install git & python-apt
+  apt:
+    name:
+      - git
+      - python3-apt
+    state: latest
+
 - name: Replicape - set kernel version to 4.19-ti
   apt:
     name: 
@@ -13,13 +20,6 @@
   apt:
     name: linux-image-4.19.94-ti-r57
     state: absent
-
-- name: Replicape - install git
-  apt:
-    name:
-      - git
-    state: latest
-
 
 - name: Replicape - clone klipper from the master repository
   git:
