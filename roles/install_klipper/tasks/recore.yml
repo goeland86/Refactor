@@ -142,6 +142,13 @@
     owner: debian
     group: debian
 
+- name: Recore - adjust ownership of klipper source
+  file:
+    path: "{{ klipper_home }}"
+    owner: debian
+    group: debian
+    recurse: yes
+
 - name: Recore - Compile AR100 binary
   shell: |
     chown debian:debian -R .
@@ -172,6 +179,13 @@
     dest: "{{ klipper_home }}/.config"
     owner: debian
     group: debian
+
+- name: Recore - adjust ownership of klipper source
+  file:
+    path: "{{ klipper_home }}"
+    owner: debian
+    group: debian
+    recurse: yes
 
 - name: Recore - Compile STM32 binary
   shell: |
