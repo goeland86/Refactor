@@ -91,6 +91,11 @@
     line: "%sudo   ALL=(ALL:ALL) ALL"
     state: absent
 
+- name: Recore - fix git dubious ownership issue
+  shell: git config --global --add safe.directory /home/debian/klipper
+  become: yes
+  become_user: debian
+
 - name: Recore - Create virtual env
   shell: virtualenv -p python3 /home/debian/klippy-env
   become: true
@@ -142,13 +147,6 @@
     owner: debian
     group: debian
 
-- name: Recore - adjust ownership of klipper source
-  file:
-    path: "{{ klipper_home }}"
-    owner: debian
-    group: debian
-    recurse: yes
-
 - name: Recore - Compile AR100 binary
   shell: |
     chown debian:debian -R .
@@ -179,13 +177,6 @@
     dest: "{{ klipper_home }}/.config"
     owner: debian
     group: debian
-
-- name: Recore - adjust ownership of klipper source
-  file:
-    path: "{{ klipper_home }}"
-    owner: debian
-    group: debian
-    recurse: yes
 
 - name: Recore - Compile STM32 binary
   shell: |
