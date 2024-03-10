@@ -12,13 +12,13 @@
 
 - name: Replicape - Remove unwanted packages
   apt:
-    name: 
+    name:
       - bbb.io-kernel-5.10-ti
     state: absent
 
 - name: Replicape - set kernel version to 4.19-ti
   apt:
-    name: 
+    name:
       - bbb.io-kernel-4.19-ti
       - python3-apt
     state: present
