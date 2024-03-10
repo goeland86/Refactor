@@ -1,0 +1,17 @@
+#!/bin/bash
+
+OUTFILE="/dev/"`lsblk -n -o NAME | grep 'mmcblk[0-2]$'`
+
+if ! test -b ${OUTFILE}boot0p1; then
+    partx -a ${OUTFILE}boot0
+fi
+
+mkdir -p /mnt/config
+if ! grep -qs '/mnt/config ' /proc/mounts; then
+    mount -r ${OUTFILE}boot0p1 /mnt/config/
+fi
+
+CONFIG=`ls /mnt/config/*.json`
+REVISION=`cat "$CONFIG" | jq -r ".Revision" | tr '[:upper:]' '[:lower:]'`
+
+echo $REVISION

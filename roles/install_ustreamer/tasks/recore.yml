@@ -15,7 +15,7 @@
     depth: 1
 
 - name: compile ustreamer
-  shell: make
+  shell: make -j
   args:
     chdir: /home/debian/ustreamer
     creates: /home/debian/ustreamer/ustreamer

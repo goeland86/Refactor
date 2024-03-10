@@ -1,0 +1,5 @@
+---
+dependencies:
+  - { role: linux_preparation }
+  - { role: install_octoprint }
+  - { role: install_weston }

@@ -14,14 +14,12 @@ fi
 CONFIG=`ls /mnt/config/*.json`
 REVISION=`cat "$CONFIG" | jq -r ".Revision" | tr '[:upper:]' '[:lower:]'`
 
-
-if [ "${REVISION}" == "a7" ]; then
-        FLASH_DEVICE=/dev/ttyS2
-else
-        FLASH_DEVICE=/dev/ttyS4
-fi
+FLASH_DEVICE=/dev/ttyS2
 
 STM32_BINARY=/opt/firmware/stm32.bin
+if [ "$REVISION" == "a7" ] ; then
+    STM32_BINARY=/opt/firmware/stm32-32KB.bin
+fi
 
 systemctl stop klipper
 

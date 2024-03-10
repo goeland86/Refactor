@@ -1,0 +1,8 @@
+[Unit]
+Description=cpufreq-set to force the CPU governor to performance on boot
+
+[Service]
+ExecStart=/opt/cpufreq.sh
+
+[Install]
+WantedBy=multi-user.target

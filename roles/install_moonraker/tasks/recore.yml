@@ -16,10 +16,11 @@
   become_user: debian
 
 - name: Recore - Install moonraker
-  shell:
-    cmd: |
-      sudo -u debian /home/debian/moonraker/scripts/install-moonraker.sh
-      sudo -u debian /home/debian/moonraker/scripts/set-policykit-rules.sh
+  shell: |
+    /home/debian/moonraker/scripts/install-moonraker.sh
+    /home/debian/moonraker/scripts/set-policykit-rules.sh
+  become: yes
+  become_user: debian
 
 - name: Recore - Create print config folder
   file:

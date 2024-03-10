@@ -7,7 +7,7 @@ The starting point for Refactor is the Armbian console image, details are in the
 https://wiki.iagent.no/wiki/Refactor
 
 This build system will install Klipper and the choice of OctoPrint or Mainsail and Moonraker.
-A touch screen interface is also insttalled, either Toggle for OctoPrint or KlipperScreen for Mainsail.
+A touch screen interface is also installed, either Toggle for OctoPrint or KlipperScreen for Mainsail.
 In addition, there are some other programs such as mjpg-streamer to add webcam functionality and the setting up the
 right folders and config files so the software is ready to use out of the box.
 

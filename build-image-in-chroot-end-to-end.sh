@@ -45,7 +45,7 @@ decompress || $(echo "check your Linux platform file is correct!"; exit) # defin
 
 echo "preparing the partition layout"
 if [ ${TARGET_PLATFORM} == "recore" ]; then
-	truncate -s 5000M $TARGETIMAGE
+	truncate -s 6000M $TARGETIMAGE
 	DEVICE=`losetup -P -f --show $TARGETIMAGE`
 	PARTITION=${DEVICE}p2
 	cat <<EOF > image.layout
@@ -53,7 +53,7 @@ if [ ${TARGET_PLATFORM} == "recore" ]; then
 unit: sectors
 
 ${DEVICE}p1 : start=8192, size=524288, type=83
-${DEVICE}p2 : start=532480, size=9303520, type=83
+${DEVICE}p2 : start=532480, size=11303520, type=83
 EOF
 fi
 
@@ -142,14 +142,8 @@ if [ $status -eq 0 ]; then
 			dd if=${UBOOT_SPL} of=${DEVICE} seek=1 bs=128k
 			dd if=${UBOOT_BIN} of=${DEVICE} seek=1 bs=384k
     fi
-
-		if [ ${TARGET_PLATFORM} == "recore" ]; then
-			dd if=/dev/zero of=${DEVICE} bs=1k count=1023 seek=1
-			dd if=${UBOOT_BIN} of=${DEVICE} bs=1024 seek=8 conv=notrunc
-		fi
     ./generate-image-from-sd.sh $DEVICE $TARGET_PLATFORM
-
-		losetup -d $DEVICE
+	losetup -d $DEVICE
 else
     echo "image generation seems to have failed - cleaning up, returning $status"
     losetup -d $DEVICE

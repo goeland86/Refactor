@@ -3,7 +3,7 @@
   apt:
     name:
       - nftables
-      - python3.7
+      - python3.9
       - python3-pip
       - python3-dev
       - git
@@ -16,16 +16,6 @@
   pip:
     name: virtualenv
     executable: pip3
-
-- name: Recore - ensure the debian user exists
-  user:
-    name: debian
-    comment: Default user for OctoPrint
-    shell: /bin/bash
-    groups: tty,dialout
-    append: yes
-    expires: -1
-    home: /home/debian
 
 - name: Recore - create nftables port forward from :80 to :5000
   copy:
@@ -76,7 +66,7 @@
   pip:
     chdir: '{{ octoprint_home }}'
     virtualenv: '{{ octoprint_home }}/venv'
-    virtualenv_python: python3.7
+    virtualenv_python: python3.9
     state: latest
     name: git+https://github.com/foosel/OctoPrint.git
   become_user: debian
@@ -94,13 +84,6 @@
     path: /etc/services
     line: octoprint 5000/tcp
     state: present
-
-- name: Recore - make sure the sudoers.d/debian file exists
-  file:
-    path: /etc/sudoers.d/debian
-    owner: root
-    group: root
-    state: touch
 
 - name: Recore - grant debian user sudo privileges for some commands
   blockinfile:
@@ -138,9 +121,3 @@
   with_items:
     - /usr/src/Refactor
     - /home/debian
-
-- name: Recore - Install OctoPrint switcheroo
-  copy:
-    src: enable-octoprint
-    dest: /usr/local/bin/
-    mode: 0700
