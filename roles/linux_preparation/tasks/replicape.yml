@@ -37,13 +37,6 @@
       - usbutils
     state: present
 
-- name: Replicape - update RCN scripts
-  shell:
-    chdir: /opt/scripts
-    cmd: |
-      chown -R root /opt/scripts
-      git pull
-
 - name: update package list
   apt:
     update_cache: yes
