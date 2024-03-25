@@ -109,8 +109,13 @@ shopt -u dotglob
 set +e # allow this to fail - we'll check the return code
 chroot ${MOUNTPOINT} su -c "\
 cd ${REFACTOR_HOME} && \
-export LC_ALL=en_US.UTF-8 && \
-dpkg-reconfigure locales && \
+echo "Europe/Oslo" > /etc/timezone && \
+dpkg-reconfigure -f noninteractive tzdata && \
+sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+sed -i -e 's/# nb_NO.UTF-8 UTF-8/nb_NO.UTF-8 UTF-8/' /etc/locale.gen && \
+echo 'LANG="nb_NO.UTF-8"'>/etc/default/locale && \
+dpkg-reconfigure --frontend=noninteractive locales && \
+update-locale LANG=nb_NO.UTF-8 && \
 apt update && DEBIAN_FRONTEND=noninteractive apt -y upgrade && \
 DEBIAN_FRONTEND=noninteractive apt install -y ansible build-essential && \
 ansible-playbook ${SYSTEM_ANSIBLE} -T 180 --extra-vars '${ANSIBLE_PLATFORM_VARS}' -i hosts -e 'ansible_python_interpreter=/usr/bin/python3'"
