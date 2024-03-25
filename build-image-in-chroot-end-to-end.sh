@@ -111,8 +111,11 @@ chroot ${MOUNTPOINT} su -c "\
 cd ${REFACTOR_HOME} && \
 echo "Europe/Oslo" > /etc/timezone && \
 dpkg-reconfigure -f noninteractive tzdata && \
-sed -i -e 's/# en_US.UTF-8 UTF-8/en_GB.UTF-8 UTF-8/' /etc/locale.gen && \
-export LC_ALL=en_GB.UTF-8 && \
+sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+echo "LANG=en_US.UTF-8\n" > /etc/default/locale && \
+echo "LC_ALL=en_US.UTF-8\n" >> /etc/default/locale && \
+echo "LC_CTYPE=en_US.UTF-8\n" >> /etc/default/locale && \
+export LC_ALL=en_US.UTF-8 && \
 dpkg-reconfigure --frontend=noninteractive locales && \
 update-locale LANG=en_US.UTF-8 && \
 apt update && DEBIAN_FRONTEND=noninteractive apt -y upgrade && \
