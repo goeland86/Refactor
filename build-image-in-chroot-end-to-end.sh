@@ -116,6 +116,7 @@ sed -i -e 's/# nb_NO.UTF-8 UTF-8/nb_NO.UTF-8 UTF-8/' /etc/locale.gen && \
 echo 'LANG="nb_NO.UTF-8"'>/etc/default/locale && \
 dpkg-reconfigure --frontend=noninteractive locales && \
 update-locale LANG=nb_NO.UTF-8 && \
+rm /etc/dpkg/origins/armbian && \
 apt update && DEBIAN_FRONTEND=noninteractive apt -y upgrade && \
 DEBIAN_FRONTEND=noninteractive apt install -y ansible build-essential && \
 ansible-playbook ${SYSTEM_ANSIBLE} -T 180 --extra-vars '${ANSIBLE_PLATFORM_VARS}' -i hosts -e 'ansible_python_interpreter=/usr/bin/python3'"
