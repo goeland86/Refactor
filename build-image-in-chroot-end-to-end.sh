@@ -109,18 +109,18 @@ shopt -u dotglob
 set +e # allow this to fail - we'll check the return code
 chroot ${MOUNTPOINT} su -c "\
 cd ${REFACTOR_HOME} && \
-echo "Europe/Oslo" > /etc/timezone && \
+echo \"Europe/Oslo\" > /etc/timezone && \
 dpkg-reconfigure -f noninteractive tzdata && \
 sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
-echo "LANG=en_US.UTF-8\n" > /etc/default/locale && \
-echo "LC_ALL=en_US.UTF-8\n" >> /etc/default/locale && \
-echo "LC_CTYPE=en_US.UTF-8\n" >> /etc/default/locale && \
-export LC_ALL=en_US.UTF-8 && \
+echo \"LANG=en_US.UTF-8\n\" > /etc/default/locale && \
+echo \"LC_ALL=en_US.UTF-8\n\" >> /etc/default/locale && \
+echo \"LC_CTYPE=en_US.UTF-8\n\" >> /etc/default/locale && \
+export LC_ALL=\"en_US.UTF-8\" && \
 dpkg-reconfigure --frontend=noninteractive locales && \
 update-locale LANG=en_US.UTF-8 && \
 apt update && DEBIAN_FRONTEND=noninteractive apt -y upgrade && \
 DEBIAN_FRONTEND=noninteractive apt install -y ansible build-essential && \
-ansible-playbook ${SYSTEM_ANSIBLE} -T 180 --extra-vars '${ANSIBLE_PLATFORM_VARS}' -i hosts -e 'ansible_python_interpreter=/usr/bin/python3'"
+LC_ALL=\"en_US.UTF-8\" ansible-playbook ${SYSTEM_ANSIBLE} -T 180 --extra-vars '${ANSIBLE_PLATFORM_VARS}' -i hosts -e 'ansible_python_interpreter=/usr/bin/python3'"
 
 status=$?
 set -e
