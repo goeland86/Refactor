@@ -115,7 +115,9 @@ sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
 echo LC_ALL=en_US.UTF-8 > /etc/default/locale && \
 dpkg-reconfigure --frontend=noninteractive locales && \
 update-locale LC_ALL=en_US.UTF-8 && \
-apt update && DEBIAN_FRONTEND=noninteractive apt -y upgrade && \
+apt update && DEBIAN_FRONTEND=noninteractive apt -y upgrade << EOF
+y
+EOF && \
 apt install -y ansible build-essential << EOF
 y
 EOF && \
