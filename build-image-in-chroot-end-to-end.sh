@@ -120,7 +120,8 @@ y
 EOF && \
 apt install -y ansible build-essential << EOF
 y
-EOF && \
+EOF"
+chroot ${MOUNTPOINT} su -c "\
 LC_ALL=en_US.UTF-8 ansible-playbook ${SYSTEM_ANSIBLE} -T 180 --extra-vars '${ANSIBLE_PLATFORM_VARS}' -i hosts -e 'ansible_python_interpreter=/usr/bin/python3'"
 
 status=$?
