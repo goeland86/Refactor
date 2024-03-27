@@ -117,7 +117,9 @@ export LC_ALL=\"en_US.UTF-8\" && \
 dpkg-reconfigure --frontend=noninteractive locales && \
 update-locale LC_ALL=en_US.UTF-8 && \
 apt update && DEBIAN_FRONTEND=noninteractive apt -y upgrade && \
-DEBIAN_FRONTEND=noninteractive apt install -y ansible build-essential && \
+apt install -y ansible build-essential << EOF
+y
+EOF && \
 LC_ALL=\"en_US.UTF-8\" ansible-playbook ${SYSTEM_ANSIBLE} -T 180 --extra-vars '${ANSIBLE_PLATFORM_VARS}' -i hosts -e 'ansible_python_interpreter=/usr/bin/python3'"
 
 status=$?
