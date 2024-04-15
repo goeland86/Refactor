@@ -118,12 +118,10 @@ update-locale LC_ALL=en_US.UTF-8 && \
 apt update && DEBIAN_FRONTEND=noninteractive apt -y upgrade << EOF
 y
 EOF && \
-apt install -y python3-pip build-essential << EOF
+apt install -y python3-pip python3-venv build-essential ansible << EOF
 y
 EOF"
 chroot ${MOUNTPOINT} su -c "\
-curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
-python3 get-pip.py && \
 LC_ALL=en_US.UTF-8 ansible-playbook ${SYSTEM_ANSIBLE} -T 180 --extra-vars '${ANSIBLE_PLATFORM_VARS}' -i hosts -e 'ansible_python_interpreter=/usr/bin/python3'"
 
 status=$?
